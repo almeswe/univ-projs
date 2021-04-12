@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<BorlandProject>
+	<Transactions>
+    <Transaction>1899.12.30 00:00:00.000.665,=E:\курсовой\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.304,=E:\курсовой\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.439,=E:\курсовой\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.770,E:\курсовой\Unit1.pas=E:\курсовой\Converter2.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.842,E:\курсовой\Unit1.pas=E:\курсовой\List.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.721,E:\курсовой\Unit1.pas=E:\курсовой\Lexer.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.542,E:\курсовой\Stack2.pas=E:\курсовой\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.642,E:\курсовой\Linker.pas=E:\курсовой\Assembler.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.272,C:\Users\Almes\Desktop\курсовой\Stack.pas=C:\Users\Almes\Desktop\курсовой\StackImpl.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.748,E:\курсовой\Unit1.pas=E:\курсовой\Defines2.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.807,C:\Users\Almes\Desktop\курсовой\Converter.pas=C:\Users\Almes\Desktop\курсовой\Parser.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.931,E:\курсовой\Project1.dproj=E:\курсовой\Interpreter.dproj</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.693,=E:\курсовой\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.186,E:\курсовой\Tester.pas=E:\курсовой\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.410,C:\Users\Almes\Desktop\курсовой\Unit1.pas=C:\Users\Almes\Desktop\курсовой\Defines.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.101,=C:\Users\Almes\Desktop\курсовой\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.363,C:\Users\Almes\Desktop\курсовой\Other.pas=C:\Users\Almes\Desktop\курсовой\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.145,C:\Users\Almes\Desktop\курсовой\Parser.pas=C:\Users\Almes\Desktop\курсовой\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.986,E:\курсовой\Assembler.pas=E:\курсовой\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.548,=E:\курсовой\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.665,=E:\курсовой\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.481,=E:\курсовой\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.695,=C:\Users\Almes\Desktop\курсовой\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.715,=C:\Users\Almes\Desktop\курсовой\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.892,C:\Users\Almes\Desktop\курсовой\Project1.dproj=C:\Users\Almes\Documents\Embarcadero\Studio\Projects\Project1.dproj</Transaction>
+  </Transactions>
+	<ProjectSortOrder AutoSort="0" SortType="0">
+    <File Path="Stack2.pas"/>
+    <File Path="Converter2.pas"/>
+    <File Path="Lexer.pas"/>
+    <File Path="Defines2.pas"/>
+    <File Path="Tester.pas"/>
+  </ProjectSortOrder>
+</BorlandProject>
