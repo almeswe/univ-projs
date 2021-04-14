@@ -65,16 +65,17 @@ begin
 end;
 
 function TStack.pop() : TCell;
-var temp : ^TCell;
+var temp : TCell;
 begin
-  temp := @(self.head^);
+  temp := self.head^;
+  dispose(self.head);
   if self.empty then
     raise Exception.Create('Cannot pop from empty stack!');
   if temp.next = nil then
     self.head := nil
   else
     self.head := @(temp.next^);
-  exit(temp^);
+  exit(temp);
 end;
 
 function TStack.top() : TCell;
@@ -117,7 +118,8 @@ begin
   for i := 1 to 10000000 do
     s.push('123');
   readln;
-  s.clear;
+  for i := 1 to 10000000 do
+    s.pop();
   readln;
 end;
 
