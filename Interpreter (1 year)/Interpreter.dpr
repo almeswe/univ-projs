@@ -28,20 +28,25 @@ begin
         writeln(lexer.errors[i].to_string());
     end
     else begin
-       conv.init();
-       conv.convert(tokens);
-       writeln(conv.notation);
-
        tester.init(tokens);
        tester.test_for_errors;
-       for i := 0 to length(tester.errors)-1 do
-          writeln(tester.errors[i].to_string());
+       if length(tester.errors) > 0 then begin
+         for i := 0 to length(tester.errors)-1 do
+            writeln(tester.errors[i].to_string());
+       end
+       else begin
+         conv.init();
+         conv.convert(tokens);
+         writeln(conv.notation);
+         conv.reset;
+       end;
        tester.reset;
-       conv.reset;
+
     end;
 
     lexer.reset;
     writeln;
   end;
+  //Stack2.test;
 end.
 
