@@ -73,7 +73,7 @@ begin
   if not self.inited then
     raise Exception.Create('Call init procedure first!');
   if self.curr_char_pos+1 > length(self.expr) then
-    self.curr_char := EOL
+    self.curr_char := EOL_CH
   else begin
     inc(self.curr_char_pos);
     self.curr_char := self.expr[self.curr_char_pos];
@@ -86,8 +86,8 @@ begin
   if not self.inited then
     raise Exception.Create('Call init procedure first!');
   self.get_next_char;
-  while self.curr_char <> EOL do begin
-      if self.is_op() or self.is_paren() then begin
+  while self.curr_char <> EOL_CH do begin
+      if self.is_op() then begin
         self.append_token(self.recognize_op());
         continue;
       end;
@@ -123,6 +123,7 @@ var loc   : ^TPosition;
 begin
   if not self.inited then
     raise Exception.Create('Call init procedure first!');
+  //
   New(loc);
   loc.pos_in := pos;
   loc.target := self.curr_file;
@@ -131,6 +132,7 @@ begin
   error.msg  := msg;
   error.pos  := loc^;
   error.kind := TErrorKind.LEXER_ERROR;
+  //
   SetLength(self.errors, length(self.errors) + 1);
   self.errors[length(self.errors) - 1] := error^;
 end;
@@ -141,6 +143,7 @@ var loc   : ^TPosition;
 begin
   if not self.inited then
     raise Exception.Create('Call init procedure first!');
+   //
    New(loc);
    loc.target := self.curr_file;
    loc.pos_in := self.curr_char_pos;
@@ -149,6 +152,7 @@ begin
    token.pos  := loc^;
    token.data := self.curr_char;
    token.kind := TTokenKind.Op;
+   //
    self.get_next_char;
    exit(token^);
 end;
@@ -159,6 +163,7 @@ var loc   : ^TPosition;
 begin
   if not self.inited then
     raise Exception.Create('Call init procedure first!');
+   //
    New(loc);
    loc.target := self.curr_file;
    loc.pos_in := self.curr_char_pos;
@@ -167,8 +172,9 @@ begin
    token.data := '';
    token.pos  := loc^;
    token.kind := TTokenKind.Constant;
+   //
 
-   while (self.curr_char <> EOL) and (self.is_digit()) do begin
+   while (self.curr_char <> EOL_CH) and (self.is_digit()) do begin
        token^.data := token^.data + self.curr_char;
        self.get_next_char;
    end;
@@ -182,6 +188,7 @@ var loc   : ^TPosition;
 begin
   if not self.inited then
     raise Exception.Create('Call init procedure first!');
+   //
    New(loc);
    loc.target := self.curr_file;
    loc.pos_in := self.curr_char_pos;
@@ -190,8 +197,9 @@ begin
    token.data := '';
    token.pos  := loc^;
    token.kind := TTokenKind.Variable;
+   //
 
-   while (self.curr_char <> EOL) and self.is_letter() do begin
+   while (self.curr_char <> EOL_CH) and self.is_letter() do begin
        token^.data := token^.data + self.curr_char;
        self.get_next_char;
    end;

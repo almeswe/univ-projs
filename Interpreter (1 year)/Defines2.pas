@@ -4,7 +4,7 @@ interface
 
 uses SysUtils;
 
-const EOL     = #10;
+const EOL_CH  = #10;
 const NO_FILE = 'No file';
 
 type int  = integer;
@@ -64,10 +64,10 @@ begin
     TErrorKind.CONVERTER_ERROR: str := '[Converter error]: ';
   end;
 
-  str := str + msg + ' in (pos : ' + inttostr(self.pos.pos_in);
+  str := str + msg + ' <in pos : ' + inttostr(self.pos.pos_in);
   if self.pos.target <> NO_FILE then
     str := str + ' ' + self.pos.target;
-  str := str + ')';
+  str := str + '>';
   exit(str);
 end;
 function TAction.to_string(): string;
