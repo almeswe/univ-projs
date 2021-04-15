@@ -29,6 +29,7 @@ type TLexer = record
   function recognize_op()  : TToken;
   function recognize_num() : TToken;
   function recognize_var() : TToken;
+  function recognize_paren() : TToken;
 
   function is_errored() : bool;
 
@@ -88,6 +89,10 @@ begin
   while self.curr_char <> EOL do begin
       if self.is_op() or self.is_paren() then begin
         self.append_token(self.recognize_op());
+        continue;
+      end;
+      if self.is_paren() then begin
+        self.append_token(self.recognize_paren());
         continue;
       end;
       if self.is_letter() then begin
@@ -191,6 +196,28 @@ begin
        self.get_next_char;
    end;
 
+   exit(token^);
+end;
+
+function TLexer.recognize_paren() : TToken;
+var token : ^TToken;
+var loc   : ^TPosition;
+begin
+  if not self.inited then
+    raise Exception.Create('Call init procedure first!');
+   New(loc);
+   loc.target := self.curr_file;
+   loc.pos_in := self.curr_char_pos;
+
+   New(token);
+   token.pos  := loc^;
+   token.data := self.curr_char;
+
+   case self.curr_char of
+      '(' : token.kind := TTokenKind.OpenParen;
+      ')' : token.kind := TTokenKind.CloseParen;
+   end;
+   self.get_next_char;
    exit(token^);
 end;
 

@@ -25,7 +25,7 @@ type TError = record
 end;
 type TErrors = array of TError;
 
-type TTokenKind = (Op, Constant, Variable);
+type TTokenKind = (Op, OpenParen, CloseParen, Constant, Variable, EOL);
 type TToken = record
   data : string;
   pos  : TPosition;
@@ -49,9 +49,11 @@ implementation
 function TToken.to_string() : string;
 begin
   case self.kind of
-    TTokenKind.Op:       exit('Operator: ' + self.data);
-    TTokenKind.Constant: exit('Constant: ' + self.data);
-    TTokenKind.Variable: exit('Variable: ' + self.data);
+    TTokenKind.Op:         exit('Operator: ' + self.data);
+    TTokenKind.Constant:   exit('Constant: ' + self.data);
+    TTokenKind.Variable:   exit('Variable: ' + self.data);
+    TTokenKind.OpenParen:  exit('Op-Paren: ' + self.data);
+    TTokenKind.CloseParen: exit('Cl-Paren: ' + self.data);
   end;
 end;
 function TError.to_string() : string;

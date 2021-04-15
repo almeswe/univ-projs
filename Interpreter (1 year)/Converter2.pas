@@ -56,43 +56,37 @@ begin
     if not self.inited then
       raise Exception.Create('Call init procedure first!');
 
-   SetLength(self.actions, 0);
    self.notation := '';
+   SetLength(self.actions, 0);
 
    for i := 0 to length(tokens)-1 do begin
        case tokens[i].kind of
-
-          TTokenKind.Constant, TTokenKind.Variable:
-              self.append_action(tokens[i].data, TActionKind.APPEND, out_value);
+          TTokenKind.Constant, TTokenKind.Variable: begin
+            self.append_action(tokens[i].data, TActionKind.APPEND, out_value);
+          end;
 
           TTokenKind.Op: begin
-             if self.is_paren(tokens[i].data) then begin
-               if self.is_cl_paren(tokens[i].data) then begin
+            while (not self.stack.empty()) and (self.get_op_priority(self.stack.top().data) >= self.get_op_priority(tokens[i].data)) do begin
+              self.append_action(self.stack.top().data, TActionKind.POP, out_value);
+              self.notation := self.notation + out_value;
+            end;
+            self.append_action(tokens[i].data, TActionKind.PUSH, out_value);
+          end;
 
-                 while (not self.stack.empty()) and
-                       (not self.is_op_paren(self.stack.top().data)) do
-                 begin
-                    if not self.is_paren(self.stack.top().data) then begin
-                       self.append_action(self.stack.top().data, TActionKind.POP, out_value);
-                       self.notation := self.notation + out_value;
-                    end;
-                 end;
-                 if not self.stack.empty() then
-                    self.append_action(self.stack.top().data, TActionKind.POP, out_value);
-               end
-               else
-                  if not self.stack.empty() then
-                    self.append_action(self.stack.top().data, TActionKind.PUSH, out_value);
-             end
-             else begin
-                while (not self.stack.empty()) and
-                      (self.get_op_priority(self.stack.top().data) >= self.get_op_priority(tokens[i].data)) do
-                begin
+          TTokenKind.OpenParen, TTokenKind.CloseParen: begin
+            if self.is_cl_paren(tokens[i].data) then begin
+              while (not self.stack.empty()) and (not self.is_op_paren(self.stack.top().data)) do begin
+                if not self.is_paren(self.stack.top().data) then begin
                   self.append_action(self.stack.top().data, TActionKind.POP, out_value);
                   self.notation := self.notation + out_value;
                 end;
-                self.append_action(tokens[i].data, TActionKind.PUSH, out_value);
-             end;
+              end;
+              if not self.stack.empty() then
+                self.append_action(self.stack.top().data, TActionKind.POP, out_value);
+            end
+            else
+              if not self.stack.empty() then
+                self.append_action(self.stack.top().data, TActionKind.PUSH, out_value);
           end;
        end;
    end;
