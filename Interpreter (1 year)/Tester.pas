@@ -20,8 +20,10 @@ type TTester = record
   procedure test_operator();
 
   procedure get_next_token();
+  //
   procedure append_error(msg : string; pos : TPosition);
   procedure append_error_formatted(expected : string; met : string);
+  //
 
   function match(kind : TTokenKind; offset : int = 0) : bool;
 end;
@@ -89,7 +91,7 @@ begin
     prev_token := self.tokens[self.curr_token_num-1];
     case prev_token.kind of
       TTokenKind.CloseParen, TTokenKind.Constant, TTokenKind.Variable:
-        self.append_error_formatted('Operator before operand',prev_token.data);
+        self.append_error('Operator before operand expected, but met: [' + prev_token.data + ']',prev_token.pos);
     end;
   end;
   //check left
@@ -97,7 +99,7 @@ begin
     forw_token := self.tokens[self.curr_token_num+1];
     case forw_token.kind of
       TTokenKind.OpenParen, TTokenKind.Constant, TTokenKind.Variable:
-        self.append_error_formatted('Operator after operand',forw_token.data);
+        self.append_error('Operator after operand expected, but met: [' + forw_token.data + ']',forw_token.pos);
     end;
   end;
 end;
@@ -111,38 +113,29 @@ begin
     prev_token := self.tokens[self.curr_token_num-1];
     case prev_token.kind of
       TTokenKind.Op, TTokenKind.OpenParen:
-        self.append_error_formatted('Operand before operator',prev_token.data);
+        self.append_error('Operand before operator expected, but met: [' + prev_token.data + ']',prev_token.pos);
     end;
   end
   else
-    self.append_error_formatted('Operand before operator',self.curr_token.data);
-
+    self.append_error('Operand before operator expected, but met: [' + self.curr_token.data + ']', self.curr_token.pos);
   //check left
   if self.curr_token_num < length(self.tokens)-1 then begin
     forw_token := self.tokens[self.curr_token_num+1];
     case forw_token.kind of
       TTokenKind.Op, TTokenKind.CloseParen:
-        self.append_error_formatted('Operator after operand',forw_token.data);
+        self.append_error('Operand after operator expected, but met: [' + forw_token.data + ']',forw_token.pos);
     end;
   end
   else
-    self.append_error_formatted('Operand after operator',self.curr_token.data);
+    self.append_error('Operand after operator expected, but met: [' + self.curr_token.data + ']',self.curr_token.pos);
 end;
 
 procedure TTester.get_next_token();
-var eol_token : ^TToken;
 begin
   if not self.inited then
     raise Exception.Create('Call init procedure first!');
   if self.curr_token_num + 1 > length(self.tokens)-1 then begin
-  //
-    new(eol_token);
-    eol_token.data := 'EOL';
-    eol_token.kind := TTokenKind.EOL;
-    eol_token.pos.pos_in := self.curr_token.pos.pos_in + length(self.curr_token.data);
-    self.curr_token := eol_token^;
-    dispose(eol_token);
-  //
+    self.curr_token := new_token('EOL', new_position(self.curr_token.pos.pos_in + length(self.curr_token.data), self.curr_token.pos.target),TTokenKind.EOL);
   end
   else begin
     inc(self.curr_token_num);
@@ -151,18 +144,11 @@ begin
 end;
 
 procedure TTester.append_error(msg : string; pos : TPosition);
-var error : ^TError;
 begin
   if not self.inited then
     raise Exception.Create('Call init procedure first!');
-  //
-  New(error);
-  error.msg  := msg;
-  error.pos  := pos;
-  error.kind := TErrorKind.CONVERTER_ERROR;
-  //
   SetLength(self.errors, length(self.errors)+1);
-  self.errors[length(self.errors)-1] := error^;
+  self.errors[length(self.errors)-1] := new_error(msg, pos, TErrorKind.CONVERTER_ERROR);
 end;
 
 procedure TTester.append_error_formatted(expected : string; met : string);

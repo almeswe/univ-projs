@@ -44,6 +44,11 @@ type TAction = record
 end;
 type TActions = array of TAction;
 
+function new_action(data : string; kind : TActionKind) : TAction;
+function new_position(pos_in : int; target : string = NO_FILE) : TPosition;
+function new_error(msg : string; pos : TPosition; kind : TErrorKind) : TError;
+function new_token(data : string; pos : TPosition; kind : TTokenKind) : TToken;
+
 implementation
 
 function TToken.to_string() : string;
@@ -77,6 +82,41 @@ begin
     TActionKind.POP:    exit('POP   : ' + self.data);
     TActionKind.APPEND: exit('APPEND: ' + self.data);
   end;
+end;
+
+function new_action(data : string; kind : TActionKind) : TAction;
+var action : ^TAction;
+begin
+  new(action);
+  action.data := data;
+  action.kind := kind;
+  exit(action^);
+end;
+function new_position(pos_in : int; target : string = NO_FILE) : TPosition;
+var position : ^TPosition;
+begin
+  new(position);
+  position.pos_in := pos_in;
+  position.target := target;
+  exit(position^);
+end;
+function new_error(msg : string; pos : TPosition; kind : TErrorKind) : TError;
+var error : ^TError;
+begin
+  new(error);
+  error.msg := msg;
+  error.pos := pos;
+  error.kind := kind;
+  exit(error^);
+end;
+function new_token(data : string; pos : TPosition; kind : TTokenKind) : TToken;
+var token : ^TToken;
+begin
+  new(token);
+  token.data := data;
+  token.pos := pos;
+  token.kind := kind;
+  exit(token^);
 end;
 
 end.

@@ -118,115 +118,73 @@ begin
 end;
 
 procedure TLexer.append_error(msg: string; pos: integer);
-var error : ^TError;
-var loc   : ^TPosition;
+var error : TError;
+var loc   : TPosition;
 begin
   if not self.inited then
     raise Exception.Create('Call init procedure first!');
-  //
-  New(loc);
-  loc.pos_in := pos;
-  loc.target := self.curr_file;
-
-  New(error);
-  error.msg  := msg;
-  error.pos  := loc^;
-  error.kind := TErrorKind.LEXER_ERROR;
-  //
+  loc   := new_position(pos, self.curr_file);
+  error := new_error(msg, loc, TErrorKind.LEXER_ERROR);
   SetLength(self.errors, length(self.errors) + 1);
-  self.errors[length(self.errors) - 1] := error^;
+  self.errors[length(self.errors) - 1] := error;
 end;
 
 function TLexer.recognize_op() : TToken;
-var token : ^TToken;
-var loc   : ^TPosition;
+var token : TToken;
+var loc   : TPosition;
 begin
-  if not self.inited then
+   if not self.inited then
     raise Exception.Create('Call init procedure first!');
-   //
-   New(loc);
-   loc.target := self.curr_file;
-   loc.pos_in := self.curr_char_pos;
-
-   New(token);
-   token.pos  := loc^;
-   token.data := self.curr_char;
-   token.kind := TTokenKind.Op;
-   //
+   loc   := new_position(self.curr_char_pos, self.curr_file);
+   token := new_token(self.curr_char, loc, TTokenKind.Op);
    self.get_next_char;
-   exit(token^);
+   exit(token);
 end;
 
 function TLexer.recognize_num() : TToken;
-var token : ^TToken;
-var loc   : ^TPosition;
+var token : TToken;
+var loc   : TPosition;
 begin
   if not self.inited then
     raise Exception.Create('Call init procedure first!');
-   //
-   New(loc);
-   loc.target := self.curr_file;
-   loc.pos_in := self.curr_char_pos;
-
-   New(token);
-   token.data := '';
-   token.pos  := loc^;
-   token.kind := TTokenKind.Constant;
-   //
-
+   loc   := new_position(self.curr_char_pos, self.curr_file);
+   token := new_token('', loc, TTokenKind.Constant);
    while (self.curr_char <> EOL_CH) and (self.is_digit()) do begin
-       token^.data := token^.data + self.curr_char;
+       token.data := token.data + self.curr_char;
        self.get_next_char;
    end;
-
-   exit(token^);
+   exit(token);
 end;
 
 function TLexer.recognize_var() : TToken;
-var token : ^TToken;
-var loc   : ^TPosition;
+var token : TToken;
+var loc   : TPosition;
 begin
   if not self.inited then
     raise Exception.Create('Call init procedure first!');
-   //
-   New(loc);
-   loc.target := self.curr_file;
-   loc.pos_in := self.curr_char_pos;
-
-   New(token);
-   token.data := '';
-   token.pos  := loc^;
-   token.kind := TTokenKind.Variable;
-   //
-
+   loc   := new_position(self.curr_char_pos, self.curr_file);
+   token := new_token('', loc, TTokenKind.Variable);
    while (self.curr_char <> EOL_CH) and self.is_letter() do begin
-       token^.data := token^.data + self.curr_char;
+       token.data := token.data + self.curr_char;
        self.get_next_char;
    end;
-
-   exit(token^);
+   exit(token);
 end;
 
 function TLexer.recognize_paren() : TToken;
-var token : ^TToken;
-var loc   : ^TPosition;
+var token : TToken;
+var loc   : TPosition;
 begin
   if not self.inited then
     raise Exception.Create('Call init procedure first!');
-   New(loc);
-   loc.target := self.curr_file;
-   loc.pos_in := self.curr_char_pos;
-
-   New(token);
-   token.pos  := loc^;
-   token.data := self.curr_char;
-
+   loc   := new_position(self.curr_char_pos, self.curr_file);
+   token := new_token(self.curr_char, loc, TTokenKind.OpenParen);
    case self.curr_char of
       '(' : token.kind := TTokenKind.OpenParen;
       ')' : token.kind := TTokenKind.CloseParen;
    end;
    self.get_next_char;
-   exit(token^);
+   exit(token);
 end;
 
 function TLexer.is_errored() : bool;

@@ -17,7 +17,6 @@ type TConverter = record
   procedure convert(tokens : TTokens);
 
   procedure append_action(data : string; kind : TActionKind; out value : string);
-
   procedure execute_action(data : string; kind : TActionKind; out value : string);
 
   function is_errored() : bool;
@@ -55,10 +54,8 @@ var out_value : string;
 begin
     if not self.inited then
       raise Exception.Create('Call init procedure first!');
-
    self.notation := '';
    SetLength(self.actions, 0);
-
    for i := 0 to length(tokens)-1 do begin
        case tokens[i].kind of
           TTokenKind.Constant, TTokenKind.Variable: begin
@@ -98,17 +95,11 @@ begin
 end;
 
 procedure TConverter.append_action(data: string; kind: TActionKind; out value : string);
-var action : ^TAction;
 begin
   if not self.inited then
     raise Exception.Create('Call init procedure first!');
-  New(action);
-  action.data := data;
-  action.kind := kind;
-
   SetLength(self.actions, length(self.actions)+1);
-  self.actions[length(self.actions)-1] := action^;
-
+  self.actions[length(self.actions)-1] := new_action(data, kind);;
   self.execute_action(data, kind, value);
 end;
 
