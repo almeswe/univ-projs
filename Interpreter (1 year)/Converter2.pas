@@ -13,7 +13,6 @@ type TConverter = record
   var actions  : TActions;
 
   procedure init();
-  procedure reset();
   procedure convert(tokens : TTokens);
 
   procedure append_action(data : string; kind : TActionKind; out value : string);
@@ -37,7 +36,6 @@ begin
   self.stack.init();
 end;
 
-procedure TConverter.reset();
 begin
   if not self.inited then
     raise Exception.Create('Call init procedure first!');
@@ -82,8 +80,8 @@ begin
                 self.append_action(self.stack.top().data, TActionKind.POP, out_value);
             end
             else
-              if not self.stack.empty() then
-                self.append_action(self.stack.top().data, TActionKind.PUSH, out_value);
+              //if not self.stack.empty() then
+                self.append_action(tokens[i].data, TActionKind.PUSH, out_value);
           end;
        end;
    end;
