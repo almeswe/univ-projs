@@ -16,10 +16,11 @@ type TLexer = record
   var errors : TErrors;
   var tokens : TTokens;
 
-  procedure init(path : string);
+  procedure init(input : string);
   procedure init_no_file(expr : string);
+  procedure process_file(path : string; out line : string);
 
-  procedure reset();
+  procedure discard();
   procedure get_next_char();
 
   procedure tokenize();
@@ -42,9 +43,16 @@ end;
 
 implementation
 
-procedure TLexer.init(path : string);
+procedure TLexer.init(input : string);
 begin
-  raise Exception.Create('Not implemented!');
+  if FileExists(input) then begin
+    self.inited := true;
+    self.curr_file := input;
+    self.curr_char_pos := 0;
+    self.process_file(input, self.expr);
+  end
+  else
+    self.init_no_file(input);
 end;
 
 procedure TLexer.init_no_file(expr : string);
@@ -56,7 +64,19 @@ begin
   self.curr_char_pos := 0;
 end;
 
-procedure TLexer.reset();
+procedure TLexer.process_file(path : string; out line : string);
+var raw_data_file : TextFile;
+begin
+    AssignFile(raw_data_file, path);
+    Reset(raw_data_file);
+    if eof(raw_data_file) then
+      self.append_error('File is empty.', 0)
+    else
+      readln(raw_data_file, line);
+    CloseFile(raw_data_file);
+end;
+
+procedure TLexer.discard();
 begin
   if not self.inited then
     raise Exception.Create('Call init procedure first!');
@@ -104,7 +124,7 @@ begin
         continue;
       end;
       if not self.is_wspace() then
-        self.append_error('Bad character met: ' + self.curr_char, self.curr_char_pos);
+        self.append_error('Bad character met: [' + self.curr_char + ']', self.curr_char_pos );
       self.get_next_char;
   end;
 end;
