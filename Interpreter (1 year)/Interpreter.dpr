@@ -1,4 +1,4 @@
-program Interpreter;
+﻿program Interpreter;
 
 uses
   SysUtils,
@@ -6,7 +6,8 @@ uses
   Converter2 in 'Converter2.pas',
   Lexer in 'Lexer.pas',
   Defines2 in 'Defines2.pas',
-  Tester in 'Tester.pas';
+  Tester in 'Tester.pas',
+  Tests in 'Tests.pas';
 
 var lexer  : TLexer;
 var tokens : TTokens;
@@ -18,8 +19,9 @@ var i    : integer;
 
 begin
   while true do begin
+    write('>');
     readln(expr);
-    lexer.init_no_file(expr);
+    lexer.init(expr);
     lexer.tokenize();
     tokens := lexer.tokens;
 
@@ -37,18 +39,14 @@ begin
        else begin
          conv.init();
          conv.convert(tokens);
-         for i := 0 to length(conv.actions)-1 do
-            writeln(conv.actions[i].to_string());
          writeln(conv.notation);
-         conv.reset;
+         conv.discard;
        end;
-       tester.reset;
-
+       tester.discard;
     end;
 
-    lexer.reset;
+    lexer.discard;
     writeln;
   end;
-  //Stack2.test;
 end.
 
