@@ -9,6 +9,7 @@ const NO_FILE = 'No file';
 
 type int  = integer;
 type bool = boolean;
+type float = real;
 
 type TPosition = record
    pos_in : int;
@@ -69,9 +70,11 @@ begin
     TErrorKind.CONVERTER_ERROR: str := '[Converter error]: ';
   end;
 
-  str := str + msg + ' <in pos : ' + inttostr(self.pos.pos_in);
+  str := str + msg + ' <';
+
   if self.pos.target <> NO_FILE then
-    str := str + ' ' + self.pos.target;
+    str := str + 'file: '+ self.pos.target + ' ';
+  str := str + 'in pos : ' + inttostr(self.pos.pos_in);
   str := str + '>';
   exit(str);
 end;

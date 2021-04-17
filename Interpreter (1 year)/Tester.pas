@@ -13,19 +13,19 @@ type TTester = record
   var errors         : TErrors;
 
   procedure init(tokens : TTokens);
-  procedure reset();
+  procedure discard();
 
   procedure test_for_errors();
   procedure test_operand();
   procedure test_operator();
 
   procedure get_next_token();
+
   //
   procedure append_error(msg : string; pos : TPosition);
   procedure append_error_formatted(expected : string; met : string);
   //
 
-  function match(kind : TTokenKind; offset : int = 0) : bool;
 end;
 
 implementation
@@ -38,7 +38,7 @@ begin
   SetLength(errors, 0);
 end;
 
-procedure TTester.reset();
+procedure TTester.discard();
 begin
   if not self.inited then
     raise Exception.Create('Call init procedure first!');
@@ -127,6 +127,7 @@ begin
     end;
   end
   else
+  //fix printing
     self.append_error('Operand after operator expected, but met: [' + self.curr_token.data + ']',self.curr_token.pos);
 end;
 
@@ -154,14 +155,6 @@ end;
 procedure TTester.append_error_formatted(expected : string; met : string);
 begin
   self.append_error(expected + ' expected, but met: [' + met + ']', self.curr_token.pos);
-end;
-
-function TTester.match(kind : TTokenKind; offset : int = 0) : bool;
-begin
-  if length(self.tokens) > self.curr_token_num + offset then
-    if self.tokens[self.curr_token_num + offset].kind = kind then
-      exit(true);
-  exit(false);
 end;
 
 end.
