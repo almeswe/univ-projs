@@ -39,6 +39,8 @@ begin
        else begin
          conv.init();
          conv.convert(tokens);
+         //for i := 0 to length(conv.actions)-1 do
+         //  writeln(conv.actions[i].to_string());
          writeln(conv.notation);
          conv.discard;
        end;

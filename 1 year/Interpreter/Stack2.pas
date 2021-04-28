@@ -50,6 +50,7 @@ procedure TStack.clear();
 var i     : integer;
 var temp  : ^TCell;
 var cells : array of ^TCell;
+
 begin
   SetLength(cells,0);
   temp := @(self.head^);

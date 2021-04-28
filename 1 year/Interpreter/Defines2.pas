@@ -62,6 +62,7 @@ begin
     TTokenKind.CloseParen: exit('Cl-Paren: ' + self.data);
   end;
 end;
+
 function TError.to_string() : string;
 var str : string;
 begin
@@ -78,6 +79,7 @@ begin
   str := str + '>';
   exit(str);
 end;
+
 function TAction.to_string(): string;
 begin
   case self.kind of
@@ -95,6 +97,7 @@ begin
   action.kind := kind;
   exit(action^);
 end;
+
 function new_position(pos_in : int; target : string = NO_FILE) : TPosition;
 var position : ^TPosition;
 begin
@@ -103,6 +106,7 @@ begin
   position.target := target;
   exit(position^);
 end;
+
 function new_error(msg : string; pos : TPosition; kind : TErrorKind) : TError;
 var error : ^TError;
 begin
@@ -112,6 +116,7 @@ begin
   error.kind := kind;
   exit(error^);
 end;
+
 function new_token(data : string; pos : TPosition; kind : TTokenKind) : TToken;
 var token : ^TToken;
 begin
