@@ -1,10 +1,10 @@
-object EConstructorForm: TEConstructorForm
+object ECorrectForm: TECorrectForm
   Left = 0
   Top = 0
   BorderStyle = bsDialog
-  Caption = 'EConstructorForm'
-  ClientHeight = 386
-  ClientWidth = 300
+  Caption = 'ECorrecter'
+  ClientHeight = 388
+  ClientWidth = 316
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -12,18 +12,20 @@ object EConstructorForm: TEConstructorForm
   Font.Name = 'Tahoma'
   Font.Style = []
   OldCreateOrder = False
-  OnCreate = FormCreate
   PixelsPerInch = 96
   TextHeight = 13
-  object AddNewGroupBox: TGroupBox
+  object CorrectGroupBox: TGroupBox
     Left = 0
     Top = 0
-    Width = 300
-    Height = 386
+    Width = 316
+    Height = 388
     Align = alClient
-    Caption = 'ADD NEW EMPLOYEE'
+    Caption = 'CORRECT EMPLOYEE'
     TabOrder = 0
-    object InfoGroupBox: TGroupBox
+    ExplicitTop = 8
+    ExplicitWidth = 358
+    ExplicitHeight = 476
+    object CorrectInfoGroupBox: TGroupBox
       Left = 15
       Top = 25
       Width = 281
@@ -44,7 +46,7 @@ object EConstructorForm: TEConstructorForm
         Height = 13
         Caption = 'MIDDLENAME'
       end
-      object SuurnameLabel: TLabel
+      object SurnameLabel: TLabel
         Left = 20
         Top = 53
         Width = 48
@@ -63,7 +65,6 @@ object EConstructorForm: TEConstructorForm
         Font.Style = []
         ParentFont = False
         TabOrder = 0
-        Text = 'Alexey'
       end
       object MiddlenameEdit: TEdit
         Left = 74
@@ -77,7 +78,6 @@ object EConstructorForm: TEConstructorForm
         Font.Style = []
         ParentFont = False
         TabOrder = 1
-        Text = 'Sergeevich'
       end
       object SurnameEdit: TEdit
         Left = 74
@@ -91,10 +91,9 @@ object EConstructorForm: TEConstructorForm
         Font.Style = []
         ParentFont = False
         TabOrder = 2
-        Text = 'Meleshko'
       end
     end
-    object ProjectGroupBox: TGroupBox
+    object CorrectProjectGroupBox: TGroupBox
       Left = 15
       Top = 152
       Width = 281
@@ -134,7 +133,6 @@ object EConstructorForm: TEConstructorForm
         Font.Style = []
         ParentFont = False
         TabOrder = 0
-        Text = 'Arctic code'
       end
       object ProjectTaskComboBox: TComboBox
         Left = 74
@@ -148,7 +146,6 @@ object EConstructorForm: TEConstructorForm
         Font.Style = []
         ParentFont = False
         TabOrder = 1
-        Text = 'SE'
         Items.Strings = (
           'UX Design'
           'UI Design'
@@ -175,7 +172,7 @@ object EConstructorForm: TEConstructorForm
         Text = '  .  .  '
       end
     end
-    object SheduleGroupBox: TGroupBox
+    object CorrectSheduleGroupBox: TGroupBox
       Left = 15
       Top = 280
       Width = 281
@@ -229,23 +226,14 @@ object EConstructorForm: TEConstructorForm
         Text = '  :  '
       end
     end
-    object SubmitButton: TButton
-      Left = 34
+    object CorrectSubmitButton: TButton
+      Left = 15
       Top = 357
-      Width = 262
+      Width = 281
       Height = 25
       Caption = 'SUBMIT'
       TabOrder = 3
-      OnClick = SubmitButtonClick
-    end
-    object RandomButton: TButton
-      Left = 3
-      Top = 357
-      Width = 28
-      Height = 25
-      Caption = 'R'
-      TabOrder = 4
-      OnClick = RandomButtonClick
+      OnClick = CorrectSubmitButtonClick
     end
   end
 end

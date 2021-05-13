@@ -8,30 +8,37 @@ uses
   Vcl.StdCtrls,
   Defines,
   DB,
+  Testing,
   List,
   ECreator,
-  EDeleter;
+  ECorrector;
 
-type
-  TMainForm = class(TForm)
+type TMainForm = class(TForm)
 
-    AddNewButton: TButton;
     DataListView: TListView;
-    LoadButton: TButton;
-    SaveButton: TButton;
-    SortButton: TButton;
-    OpenDialog: TOpenDialog;
+
+    LoadButton:   TButton;
+    SaveButton:   TButton;
+    SortButton:   TButton;
     DeleteButton: TButton;
+    AddNewButton: TButton;
+
+    OpenDialog: TOpenDialog;
+    CorrectButton: TButton;
+    ClearButton: TButton;
 
     procedure FormResize(Sender: TObject);
-    procedure AddNewButtonClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure LoadButtonClick(Sender: TObject);
-    procedure DeleteButtonClick(Sender: TObject);
     procedure SaveButtonClick(Sender: TObject);
+    procedure DeleteButtonClick(Sender: TObject);
+    procedure AddNewButtonClick(Sender: TObject);
+    procedure CorrectButtonClick(Sender: TObject);
+    procedure ClearButtonClick(Sender: TObject);
 
     private
-      data : TCustomList;
+      //type TSortKind = (None, );
+      Data : TCustomList;
 
       procedure Refresh();
       procedure AddEmployee(employee : TEmployee);
@@ -47,10 +54,9 @@ procedure TMainForm.Refresh();
 var i : integer;
 begin
   self.DataListView.Items.Clear;
-  for i := 0 to self.data.size()-1 do
-    self.AddEmployee(self.data.get(i));
+  for i := 0 to self.Data.Size()-1 do
+    self.AddEmployee(self.Data.GetData(i));
 end;
-
 procedure TMainForm.AddEmployee(employee: TEmployee);
 var item : TListItem;
 begin
@@ -64,51 +70,73 @@ end;
 
 procedure TMainForm.FormCreate(Sender: TObject);
 begin
-  self.data.init();
+  self.Data.Init();
   self.OpenDialog.Create(self);
 end;
 procedure TMainForm.FormResize(Sender: TObject);
-const COUNT_OF_COLUMNS = 5;
+const columns = 5;
 var i : integer;
 var c_width : integer;
 begin
-  c_width := round(self.Width/COUNT_OF_COLUMNS);
-  for i := 0 to COUNT_OF_COLUMNS-1 do
+  c_width := round(self.Width/columns);
+  for i := 0 to columns-1 do
     self.DataListView.Columns[i].Width := c_width;
 end;
 procedure TMainForm.LoadButtonClick(Sender: TObject);
 begin
   if self.OpenDialog.Execute then begin
-    //self.data.clear;
-    self.data := DB.LoadFromTypeFile(self.OpenDialog.FileName);
+    self.Data := DB.LoadFromTypeFile(self.OpenDialog.FileName);
     self.Refresh;
   end;
 end;
 procedure TMainForm.SaveButtonClick(Sender: TObject);
 begin
   if self.OpenDialog.Execute then
-    DB.SaveToTypeFile(self.OpenDialog.FileName, self.data);
+    DB.SaveToTypeFile(self.OpenDialog.FileName, self.Data);
 end;
 procedure TMainForm.AddNewButtonClick(Sender: TObject);
 var ConstructorForm : TEConstructorForm;
 begin
   ConstructorForm := TEConstructorForm.Create(self);
+  ConstructorForm.SetArgs(self.Data);
   ConstructorForm.ShowModal;
   if ConstructorForm.IsEmployeeCreated() then begin
     self.AddEmployee(ConstructorForm.GetCreatedEmployee());
-    self.data.append(ConstructorForm.GetCreatedEmployee());
+    self.Data.Append(ConstructorForm.GetCreatedEmployee());
   end;
   ConstructorForm.Release;
 end;
-procedure TMainForm.DeleteButtonClick(Sender: TObject);
-var DeleterForm : TEDeleterForm;
+procedure TMainForm.CorrectButtonClick(Sender: TObject);
+var Index : integer;
+var CorrectForm : TECorrectForm;
 begin
-  DeleterForm := TEDeleterForm.Create(self);
-  DeleterForm.SetDataSource(self.data);
-  DeleterForm.ShowModal;
-  DeleterForm.Synchronize(self.data);
+  if self.DataListView.Selected <> nil then begin
+    CorrectForm := TECorrectForm.Create(self);
+    CorrectForm.SetArgs(self.Data.GetByName(self.DataListView.Selected.Caption, Index), self.Data);
+    CorrectForm.ShowModal;
+    if CorrectForm.IsEmployeeCorrected() then begin
+      self.Data.SetData(Index, CorrectForm.GetCorrectedEmployee());
+      self.Refresh;
+    end;
+    CorrectForm.Release;
+  end
+  else
+    ShowErrorMessageBox(self.Handle, 'You need one selected item for correcting!');
+end;
+procedure TMainForm.DeleteButtonClick(Sender: TObject);
+begin
+  if self.DataListView.Selected <> nil then begin
+    self.Data.DeleteByName(self.DataListView.Selected.Caption);
+    self.DataListView.DeleteSelected;
+  end
+  else
+    ShowErrorMessageBox(self.Handle, 'You need one selected item for deleting!');
+end;
+procedure TMainForm.ClearButtonClick(Sender: TObject);
+begin
+  self.DataListView.Clear;
+  self.Data.Clear;
   self.Refresh;
-  DeleterForm.Release;
 end;
 
 end.

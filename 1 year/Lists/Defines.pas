@@ -17,11 +17,20 @@ type TEmployee = record
   Midname : string[20];
   Project : TEmployeeProject;
   Shedule : TEmployeeShedule;
+
+  function SameEmployee(other : string) : boolean;
 end;
 type TEmployees = array of TEmployee;
 
 type TStringArray = array of string;
 
 implementation
+
+function TEmployee.SameEmployee(other : string) : boolean;
+begin
+  if self.Name + ' ' + self.Surname + ' ' + self.Midname = other then
+      exit(true);
+  exit(false);
+end;
 
 end.

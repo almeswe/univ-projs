@@ -4,10 +4,9 @@ interface
 
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.Mask, Defines, Math;
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.Mask, List, Defines, Math, Testing;
 
-type
-  TEConstructorForm = class(TForm)
+type TEConstructorForm = class(TForm)
 
     InfoGroupBox   : TGroupBox;
     AddNewGroupBox : TGroupBox;
@@ -42,23 +41,20 @@ type
     procedure RandomButtonClick(Sender: TObject);
      
     private
-      Employee        : TEmployee;
+      Employee : TEmployee;
+      Employees : TCustomList;
       EmployeeCreated : boolean;
 
       function CreateEmployee() : boolean;
       function CheckForMistakes() : boolean;
-      function CheckLongDate(date : string) : boolean;
-      function CheckShortDate(date : string) : boolean;
-      function IsTextEditEmpty(edit : TEdit) : boolean;
-      function IsComboBoxEmpty(box: TComboBox) : boolean;
-      function IsMaskEditEmpty(maskedit: TMaskEdit; shorttime : boolean = false) : boolean;
 
       procedure FillRandomly();
-      procedure ShowErrorMessageBox(msg : string; title : string = '');
 
     public
       function GetCreatedEmployee() : TEmployee; inline;
       function IsEmployeeCreated() : boolean; inline;
+
+      procedure SetArgs(employees : TCustomList);
   end;
 
 var EConstructorForm: TEConstructorForm;
@@ -66,90 +62,42 @@ var EConstructorForm: TEConstructorForm;
 implementation
 
 {$R *.dfm}
-
-function TEConstructorForm.CheckLongDate(date : string) : boolean;
-var day, mnth, year : string;
-begin
-  day  := Copy(date, 0, 2);
-  mnth := Copy(date, 4, 2);
-  year := Copy(date, 7, 2);
-  if (StrToInt(day) < 0) or (StrToInt(day) > 30) then
-    exit(false);
-  if (StrToInt(mnth) < 0) or (StrToInt(mnth) > 12) then
-    exit(false);
-  if (StrToInt(year) < 20) or (StrToInt(year) > 50) then
-    exit(false);
-  exit(true);
-end;
-function TEConstructorForm.CheckShortDate(date: string) : boolean;
-var hrs, mins : string;
-begin
-  hrs  := Copy(date, 0, 2);
-  mins := Copy(date, 4, 2);
-  if (StrToInt(hrs) < 0) or (StrToInt(hrs) > 23) then
-    exit(false);
-  if (StrToInt(mins) < 0) or (StrToInt(mins) > 59) then
-    exit(false);
-  exit(true);
-end;
-function TEConstructorForm.IsTextEditEmpty(edit: TEdit) : boolean;
-begin
-  if Trim(edit.Text) <> '' then
-    exit(true);
-  exit(false);
-end;
-
-procedure TEConstructorForm.RandomButtonClick(Sender: TObject);
-begin
-   self.FillRandomly();
-end;
-
-function TEConstructorForm.IsComboBoxEmpty(box: TComboBox) : boolean;
-begin
-  if Trim(box.Text) <> '' then
-    exit(true);
-  exit(false);
-end;
-function TEConstructorForm.IsMaskEditEmpty(maskedit: TMaskEdit; shorttime : boolean = false) : boolean;
-var a : string;
-begin
-  a := maskedit.Text;
-  if not shorttime then
-    if Trim(maskedit.Text) = '..' then
-      exit(false);
-  if shorttime then
-    if Trim(maskedit.Text) = ':' then
-      exit(false);
-  exit(true);
-end;
 function TEConstructorForm.CheckForMistakes() : boolean;
+var index : integer;
+var empl : TEmployee;
 begin
-  if not self.IsTextEditEmpty(self.NameEdit)        or
-     not self.IsTextEditEmpty(self.SurnameEdit)     or
-     not self.IsTextEditEmpty(self.MiddlenameEdit)  or
-     not self.IsTextEditEmpty(self.ProjectNameEdit) then begin
-        self.ShowErrorMessageBox('One or more text fields are empty.', 'Error');
+  if not IsTextEditEmpty(self.NameEdit)        or
+     not IsTextEditEmpty(self.SurnameEdit)     or
+     not IsTextEditEmpty(self.MiddlenameEdit)  or
+     not IsTextEditEmpty(self.ProjectNameEdit) then begin
+        ShowErrorMessageBox(self.Handle, 'One or more text fields are empty.', 'Error');
         exit(false);
      end;
 
-  if not self.IsComboBoxEmpty(self.ProjectTaskComboBox) then begin
-      self.ShowErrorMessageBox('Project task is empty.', 'Error');
+  if not IsComboBoxEmpty(self.ProjectTaskComboBox) then begin
+      ShowErrorMessageBox(self.Handle, 'Project task is empty.', 'Error');
       exit(false);
   end;
 
-  if not self.IsMaskEditEmpty(self.ProjectDeadlineMaskEdit)   or
-     not self.IsMaskEditEmpty(self.SheduleEndMaskEdit , true) or
-     not self.IsMaskEditEmpty(self.SheduleStartMaskEdit,true) then begin
-        self.ShowErrorMessageBox('One or more date fields are empty.', 'Error');
+  if not IsMaskEditEmpty(self.ProjectDeadlineMaskEdit)   or
+     not IsMaskEditEmpty(self.SheduleEndMaskEdit , true) or
+     not IsMaskEditEmpty(self.SheduleStartMaskEdit,true) then begin
+        ShowErrorMessageBox(self.Handle, 'One or more date fields are empty.', 'Error');
         exit(false);
      end;
 
-  if not self.CheckLongDate(self.ProjectDeadlineMaskEdit.Text) or
-     not self.CheckShortDate(self.SheduleEndMaskEdit.Text)     or
-     not self.CheckShortDate(self.SheduleStartMaskEdit.Text)   then begin
-      self.ShowErrorMessageBox('One or more date fields are filled incorrect.', 'Error');
+  if not CheckLongDate(self.ProjectDeadlineMaskEdit.Text) or
+     not CheckShortDate(self.SheduleEndMaskEdit.Text)     or
+     not CheckShortDate(self.SheduleStartMaskEdit.Text)   then begin
+      ShowErrorMessageBox(self.Handle, 'One or more date fields are filled incorrect.', 'Error');
       exit(false);
      end;
+
+  empl := self.Employees.GetByName(self.NameEdit.Text + ' ' + self.SurnameEdit.Text + ' ' + self.MiddlenameEdit.Text, index);
+  if index <> -1 then begin
+    ShowErrorMessageBox(self.Handle, 'This employee already in list.', 'Error');
+    exit(false);
+  end;
 
   exit(true);
 end;
@@ -189,6 +137,10 @@ end;
 function  TEConstructorForm.IsEmployeeCreated() : boolean;
 begin
   exit(self.EmployeeCreated);
+end;
+procedure TEConstructorForm.SetArgs(employees : TCustomList);
+begin
+  self.Employees := employees;
 end;
 procedure TEConstructorForm.FillRandomly();
 type TStringPool = array[1..10] of string[20];
@@ -252,13 +204,9 @@ begin
   self.ProjectNameEdit.Text := projnames[RandomRange(1, 10)];
   self.ProjectTaskComboBox.Text := tasks[RandomRange(1, 7)];
 
-  self.ProjectDeadlineMaskEdit.Text := IntToStr(RandomRange(0, 2)) + IntToStr(RandomRange(1, 9)) + '.0' + IntToStr(RandomRange(1, 9)) + '.' + IntToStr(RandomRange(21, 30));
+  self.ProjectDeadlineMaskEdit.Text := IntToStr(RandomRange(0, 2)) + IntToStr(RandomRange(1, 9)) + '.0' + IntToStr(RandomRange(1, 9)) + '.21';
   self.SheduleStartMaskEdit.Text := IntToStr(RandomRange(10, 15)) + ':00';
   self.SheduleEndMaskEdit.Text := IntToStr(RandomRange(16, 23)) + ':00';
-end;
-procedure TEConstructorForm.ShowErrorMessageBox(msg: string; title: string = '');
-begin
-  MessageBox(self.Handle, PChar(msg), PChar(title), MB_OK + MB_ICONERROR);
 end;
 
 procedure TEConstructorForm.FormCreate(Sender: TObject);
@@ -270,5 +218,9 @@ procedure TEConstructorForm.SubmitButtonClick(Sender: TObject);
 begin
   if self.CreateEmployee() then
     self.Close;
+end;
+procedure TEConstructorForm.RandomButtonClick(Sender: TObject);
+begin
+   self.FillRandomly();
 end;
 end.

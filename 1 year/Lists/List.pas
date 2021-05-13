@@ -14,26 +14,30 @@ type TCustomList = record
   Head : ^TCustomListItem;
   Last : ^TCustomListItem;
 
-  procedure init();
-  procedure clear();
-  //procedure swap()
-  procedure append(data : TEmployee);
-  procedure delete(const index : integer);
+  procedure Init();
+  procedure Clear();
+  procedure Append(data : TEmployee);
+  procedure Delete(const index : integer);
+  procedure SetData(const index : integer; data : TEmployee);
 
-  function empty(): boolean; inline;
-  function size() : integer;
-  function get(const index : integer) : TEmployee;
+  function Empty(): boolean; inline;
+  function Size() : integer;
+  function GetData(const index : integer) : TEmployee;
+
+  //extended
+  procedure DeleteByName(name : string);
+  function GetByName(name : string; out index : integer) : TEmployee;
 
 end;
 
 implementation
 
-procedure TCustomList.init();
+procedure TCustomList.Init();
 begin
   self.Head := nil;
   self.Last := nil;
 end;
-procedure TCustomList.clear();
+procedure TCustomList.Clear();
 var i : integer;
 var current : ^TCustomListItem;
 var items : array of ^TCustomListItem;
@@ -52,7 +56,7 @@ begin
   self.Head := nil;
   self.Last := nil;
 end;
-procedure TCustomList.append(data : TEmployee);
+procedure TCustomList.Append(data : TEmployee);
 var temp : ^TCustomListItem;
 begin
   new(temp);
@@ -69,7 +73,7 @@ begin
       self.Head.Next := @(self.Last^);
   end;
 end;
-procedure TCustomList.delete(const index : integer);
+procedure TCustomList.Delete(const index : integer);
 var i: integer;
 var current, previous : ^TCustomListItem;
 begin
@@ -103,14 +107,30 @@ begin
     previous.Next := current.Next;
   dispose(current);
 end;
-
-function TCustomList.empty() : boolean;
+procedure TCustomList.SetData(const index : integer; data : TEmployee);
+var i : integer;
+var current : ^TCustomListItem;
 begin
-  if self.size() = 0 then
+  if index < 0 then
+    raise Exception.Create('Negative index is not supplied!');
+  if self.Head = nil then
+    raise Exception.Create('List is empty!');
+  current := @(self.Head^);
+  for i := 0 to index-1 do begin
+    if current = nil then
+      raise Exception.Create('Item with index: [' + inttostr(index) + '] does not exist!');
+    current := @(current.Next^);
+  end;
+  current^.Data := data;
+end;
+
+function TCustomList.Empty() : boolean;
+begin
+  if self.Size() = 0 then
     exit(true);
   exit(false);
 end;
-function TCustomList.size() : integer;
+function TCustomList.Size() : integer;
 var len : integer;
 var current : ^TCustomListItem;
 begin
@@ -124,7 +144,7 @@ begin
   end;
   exit(len);
 end;
-function TCustomList.get(const index : integer) : TEmployee;
+function TCustomList.GetData(const index : integer) : TEmployee;
 var i : integer;
 var current : ^TCustomListItem;
 begin
@@ -139,6 +159,27 @@ begin
     current := @(current.Next^);
   end;
   exit(current^.Data);
+end;
+procedure TCustomList.DeleteByName(name : string);
+var i : integer;
+begin
+  for i := 0 to self.Size()-1 do begin
+    if self.GetData(i).SameEmployee(name) then begin
+      self.Delete(i);
+      break;
+    end;
+  end;
+end;
+function TCustomList.GetByName(name : string; out index : integer) : TEmployee;
+var i : integer;
+begin
+  for i := 0 to self.Size()-1 do begin
+    if self.GetData(i).SameEmployee(name) then begin
+      Index := i;
+      exit(self.GetData(i));
+    end;
+  end;
+  Index := -1;
 end;
 
 end.

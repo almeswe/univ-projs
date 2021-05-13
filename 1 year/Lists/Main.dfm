@@ -54,6 +54,12 @@ object MainForm: TMainForm
     Width = 75
     Height = 25
     Caption = 'ADD'
+    Font.Charset = RUSSIAN_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -15
+    Font.Name = 'Consolas'
+    Font.Style = [fsBold]
+    ParentFont = False
     TabOrder = 1
     OnClick = AddNewButtonClick
   end
@@ -63,6 +69,12 @@ object MainForm: TMainForm
     Width = 75
     Height = 25
     Caption = 'LOAD'
+    Font.Charset = RUSSIAN_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -15
+    Font.Name = 'Consolas'
+    Font.Style = [fsBold]
+    ParentFont = False
     TabOrder = 2
     OnClick = LoadButtonClick
   end
@@ -72,6 +84,12 @@ object MainForm: TMainForm
     Width = 75
     Height = 25
     Caption = 'SAVE'
+    Font.Charset = RUSSIAN_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -15
+    Font.Name = 'Consolas'
+    Font.Style = [fsBold]
+    ParentFont = False
     TabOrder = 3
     OnClick = SaveButtonClick
   end
@@ -81,6 +99,12 @@ object MainForm: TMainForm
     Width = 75
     Height = 25
     Caption = 'SORT'
+    Font.Charset = RUSSIAN_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -15
+    Font.Name = 'Consolas'
+    Font.Style = [fsBold]
+    ParentFont = False
     TabOrder = 4
   end
   object DeleteButton: TButton
@@ -89,8 +113,44 @@ object MainForm: TMainForm
     Width = 75
     Height = 25
     Caption = 'DELETE'
+    Font.Charset = RUSSIAN_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -15
+    Font.Name = 'Consolas'
+    Font.Style = [fsBold]
+    ParentFont = False
     TabOrder = 5
     OnClick = DeleteButtonClick
+  end
+  object CorrectButton: TButton
+    Left = 162
+    Top = 39
+    Width = 75
+    Height = 25
+    Caption = 'CORRECT'
+    Font.Charset = RUSSIAN_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -15
+    Font.Name = 'Consolas'
+    Font.Style = [fsBold]
+    ParentFont = False
+    TabOrder = 6
+    OnClick = CorrectButtonClick
+  end
+  object ClearButton: TButton
+    Left = 162
+    Top = 8
+    Width = 75
+    Height = 25
+    Caption = 'CLEAR'
+    Font.Charset = RUSSIAN_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -15
+    Font.Name = 'Consolas'
+    Font.Style = [fsBold]
+    ParentFont = False
+    TabOrder = 7
+    OnClick = ClearButtonClick
   end
   object OpenDialog: TOpenDialog
     Left = 736

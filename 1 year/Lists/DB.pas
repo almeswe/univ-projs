@@ -29,8 +29,8 @@ begin
   if FileExists(path) then begin
     AssignFile(TypeFile, path);
     Rewrite(TypeFile);
-    for i := 0 to data.size()-1 do begin
-      gotted := data.get(i);
+    for i := 0 to data.Size()-1 do begin
+      gotted := data.GetData(i);
       Write(TypeFile, gotted);
     end;
     CloseFile(TypeFile);
@@ -48,13 +48,13 @@ var i : integer;
 var data : TCustomList;
 var readed : TEmployee;
 begin
-  data.init();
+  data.Init();
   if FileExists(path) then begin
     AssignFile(TypeFile, path);
     Reset(TypeFile);
     while not eof(TypeFile) do begin
       Read(TypeFile, readed);
-      data.append(readed);
+      data.Append(readed);
     end;
     CloseFile(TypeFile);
   end;
