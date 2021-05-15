@@ -9,8 +9,8 @@ uses
   DB in 'DB.pas',
   ECorrector in 'ECorrector.pas' {ECorrectForm},
   Testing in 'Testing.pas',
-  ESorter in 'ESorter.pas' {ESortForm},
-  ETyper in 'ETyper.pas' {ETypeForm};
+  ETyper in 'ETyper.pas' {ETypeForm},
+  Time in 'Time.pas';
 
 {$R *.res}
 
@@ -20,7 +20,6 @@ begin
   Application.CreateForm(TMainForm, MainForm);
   Application.CreateForm(TEConstructorForm, EConstructorForm);
   Application.CreateForm(TECorrectForm, ECorrectForm);
-  Application.CreateForm(TESortForm, ESortForm);
   Application.CreateForm(TETypeForm, ETypeForm);
   Application.Run;
 end.

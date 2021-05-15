@@ -98,7 +98,7 @@ begin
     if self.Employees.GetData(i).ToExtendedNameString() <> self.Employee.ToExtendedNameString() then begin
        if self.Employees.GetData(i).ToNameString() =  self.NameEdit.Text + ' ' + self.SurnameEdit.Text + ' ' + self.MiddlenameEdit.Text then begin
           if (self.Employees.GetData(i).Project.Name <> self.ProjectNameEdit.Text) or (self.Employees.GetData(i).Project.Task = self.ProjectTaskComboBox.Text) then begin
-            ShowErrorMessageBox(self.Handle, 'Something went wrong when trying to correct employee!', 'Error');
+            ShowErrorMessageBox(self.Handle, 'Something went wrong when trying to add employee!', 'Error');
             exit(false);
           end;
        end;
@@ -107,6 +107,7 @@ begin
 
   exit(true);
 end;
+
 function TEConstructorForm.CreateEmployee() : boolean;
 var Employee : ^TEmployee;
 var Project  : ^TEmployeeProject;
@@ -134,14 +135,17 @@ function  TEConstructorForm.GetCreatedEmployee() : TEmployee;
 begin
   exit(self.Employee);
 end;
+
 function  TEConstructorForm.IsEmployeeCreated() : boolean;
 begin
   exit(self.EmployeeCreated);
 end;
+
 procedure TEConstructorForm.SetArgs(employees : TCustomList);
 begin
   self.Employees := employees;
 end;
+
 procedure TEConstructorForm.FillRandomly();
 type TStringPool = array[1..10] of string[20];
 
@@ -214,13 +218,16 @@ begin
   randomize;
   self.EmployeeCreated := false;
 end;
+
 procedure TEConstructorForm.SubmitButtonClick(Sender: TObject);
 begin
   if self.CreateEmployee() then
     self.Close;
 end;
+
 procedure TEConstructorForm.RandomButtonClick(Sender: TObject);
 begin
    self.FillRandomly();
 end;
+
 end.

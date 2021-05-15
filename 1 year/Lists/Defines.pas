@@ -2,6 +2,8 @@ unit Defines;
 
 interface
 
+uses SysUtils, Time;
+
 type TEmployeeShedule = record
   Start  : string[5];
   Finish : string[5];
@@ -18,6 +20,8 @@ type TEmployee = record
   Project : TEmployeeProject;
   Shedule : TEmployeeShedule;
 
+  function GetDaylyWorkHours() : integer;
+  function GetMonthlyWorkHours() : integer;
   function ToNameString() : string;
   function ToExtendedNameString() : string;
 end;
@@ -44,6 +48,16 @@ begin
   employee.Midname := '';
 
   exit(employee);
+end;
+
+function TEmployee.GetDaylyWorkHours() : integer;
+begin
+  exit(abs(StrToInt(Copy(self.Shedule.Finish, 0, 2)) - StrToInt(Copy(self.Shedule.Start, 0, 2))));
+end;
+
+function TEmployee.GetMonthlyWorkHours() : integer;
+begin
+  exit(self.GetDaylyWorkHours() * Time.GetWorkDays(Time.GetDaysIn(Time.GetPreviousMonth())));
 end;
 
 function TEmployee.ToNameString() : string;

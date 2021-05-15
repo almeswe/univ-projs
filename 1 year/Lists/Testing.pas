@@ -2,7 +2,7 @@ unit Testing;
 
 interface
 
-uses Winapi.Windows, Vcl.Mask, Vcl.StdCtrls, SysUtils, Defines;
+uses Winapi.Windows, Vcl.Mask, Vcl.StdCtrls, SysUtils, Defines, Time;
 
 function CheckLongDate(date : string) : boolean;
 function CheckShortDate(date : string) : boolean;
@@ -19,9 +19,9 @@ begin
   day  := Copy(date, 0, 2);
   mnth := Copy(date, 4, 2);
   year := Copy(date, 7, 2);
-  if (StrToInt(day) < 0) or (StrToInt(day) > 30) then
+  if (StrToInt(day) < 1) or (StrToInt(day) > Time.GetDaysIn(StrToInt(mnth))) then
     exit(false);
-  if (StrToInt(mnth) < 0) or (StrToInt(mnth) > 12) then
+  if (StrToInt(mnth) < 1) or (StrToInt(mnth) > 12) then
     exit(false);
   if StrToInt(year) <> 21 then
     exit(false);

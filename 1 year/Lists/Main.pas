@@ -22,22 +22,28 @@ type TMainForm = class(TForm)
     SETasksRadioButton: TRadioButton;
     NoneRadioButton: TRadioButton;
     SENTasksRadioButton: TRadioButton;
+    AEHRadioButton: TRadioButton;
 
     procedure FormResize(Sender: TObject);
     procedure FormCreate(Sender: TObject);
+
     procedure LoadButtonClick(Sender: TObject);
     procedure SaveButtonClick(Sender: TObject);
+    procedure ClearButtonClick(Sender: TObject);
     procedure DeleteButtonClick(Sender: TObject);
     procedure AddNewButtonClick(Sender: TObject);
     procedure CorrectButtonClick(Sender: TObject);
-    procedure ClearButtonClick(Sender: TObject);
+
+    procedure AEHRadioButtonClick(Sender: TObject);
     procedure NoneRadioButtonClick(Sender: TObject);
     procedure SETasksRadioButtonClick(Sender: TObject);
     procedure SENTasksRadioButtonClick(Sender: TObject);
+
     procedure DataListViewKeyPress(Sender: TObject; var Key: Char);
+    procedure DataListViewColumnClick(Sender: TObject; Column: TListColumn);
 
     private
-      type TSortKind = (None, SETasks, SENTasks);
+      type TSortKind = (None, SETasks, SENTasks, AEHours);
 
       var Employees : TCustomList;
       var CurrentSort : TSortKind;
@@ -47,6 +53,7 @@ type TMainForm = class(TForm)
       procedure Refresh();
       procedure RefreshNone();
       procedure RefreshSETasks();
+      procedure RefreshAEHours();
       procedure RefreshSENTasks();
       procedure AddEmployee(employee : TEmployee);
 
@@ -62,6 +69,10 @@ implementation
 procedure TMainForm.Refresh();
 begin
   self.DataListView.Items.Clear;
+
+  if self.DataListView.Columns.Count = 6 then
+    self.DataListView.Columns[5].Free;
+
   case self.CurrentSort of
     TSortKind.None:
       self.RefreshNone;
@@ -71,7 +82,12 @@ begin
 
     TSortKind.SENTasks:
       self.RefreshSENTasks;
+
+    TSortKind.AEHours:
+      self.RefreshAEHours;
   end;
+
+  self.FormResize(nil);
 end;
 
 procedure TMainForm.RefreshNone();
@@ -79,6 +95,28 @@ var i : integer;
 begin
   for i := 0 to self.Employees.Size()-1 do
     self.AddEmployee(self.Employees.GetData(i));
+end;
+
+procedure TMainForm.RefreshAEHours();
+var i, j : integer;
+var column : TListColumn;
+var tempList : TCustomList;
+begin
+  column := self.DataListView.Columns.Add;
+  column.Caption := 'WORK HOURS';
+
+  tempList := self.Employees;
+  for i := 0 to tempList.Size()-1 do begin
+    for j := i+1 to tempList.Size()-1 do begin
+      if tempList.GetData(j).GetMonthlyWorkHours() < tempList.GetData(i).GetMonthlyWorkHours() then
+        tempList.Swap(i, j);
+    end;
+  end;
+
+  for i := 0 to tempList.Size()-1 do
+    self.AddEmployee(tempList.GetData(i));
+
+  //tempList.Clear;
 end;
 
 procedure TMainForm.RefreshSETasks();
@@ -117,7 +155,7 @@ begin
   list.Clear;
 end;
 
-procedure TMainForm.AddEmployee(employee: TEmployee);
+procedure TMainForm.AddEmployee(employee : TEmployee);
 var item : TListItem;
 begin
   item := self.DataListView.Items.Add;
@@ -126,6 +164,8 @@ begin
   item.SubItems.Add(employee.Project.Task);
   item.SubItems.Add(employee.Project.Deadline);
   item.SubItems.Add(employee.Shedule.Start + ' - ' + employee.Shedule.Finish);
+  if self.CurrentSort = TSortKind.AEHours then
+    item.SubItems.Add(IntToStr(employee.GetMonthlyWorkHours()));
 end;
 
 procedure TMainForm.GetSpecifiedEmployee();
@@ -152,11 +192,11 @@ end;
 
 procedure TMainForm.FormResize(Sender: TObject);
 var i : integer;
-var c_width : integer;
+var columnWidth : integer;
 begin
-  c_width := round(self.DataListView.Width/self.DataListView.Columns.Count);
+  columnWidth := round(self.DataListView.Width/self.DataListView.Columns.Count);
   for i := 0 to self.DataListView.Columns.Count-1 do
-    self.DataListView.Columns[i].Width := c_width;
+    self.DataListView.Columns[i].Width := columnWidth;
 end;
 
 procedure TMainForm.LoadButtonClick(Sender: TObject);
@@ -217,6 +257,12 @@ begin
   ConstructorForm.Release;
 end;
 
+procedure TMainForm.AEHRadioButtonClick(Sender: TObject);
+begin
+  self.CurrentSort := TSortKind.AEHours;
+  self.Refresh;
+end;
+
 procedure TMainForm.CorrectButtonClick(Sender: TObject);
 var Name : string;
 var Index : integer;
@@ -238,22 +284,27 @@ begin
     ShowErrorMessageBox(self.Handle, 'Select item first!');
 end;
 
+procedure TMainForm.DataListViewColumnClick(Sender: TObject; Column: TListColumn);
+begin
+  if Column.Index = 0 then begin
+    self.DataListView.SortType := stText;
+    self.DataListView.SortType := stNone;
+  end;
+end;
+
 procedure TMainForm.DataListViewKeyPress(Sender: TObject; var Key: Char);
 begin
   case Key of
-
     '+': begin
        if self.DataListView.Font.Size <= 18 then
           self.DataListView.Font.Size := self.DataListView.Font.Size + 1;
     end;
-
 
     '-': begin
        if self.DataListView.Font.Size >= 9 then
           self.DataListView.Font.Size := self.DataListView.Font.Size - 1;
     end;
   end;
-
 end;
 
 procedure TMainForm.DeleteButtonClick(Sender: TObject);

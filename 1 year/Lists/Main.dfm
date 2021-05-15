@@ -45,9 +45,9 @@ object MainForm: TMainForm
         Caption = 'WORK SHEDULE'
         Width = 170
       end>
-    SortType = stText
     TabOrder = 0
     ViewStyle = vsReport
+    OnColumnClick = DataListViewColumnClick
     OnKeyPress = DataListViewKeyPress
   end
   object AddNewButton: TButton
@@ -148,7 +148,7 @@ object MainForm: TMainForm
   end
   object SETasksRadioButton: TRadioButton
     Left = 775
-    Top = 232
+    Top = 256
     Width = 114
     Height = 17
     Anchors = [akTop, akRight]
@@ -182,7 +182,7 @@ object MainForm: TMainForm
   end
   object SENTasksRadioButton: TRadioButton
     Left = 775
-    Top = 255
+    Top = 279
     Width = 176
     Height = 17
     Anchors = [akTop, akRight]
@@ -195,6 +195,22 @@ object MainForm: TMainForm
     ParentFont = False
     TabOrder = 9
     OnClick = SENTasksRadioButtonClick
+  end
+  object AEHRadioButton: TRadioButton
+    Left = 775
+    Top = 233
+    Width = 176
+    Height = 17
+    Anchors = [akTop, akRight]
+    Caption = 'Employees Hours'
+    Font.Charset = RUSSIAN_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -12
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    ParentFont = False
+    TabOrder = 10
+    OnClick = AEHRadioButtonClick
   end
   object OpenDialog: TOpenDialog
     Left = 40
