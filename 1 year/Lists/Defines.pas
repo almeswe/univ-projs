@@ -18,19 +18,42 @@ type TEmployee = record
   Project : TEmployeeProject;
   Shedule : TEmployeeShedule;
 
-  function SameEmployee(other : string) : boolean;
+  function ToNameString() : string;
+  function ToExtendedNameString() : string;
 end;
 type TEmployees = array of TEmployee;
 
 type TStringArray = array of string;
 
+function NullEmployee() : TEmployee;
+
 implementation
 
-function TEmployee.SameEmployee(other : string) : boolean;
+function NullEmployee() : TEmployee;
+var employee : TEmployee;
 begin
-  if self.Name + ' ' + self.Surname + ' ' + self.Midname = other then
-      exit(true);
-  exit(false);
+  employee.Shedule.Start  := '';
+  employee.Shedule.Finish := '';
+
+  employee.Project.Name     := '';
+  employee.Project.Task     := '';
+  employee.Project.Deadline := '';
+
+  employee.Name    := '';
+  employee.Surname := '';
+  employee.Midname := '';
+
+  exit(employee);
+end;
+
+function TEmployee.ToNameString() : string;
+begin
+  exit(self.Name + ' ' + self.Surname + ' ' + self.Midname);
+end;
+
+function TEmployee.ToExtendedNameString() : string;
+begin
+  exit(self.ToNameString() + ' ' + self.Project.Name + ' ' + self.Project.Task);
 end;
 
 end.

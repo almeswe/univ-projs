@@ -17,16 +17,18 @@ type TCustomList = record
   procedure Init();
   procedure Clear();
   procedure Append(data : TEmployee);
+  procedure DeleteByName(name : string);
+  procedure DeleteByExtendedName(name : string);
   procedure Delete(const index : integer);
+  procedure Swap(index1, index2 : integer);
   procedure SetData(const index : integer; data : TEmployee);
 
-  function Empty(): boolean; inline;
   function Size() : integer;
+  function Empty(): boolean; inline;
+  function HasWithName(name : string) : boolean;
   function GetData(const index : integer) : TEmployee;
-
-  //extended
-  procedure DeleteByName(name : string);
   function GetByName(name : string; out index : integer) : TEmployee;
+  function GetByExtendedName(name : string; out index : integer) : TEmployee;
 
 end;
 
@@ -37,6 +39,7 @@ begin
   self.Head := nil;
   self.Last := nil;
 end;
+
 procedure TCustomList.Clear();
 var i : integer;
 var current : ^TCustomListItem;
@@ -56,6 +59,7 @@ begin
   self.Head := nil;
   self.Last := nil;
 end;
+
 procedure TCustomList.Append(data : TEmployee);
 var temp : ^TCustomListItem;
 begin
@@ -73,6 +77,7 @@ begin
       self.Head.Next := @(self.Last^);
   end;
 end;
+
 procedure TCustomList.Delete(const index : integer);
 var i: integer;
 var current, previous : ^TCustomListItem;
@@ -107,6 +112,15 @@ begin
     previous.Next := current.Next;
   dispose(current);
 end;
+
+procedure TCustomList.Swap(index1, index2 : integer);
+var buff : TEmployee;
+begin
+  buff := self.GetData(index1);
+  self.SetData(index1, self.GetData(index2));
+  self.SetData(index2, buff);
+end;
+
 procedure TCustomList.SetData(const index : integer; data : TEmployee);
 var i : integer;
 var current : ^TCustomListItem;
@@ -130,6 +144,7 @@ begin
     exit(true);
   exit(false);
 end;
+
 function TCustomList.Size() : integer;
 var len : integer;
 var current : ^TCustomListItem;
@@ -144,6 +159,7 @@ begin
   end;
   exit(len);
 end;
+
 function TCustomList.GetData(const index : integer) : TEmployee;
 var i : integer;
 var current : ^TCustomListItem;
@@ -160,21 +176,55 @@ begin
   end;
   exit(current^.Data);
 end;
+
+function TCustomList.HasWithName(name : string) : boolean;
+var index : integer;
+begin
+  self.GetByName(name, index);
+  if index <> -1 then
+    exit(true);
+  exit(false);
+end;
+
 procedure TCustomList.DeleteByName(name : string);
 var i : integer;
 begin
   for i := 0 to self.Size()-1 do begin
-    if self.GetData(i).SameEmployee(name) then begin
+    if self.GetData(i).ToNameString() = name then begin
       self.Delete(i);
       break;
     end;
   end;
 end;
+
+procedure TCustomList.DeleteByExtendedName(name : string);
+var i : integer;
+begin
+  for i := 0 to self.Size()-1 do begin
+    if self.GetData(i).ToExtendedNameString() = name then begin
+      self.Delete(i);
+      break;
+    end;
+  end;
+end;
+
 function TCustomList.GetByName(name : string; out index : integer) : TEmployee;
 var i : integer;
 begin
   for i := 0 to self.Size()-1 do begin
-    if self.GetData(i).SameEmployee(name) then begin
+    if self.GetData(i).ToNameString() = name then begin
+      Index := i;
+      exit(self.GetData(i));
+    end;
+  end;
+  Index := -1;
+end;
+
+function TCustomList.GetByExtendedName(name : string; out index : integer) : TEmployee;
+var i : integer;
+begin
+  for i := 0 to self.Size()-1 do begin
+    if self.GetData(i).ToExtendedNameString() = name then begin
       Index := i;
       exit(self.GetData(i));
     end;

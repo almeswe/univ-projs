@@ -109,8 +109,17 @@
             <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="DB.pas"/>
-        <DCCReference Include="EDeleter.pas">
-            <Form>EDeleterForm</Form>
+        <DCCReference Include="ECorrector.pas">
+            <Form>ECorrectForm</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
+        <DCCReference Include="Testing.pas"/>
+        <DCCReference Include="ESorter.pas">
+            <Form>ESortForm</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
+        <DCCReference Include="ETyper.pas">
+            <Form>ETypeForm</Form>
             <FormType>dfm</FormType>
         </DCCReference>
         <BuildConfiguration Include="Release">

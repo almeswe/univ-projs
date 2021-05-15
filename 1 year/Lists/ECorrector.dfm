@@ -22,9 +22,6 @@ object ECorrectForm: TECorrectForm
     Align = alClient
     Caption = 'CORRECT EMPLOYEE'
     TabOrder = 0
-    ExplicitTop = 8
-    ExplicitWidth = 358
-    ExplicitHeight = 476
     object CorrectInfoGroupBox: TGroupBox
       Left = 15
       Top = 25

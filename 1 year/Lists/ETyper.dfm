@@ -1,0 +1,40 @@
+object ETypeForm: TETypeForm
+  Left = 0
+  Top = 0
+  BorderStyle = bsDialog
+  Caption = 'ETyper'
+  ClientHeight = 69
+  ClientWidth = 283
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  OnCreate = FormCreate
+  PixelsPerInch = 96
+  TextHeight = 13
+  object TypeSubmitButton: TButton
+    Left = 8
+    Top = 37
+    Width = 267
+    Height = 25
+    Caption = 'SUBMIT'
+    TabOrder = 0
+    OnClick = TypeSubmitButtonClick
+  end
+  object TypeNameEdit: TEdit
+    Left = 8
+    Top = 8
+    Width = 267
+    Height = 23
+    Font.Charset = RUSSIAN_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -13
+    Font.Name = 'Consolas'
+    Font.Style = [fsBold]
+    ParentFont = False
+    TabOrder = 1
+  end
+end

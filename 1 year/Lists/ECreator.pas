@@ -3,8 +3,9 @@ unit ECreator;
 interface
 
 uses
-  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.Mask, List, Defines, Math, Testing;
+  System.SysUtils, System.Classes,
+  Vcl.Forms, Vcl.StdCtrls, Vcl.Mask, Vcl.Controls,
+  List, Defines, Math, Testing;
 
 type TEConstructorForm = class(TForm)
 
@@ -62,9 +63,9 @@ var EConstructorForm: TEConstructorForm;
 implementation
 
 {$R *.dfm}
+
 function TEConstructorForm.CheckForMistakes() : boolean;
-var index : integer;
-var empl : TEmployee;
+var i : integer;
 begin
   if not IsTextEditEmpty(self.NameEdit)        or
      not IsTextEditEmpty(self.SurnameEdit)     or
@@ -93,10 +94,15 @@ begin
       exit(false);
      end;
 
-  empl := self.Employees.GetByName(self.NameEdit.Text + ' ' + self.SurnameEdit.Text + ' ' + self.MiddlenameEdit.Text, index);
-  if index <> -1 then begin
-    ShowErrorMessageBox(self.Handle, 'This employee already in list.', 'Error');
-    exit(false);
+  for i := 0 to self.Employees.Size()-1 do begin
+    if self.Employees.GetData(i).ToExtendedNameString() <> self.Employee.ToExtendedNameString() then begin
+       if self.Employees.GetData(i).ToNameString() =  self.NameEdit.Text + ' ' + self.SurnameEdit.Text + ' ' + self.MiddlenameEdit.Text then begin
+          if (self.Employees.GetData(i).Project.Name <> self.ProjectNameEdit.Text) or (self.Employees.GetData(i).Project.Task = self.ProjectTaskComboBox.Text) then begin
+            ShowErrorMessageBox(self.Handle, 'Something went wrong when trying to correct employee!', 'Error');
+            exit(false);
+          end;
+       end;
+    end;
   end;
 
   exit(true);
@@ -109,23 +115,17 @@ begin
   if not self.CheckForMistakes() then
     exit(false);
 
-  new(Shedule);
-  Shedule.Start  := self.SheduleStartMaskEdit.Text;
-  Shedule.Finish := self.SheduleEndMaskEdit.Text;
+  self.Employee.Shedule.Start  := self.SheduleStartMaskEdit.Text;
+  self.Employee.Shedule.Finish := self.SheduleEndMaskEdit.Text;
 
-  new(Project);
-  Project.Name     := self.ProjectNameEdit.Text;
-  Project.Task     := self.ProjectTaskComboBox.Text;
-  Project.Deadline := self.ProjectDeadlineMaskEdit.Text;
+  self.Employee.Project.Name     := self.ProjectNameEdit.Text;
+  self.Employee.Project.Task     := self.ProjectTaskComboBox.Text;
+  self.Employee.Project.Deadline := self.ProjectDeadlineMaskEdit.Text;
 
-  new(Employee);
-  Employee.Name    := self.NameEdit.Text;
-  Employee.Surname := self.SurnameEdit.Text;
-  Employee.Midname := self.MiddlenameEdit.Text;
-  Employee.Project := Project^;
-  Employee.Shedule := Shedule^;
+  self.Employee.Name    := self.NameEdit.Text;
+  self.Employee.Surname := self.SurnameEdit.Text;
+  self.Employee.Midname := self.MiddlenameEdit.Text;
 
-  self.Employee        := Employee^;
   self.EmployeeCreated := true;
   exit(true);
 end;

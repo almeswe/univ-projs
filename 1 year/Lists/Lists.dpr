@@ -7,7 +7,10 @@ uses
   Defines in 'Defines.pas',
   ECreator in 'ECreator.pas' {EConstructorForm},
   DB in 'DB.pas',
-  EDeleter in 'EDeleter.pas' {EDeleterForm};
+  ECorrector in 'ECorrector.pas' {ECorrectForm},
+  Testing in 'Testing.pas',
+  ESorter in 'ESorter.pas' {ESortForm},
+  ETyper in 'ETyper.pas' {ETypeForm};
 
 {$R *.res}
 
@@ -16,6 +19,8 @@ begin
   Application.MainFormOnTaskbar := True;
   Application.CreateForm(TMainForm, MainForm);
   Application.CreateForm(TEConstructorForm, EConstructorForm);
-  Application.CreateForm(TEDeleterForm, EDeleterForm);
+  Application.CreateForm(TECorrectForm, ECorrectForm);
+  Application.CreateForm(TESortForm, ESortForm);
+  Application.CreateForm(TETypeForm, ETypeForm);
   Application.Run;
 end.

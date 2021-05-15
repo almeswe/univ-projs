@@ -3,8 +3,9 @@ unit ECorrector;
 interface
 
 uses
-  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.Mask, List, Defines, Testing;
+  System.SysUtils, System.Classes,
+  Vcl.Forms, Vcl.StdCtrls, Vcl.Mask, Vcl.Controls,
+  List, Defines, Testing;
 
 type TECorrectForm = class(TForm)
 
@@ -58,7 +59,9 @@ var ECorrectForm: TECorrectForm;
 implementation
 
 {$R *.dfm}
+
 function TECorrectForm.CheckForMistakes() : boolean;
+var i : integer;
 begin
   if not IsTextEditEmpty(self.NameEdit)        or
      not IsTextEditEmpty(self.SurnameEdit)     or
@@ -86,12 +89,25 @@ begin
       ShowErrorMessageBox(self.Handle, 'One or more date fields are filled incorrect.', 'Error');
       exit(false);
      end;
+
+  for i := 0 to self.Employees.Size()-1 do begin
+    if self.Employees.GetData(i).ToExtendedNameString() <> self.Employee.ToExtendedNameString() then begin
+       if self.Employees.GetData(i).ToNameString() =  self.NameEdit.Text + ' ' + self.SurnameEdit.Text + ' ' + self.MiddlenameEdit.Text then begin
+          if (self.Employees.GetData(i).Project.Name <> self.ProjectNameEdit.Text) or (self.Employees.GetData(i).Project.Task = self.ProjectTaskComboBox.Text) then begin
+            ShowErrorMessageBox(self.Handle, 'Something went wrong when trying to correct employee!', 'Error');
+            exit(false);
+          end;
+       end;
+    end;
+  end;
+
   exit(true);
 end;
 function TECorrectForm.CorrectEmployee() : boolean;
 begin
   if not self.CheckForMistakes() then
     exit(false);
+
   self.Employee.Shedule.Start  := self.SheduleStartMaskEdit.Text;
   self.Employee.Shedule.Finish := self.SheduleEndMaskEdit.Text;
 

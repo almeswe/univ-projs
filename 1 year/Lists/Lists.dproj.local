@@ -1,32 +1,60 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <BorlandProject>
 	<Transactions>
-    <Transaction>1899.12.30 00:00:00.000.168,E:\university-projects\univ-projs\1 year\Lists\Unit1.pas=C:\Users\Almes\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.109,=E:\university-projects\univ-projs\1 year\Lists\Unit1.pas</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.934,E:\university-projects\univ-projs\1 year\Lists\Unit1.pas=E:\university-projects\univ-projs\1 year\Lists\DB.pas</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.407,E:\university-projects\univ-projs\1 year\Lists\EmployeeConstructor.dfm=E:\university-projects\univ-projs\1 year\Lists\EConstructor.dfm</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.829,E:\university-projects\univ-projs\1 year\Lists\EmployeeConstructor.dfm=E:\university-projects\univ-projs\1 year\Lists\Creator.dfm</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.702,=E:\university-projects\univ-projs\1 year\Lists\Unit1.pas</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.430,=C:\Users\Almes\Documents\Embarcadero\Studio\Projects\Unit2.pas</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.278,E:\university-projects\univ-projs\1 year\Lists\EConstructor.pas=E:\university-projects\univ-projs\1 year\Lists\Unit1.pas</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.627,E:\university-projects\univ-projs\1 year\Lists\Defines.pas=C:\Users\Almes\Documents\Embarcadero\Studio\Projects\Defines.pas</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.534,C:\Users\Almes\Documents\Embarcadero\Studio\Projects\List.pas=C:\Users\Almes\Documents\Embarcadero\Studio\Projects\Unit2.pas</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.168,E:\university-projects\univ-projs\1 year\Lists\Unit1.dfm=C:\Users\Almes\Documents\Embarcadero\Studio\Projects\Unit1.dfm</Transaction>
     <Transaction>1899.12.30 00:00:00.000.119,=C:\Users\Almes\Documents\Embarcadero\Studio\Projects\Unit2.pas</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.397,E:\university-projects\univ-projs\1 year\Lists\Creator.pas=E:\university-projects\univ-projs\1 year\Lists\ECreator.pas</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.594,E:\university-projects\univ-projs\1 year\Lists\Main.pas=E:\university-projects\univ-projs\1 year\Lists\Unit1.pas</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.397,E:\university-projects\univ-projs\1 year\Lists\Creator.dfm=E:\university-projects\univ-projs\1 year\Lists\ECreator.dfm</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.205,E:\university-projects\univ-projs\1 year\Lists\Project1.dproj=E:\university-projects\univ-projs\1 year\Lists\Lists.dproj</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.394,E:\university-projects\univ-projs\1 year\Lists\Project1.dproj=C:\Users\Almes\Documents\Embarcadero\Studio\Projects\Project1.dproj</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.628,E:\university-projects\univ-projs\1 year\Lists\List.pas=C:\Users\Almes\Documents\Embarcadero\Studio\Projects\List.pas</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.278,E:\university-projects\univ-projs\1 year\Lists\EConstructor.dfm=E:\university-projects\univ-projs\1 year\Lists\Unit1.dfm</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.407,E:\university-projects\univ-projs\1 year\Lists\EmployeeConstructor.pas=E:\university-projects\univ-projs\1 year\Lists\EConstructor.pas</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.829,E:\university-projects\univ-projs\1 year\Lists\EmployeeConstructor.pas=E:\university-projects\univ-projs\1 year\Lists\Creator.pas</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.594,E:\university-projects\univ-projs\1 year\Lists\Main.dfm=E:\university-projects\univ-projs\1 year\Lists\Unit1.dfm</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.430,=C:\Users\Almes\Documents\Embarcadero\Studio\Projects\Unit2.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.218,C:\Users\Almes\Documents\Embarcadero\Studio\Projects\Unit2.pas=C:\Users\Almes\Documents\Embarcadero\Studio\Projects\Defines.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.534,C:\Users\Almes\Documents\Embarcadero\Studio\Projects\Unit2.pas=C:\Users\Almes\Documents\Embarcadero\Studio\Projects\List.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.959,E:\university-projects\univ-projs\1 year\Lists\Testing.pas=E:\university-projects\univ-projs\1 year\Lists\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.594,E:\university-projects\univ-projs\1 year\Lists\Unit1.pas=E:\university-projects\univ-projs\1 year\Lists\Main.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.890,=E:\university-projects\univ-projs\1 year\Lists\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.912,E:\university-projects\univ-projs\1 year\Lists\Unit1.pas=E:\university-projects\univ-projs\1 year\Lists\ESorter.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.677,E:\university-projects\univ-projs\1 year\Lists\ECorrector.dfm=E:\university-projects\univ-projs\1 year\Lists\Unit1.dfm</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.365,E:\university-projects\univ-projs\1 year\Lists\Unit1.dfm=E:\university-projects\univ-projs\1 year\Lists\EDeleter.dfm</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.677,E:\university-projects\univ-projs\1 year\Lists\ECorrector.pas=E:\university-projects\univ-projs\1 year\Lists\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.168,C:\Users\Almes\Documents\Embarcadero\Studio\Projects\Unit1.dfm=E:\university-projects\univ-projs\1 year\Lists\Unit1.dfm</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.407,E:\university-projects\univ-projs\1 year\Lists\EConstructor.pas=E:\university-projects\univ-projs\1 year\Lists\EmployeeConstructor.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.205,E:\university-projects\univ-projs\1 year\Lists\Lists.dproj=E:\university-projects\univ-projs\1 year\Lists\Project1.dproj</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.628,C:\Users\Almes\Documents\Embarcadero\Studio\Projects\List.pas=E:\university-projects\univ-projs\1 year\Lists\List.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.594,E:\university-projects\univ-projs\1 year\Lists\Unit1.dfm=E:\university-projects\univ-projs\1 year\Lists\Main.dfm</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.278,E:\university-projects\univ-projs\1 year\Lists\Unit1.dfm=E:\university-projects\univ-projs\1 year\Lists\EConstructor.dfm</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.912,E:\university-projects\univ-projs\1 year\Lists\Unit1.dfm=E:\university-projects\univ-projs\1 year\Lists\ESorter.dfm</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.684,E:\university-projects\univ-projs\1 year\Lists\EDeleter.pas=</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.365,E:\university-projects\univ-projs\1 year\Lists\Unit1.pas=E:\university-projects\univ-projs\1 year\Lists\EDeleter.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.168,C:\Users\Almes\Documents\Embarcadero\Studio\Projects\Unit1.pas=E:\university-projects\univ-projs\1 year\Lists\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.397,E:\university-projects\univ-projs\1 year\Lists\ECreator.pas=E:\university-projects\univ-projs\1 year\Lists\Creator.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.627,C:\Users\Almes\Documents\Embarcadero\Studio\Projects\Defines.pas=E:\university-projects\univ-projs\1 year\Lists\Defines.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.397,E:\university-projects\univ-projs\1 year\Lists\ECreator.dfm=E:\university-projects\univ-projs\1 year\Lists\Creator.dfm</Transaction>
     <Transaction>1899.12.30 00:00:00.000.967,=C:\Users\Almes\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.218,C:\Users\Almes\Documents\Embarcadero\Studio\Projects\Defines.pas=C:\Users\Almes\Documents\Embarcadero\Studio\Projects\Unit2.pas</Transaction>
-    <Transaction>2021.05.11 15:13:25.924,=E:\university-projects\univ-projs\1 year\Lists\Unit1.pas</Transaction>
-    <Transaction>2021.05.11 15:24:07.365,E:\university-projects\univ-projs\1 year\Lists\EDeleter.pas=E:\university-projects\univ-projs\1 year\Lists\Unit1.pas</Transaction>
-    <Transaction>2021.05.11 15:24:07.365,E:\university-projects\univ-projs\1 year\Lists\EDeleter.dfm=E:\university-projects\univ-projs\1 year\Lists\Unit1.dfm</Transaction>
-  </Transactions>
+    <Transaction>1899.12.30 00:00:00.000.829,E:\university-projects\univ-projs\1 year\Lists\Creator.pas=E:\university-projects\univ-projs\1 year\Lists\EmployeeConstructor.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.394,C:\Users\Almes\Documents\Embarcadero\Studio\Projects\Project1.dproj=E:\university-projects\univ-projs\1 year\Lists\Project1.dproj</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.934,E:\university-projects\univ-projs\1 year\Lists\DB.pas=E:\university-projects\univ-projs\1 year\Lists\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.829,E:\university-projects\univ-projs\1 year\Lists\Creator.dfm=E:\university-projects\univ-projs\1 year\Lists\EmployeeConstructor.dfm</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.702,=E:\university-projects\univ-projs\1 year\Lists\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.278,E:\university-projects\univ-projs\1 year\Lists\Unit1.pas=E:\university-projects\univ-projs\1 year\Lists\EConstructor.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.924,=E:\university-projects\univ-projs\1 year\Lists\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.244,=E:\university-projects\univ-projs\1 year\Lists\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.752,=E:\university-projects\univ-projs\1 year\Lists\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.407,E:\university-projects\univ-projs\1 year\Lists\EConstructor.dfm=E:\university-projects\univ-projs\1 year\Lists\EmployeeConstructor.dfm</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.463,=E:\university-projects\univ-projs\1 year\Lists\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.109,=E:\university-projects\univ-projs\1 year\Lists\Unit1.pas</Transaction>
+    <Transaction>2021.05.15 13:47:47.808,=E:\university-projects\univ-projs\1 year\Lists\Unit1.pas</Transaction>
+    <Transaction>2021.05.15 13:49:53.572,E:\university-projects\univ-projs\1 year\Lists\ETyper.pas=E:\university-projects\univ-projs\1 year\Lists\Unit1.pas</Transaction>
+    <Transaction>2021.05.15 13:49:53.572,E:\university-projects\univ-projs\1 year\Lists\ETyper.dfm=E:\university-projects\univ-projs\1 year\Lists\Unit1.dfm</Transaction>
+  </Transactions>  <ProjectSortOrder AutoSort="0" SortType="0">
+    <File Path="DB.pas"/>
+    <File Path="Defines.pas"/>
+    <File Path="ECorrector.pas"/>
+    <File Path="ECorrector.dfm"/>
+    <File Path="ECreator.pas"/>
+    <File Path="ECreator.dfm"/>
+    <File Path="ESorter.pas"/>
+    <File Path="ESorter.dfm"/>
+    <File Path="ETyper.pas"/>
+    <File Path="ETyper.dfm"/>
+    <File Path="List.pas"/>
+    <File Path="Main.pas"/>
+    <File Path="Main.dfm"/>
+    <File Path="Testing.pas"/>
+  </ProjectSortOrder>
 </BorlandProject>

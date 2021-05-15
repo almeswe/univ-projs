@@ -161,7 +161,7 @@ object EConstructorForm: TEConstructorForm
       object ProjectDeadlineMaskEdit: TMaskEdit
         Left = 74
         Top = 78
-        Width = 184
+        Width = 183
         Height = 21
         EditMask = '!99/99/00;1;_'
         Font.Charset = DEFAULT_CHARSET
@@ -172,7 +172,7 @@ object EConstructorForm: TEConstructorForm
         MaxLength = 8
         ParentFont = False
         TabOrder = 2
-        Text = '  .  .  '
+        Text = '12.12.21'
       end
     end
     object SheduleGroupBox: TGroupBox
@@ -199,22 +199,6 @@ object EConstructorForm: TEConstructorForm
       object SheduleEndMaskEdit: TMaskEdit
         Left = 74
         Top = 40
-        Width = 176
-        Height = 21
-        EditMask = '!90:00;1;_'
-        Font.Charset = DEFAULT_CHARSET
-        Font.Color = clHotLight
-        Font.Height = -11
-        Font.Name = 'Consolas'
-        Font.Style = []
-        MaxLength = 5
-        ParentFont = False
-        TabOrder = 0
-        Text = '  :  '
-      end
-      object SheduleStartMaskEdit: TMaskEdit
-        Left = 75
-        Top = 13
         Width = 174
         Height = 21
         EditMask = '!90:00;1;_'
@@ -225,8 +209,24 @@ object EConstructorForm: TEConstructorForm
         Font.Style = []
         MaxLength = 5
         ParentFont = False
+        TabOrder = 0
+        Text = '22:22'
+      end
+      object SheduleStartMaskEdit: TMaskEdit
+        Left = 75
+        Top = 13
+        Width = 173
+        Height = 21
+        EditMask = '!90:00;1;_'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clHotLight
+        Font.Height = -11
+        Font.Name = 'Consolas'
+        Font.Style = []
+        MaxLength = 5
+        ParentFont = False
         TabOrder = 1
-        Text = '  :  '
+        Text = '12:12'
       end
     end
     object SubmitButton: TButton
