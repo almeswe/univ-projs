@@ -1,0 +1,48 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <ProjectGuid>{B2EBBB71-33B4-4967-84F1-0A4E2055B79C}</ProjectGuid>
+    </PropertyGroup>
+    <ItemGroup>
+        <Projects Include="InterpreterLogic.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="InterpreterUI.dproj">
+            <Dependencies/>
+        </Projects>
+    </ItemGroup>
+    <ProjectExtensions>
+        <Borland.Personality>Default.Personality.12</Borland.Personality>
+        <Borland.ProjectType/>
+        <BorlandProject>
+            <Default.Personality/>
+        </BorlandProject>
+    </ProjectExtensions>
+    <Target Name="InterpreterLogic">
+        <MSBuild Projects="InterpreterLogic.dproj"/>
+    </Target>
+    <Target Name="InterpreterLogic:Clean">
+        <MSBuild Projects="InterpreterLogic.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="InterpreterLogic:Make">
+        <MSBuild Projects="InterpreterLogic.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="InterpreterUI">
+        <MSBuild Projects="InterpreterUI.dproj"/>
+    </Target>
+    <Target Name="InterpreterUI:Clean">
+        <MSBuild Projects="InterpreterUI.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="InterpreterUI:Make">
+        <MSBuild Projects="InterpreterUI.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="Build">
+        <CallTarget Targets="InterpreterLogic;InterpreterUI"/>
+    </Target>
+    <Target Name="Clean">
+        <CallTarget Targets="InterpreterLogic:Clean;InterpreterUI:Clean"/>
+    </Target>
+    <Target Name="Make">
+        <CallTarget Targets="InterpreterLogic:Make;InterpreterUI:Make"/>
+    </Target>
+    <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
+</Project>

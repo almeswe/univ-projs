@@ -25,6 +25,7 @@ type TTester = record
   procedure append_error(msg : string; pos : TPosition);
   procedure append_error_formatted(expected : string; met : string);
   //
+  function has_errors() : bool;
 
 end;
 
@@ -155,6 +156,13 @@ end;
 procedure TTester.append_error_formatted(expected : string; met : string);
 begin
   self.append_error(expected + ' expected, but met: [' + met + ']', self.curr_token.pos);
+end;
+
+function TTester.has_errors() : bool;
+begin
+  if length(self.errors) > 0 then
+    exit(true);
+  exit(false);
 end;
 
 end.
