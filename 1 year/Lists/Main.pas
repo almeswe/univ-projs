@@ -3,9 +3,9 @@ unit Main;
 interface
 
 uses
-  System.SysUtils, System.Classes,
+  System.SysUtils, System.Classes, System.IOUtils,
   Vcl.Forms, Vcl.StdCtrls, Vcl.Mask, Vcl.Controls, Vcl.Dialogs, Vcl.ComCtrls,
-  Defines, DB, Testing, List, ETyper, ECreator, ECorrector;
+  Defines, DB, Testing, List, Time, ETyper, ECreator, ECorrector;
 
 type TMainForm = class(TForm)
 
@@ -108,15 +108,13 @@ begin
   tempList := self.Employees;
   for i := 0 to tempList.Size()-1 do begin
     for j := i+1 to tempList.Size()-1 do begin
-      if tempList.GetData(j).GetMonthlyWorkHours() < tempList.GetData(i).GetMonthlyWorkHours() then
+      if tempList.GetData(j).GetMonthlyWorkHours() > tempList.GetData(i).GetMonthlyWorkHours() then
         tempList.Swap(i, j);
     end;
   end;
 
   for i := 0 to tempList.Size()-1 do
     self.AddEmployee(tempList.GetData(i));
-
-  //tempList.Clear;
 end;
 
 procedure TMainForm.RefreshSETasks();
@@ -165,7 +163,10 @@ begin
   item.SubItems.Add(employee.Project.Deadline);
   item.SubItems.Add(employee.Shedule.Start + ' - ' + employee.Shedule.Finish);
   if self.CurrentSort = TSortKind.AEHours then
-    item.SubItems.Add(IntToStr(employee.GetMonthlyWorkHours()));
+    if Time.GetPreviousMonth() - Time.GetMonthFromDate(StrToDate(employee.Project.Deadline)) < 2 then
+      item.SubItems.Add(IntToStr(employee.GetMonthlyWorkHours()))
+    else
+      item.SubItems.Add('0');
 end;
 
 procedure TMainForm.GetSpecifiedEmployee();
@@ -202,7 +203,10 @@ end;
 procedure TMainForm.LoadButtonClick(Sender: TObject);
 begin
   if self.OpenDialog.Execute then begin
-    self.Employees := DB.LoadFromTypeFile(self.OpenDialog.FileName);
+    if TPath.GetExtension(self.OpenDialog.FileName) = '.bin' then
+      self.Employees := DB.LoadFromTypeFile(self.OpenDialog.FileName)
+    else
+      self.Employees := DB.LoadFromTextFile(self.OpenDialog.FileName);
     self.Refresh;
   end;
 end;
@@ -210,7 +214,10 @@ end;
 procedure TMainForm.SaveButtonClick(Sender: TObject);
 begin
   if self.OpenDialog.Execute then
-    DB.SaveToTypeFile(self.OpenDialog.FileName, self.Employees);
+    if TPath.GetExtension(self.OpenDialog.FileName) = '.bin' then
+      DB.SaveToTypeFile(self.OpenDialog.FileName, self.Employees)
+    else
+      DB.SaveToTextFile(self.OpenDialog.FileName, self.Employees);
 end;
 
 procedure TMainForm.NoneRadioButtonClick(Sender: TObject);

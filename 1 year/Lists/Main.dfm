@@ -3,7 +3,7 @@ object MainForm: TMainForm
   Top = 0
   Caption = 'MainForm'
   ClientHeight = 624
-  ClientWidth = 959
+  ClientWidth = 939
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -14,14 +14,14 @@ object MainForm: TMainForm
   OnCreate = FormCreate
   OnResize = FormResize
   DesignSize = (
-    959
+    939
     624)
   PixelsPerInch = 96
   TextHeight = 13
   object DataListView: TListView
     Left = 0
     Top = 0
-    Width = 766
+    Width = 741
     Height = 623
     Anchors = [akLeft, akTop, akRight, akBottom]
     Columns = <
@@ -51,8 +51,8 @@ object MainForm: TMainForm
     OnKeyPress = DataListViewKeyPress
   end
   object AddNewButton: TButton
-    Left = 792
-    Top = 48
+    Left = 764
+    Top = 32
     Width = 75
     Height = 25
     Anchors = [akTop, akRight]
@@ -67,8 +67,8 @@ object MainForm: TMainForm
     OnClick = AddNewButtonClick
   end
   object LoadButton: TButton
-    Left = 792
-    Top = 24
+    Left = 764
+    Top = 8
     Width = 75
     Height = 25
     Anchors = [akTop, akRight]
@@ -83,8 +83,8 @@ object MainForm: TMainForm
     OnClick = LoadButtonClick
   end
   object SaveButton: TButton
-    Left = 866
-    Top = 24
+    Left = 838
+    Top = 8
     Width = 75
     Height = 25
     Anchors = [akTop, akRight]
@@ -99,8 +99,8 @@ object MainForm: TMainForm
     OnClick = SaveButtonClick
   end
   object DeleteButton: TButton
-    Left = 866
-    Top = 48
+    Left = 838
+    Top = 32
     Width = 75
     Height = 25
     Anchors = [akTop, akRight]
@@ -115,8 +115,8 @@ object MainForm: TMainForm
     OnClick = DeleteButtonClick
   end
   object CorrectButton: TButton
-    Left = 832
-    Top = 72
+    Left = 804
+    Top = 56
     Width = 75
     Height = 25
     Anchors = [akTop, akRight]
@@ -131,8 +131,8 @@ object MainForm: TMainForm
     OnClick = CorrectButtonClick
   end
   object ClearButton: TButton
-    Left = 832
-    Top = 96
+    Left = 804
+    Top = 80
     Width = 75
     Height = 25
     Anchors = [akTop, akRight]
@@ -147,8 +147,8 @@ object MainForm: TMainForm
     OnClick = ClearButtonClick
   end
   object SETasksRadioButton: TRadioButton
-    Left = 775
-    Top = 256
+    Left = 747
+    Top = 168
     Width = 114
     Height = 17
     Anchors = [akTop, akRight]
@@ -163,8 +163,8 @@ object MainForm: TMainForm
     OnClick = SETasksRadioButtonClick
   end
   object NoneRadioButton: TRadioButton
-    Left = 775
-    Top = 209
+    Left = 747
+    Top = 121
     Width = 97
     Height = 17
     Anchors = [akTop, akRight]
@@ -181,8 +181,8 @@ object MainForm: TMainForm
     OnClick = NoneRadioButtonClick
   end
   object SENTasksRadioButton: TRadioButton
-    Left = 775
-    Top = 279
+    Left = 747
+    Top = 191
     Width = 176
     Height = 17
     Anchors = [akTop, akRight]
@@ -197,8 +197,8 @@ object MainForm: TMainForm
     OnClick = SENTasksRadioButtonClick
   end
   object AEHRadioButton: TRadioButton
-    Left = 775
-    Top = 233
+    Left = 747
+    Top = 145
     Width = 176
     Height = 17
     Anchors = [akTop, akRight]

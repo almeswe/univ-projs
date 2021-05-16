@@ -56,8 +56,16 @@ begin
 end;
 
 function TEmployee.GetMonthlyWorkHours() : integer;
+var a : integer;
 begin
-  exit(self.GetDaylyWorkHours() * Time.GetWorkDays(Time.GetDaysIn(Time.GetPreviousMonth())));
+  a := Time.GetMonthFromDate(StrToDate(self.Project.Deadline));
+  if Time.GetMonthFromDate(Now)-1 = a then begin
+    exit(self.GetDaylyWorkHours() * Time.GetWorkDaysInBound(a, 1, Time.GetDayFromDate(StrToDate(self.Project.Deadline))));
+  end;
+  if (Time.GetMonthFromDate(Now)-1 < a) and (a <> 1) then
+    exit(self.GetDaylyWorkHours() * Time.GetWorkDaysInMonth(a))
+  else
+    exit(0);
 end;
 
 function TEmployee.ToNameString() : string;
