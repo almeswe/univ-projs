@@ -94,6 +94,19 @@ begin
       exit(false);
      end;
 
+  if not IsEditValid(self.NameEdit)        or
+     not IsEditValid(self.SurnameEdit)     or
+     not IsEditValid(self.MiddlenameEdit)  or
+     not IsEditValid(self.ProjectNameEdit) then begin
+        ShowErrorMessageBox(self.Handle, 'One or more text fields are filled incorrect.', 'Error');
+        exit(false);
+     end;
+
+  if StrToInt(Copy(self.SheduleStartMaskEdit.Text, 0, 2)) = StrToInt(Copy(self.SheduleEndMaskEdit.Text, 0, 2)) then begin
+    ShowErrorMessageBox(self.Handle, 'The work day must be at least 1 hour!', 'Error');
+    exit(false);
+  end;
+
   for i := 0 to self.Employees.Size()-1 do begin
     if self.Employees.GetData(i).ToExtendedNameString() <> self.Employee.ToExtendedNameString() then begin
        if self.Employees.GetData(i).ToNameString() =  self.NameEdit.Text + ' ' + self.SurnameEdit.Text + ' ' + self.MiddlenameEdit.Text then begin

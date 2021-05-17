@@ -57,13 +57,13 @@ var workDays : integer;
 begin
   start := Jan1;
   workDays := 0;
-  for i := 1 to fromDate do begin
+  for i := 0 to fromDate do begin
     if start = 7 then
       start := 0;
     inc(start);
   end;
 
-  for i := 1 to toDate - fromDate do begin
+  for i := 0 to toDate - fromDate do begin
     if (start <> 6) and (start <> 7) then
       inc(workDays)
     else

@@ -51,8 +51,15 @@ begin
 end;
 
 function TEmployee.GetDaylyWorkHours() : integer;
+var start, finish : integer;
 begin
-  exit(abs(StrToInt(Copy(self.Shedule.Finish, 0, 2)) - StrToInt(Copy(self.Shedule.Start, 0, 2))));
+  start := StrToInt(Copy(self.Shedule.Start, 0, 2));
+  finish := StrToInt(Copy(self.Shedule.Finish, 0, 2));
+
+  if finish < start then
+    finish := finish + 24;
+
+  exit(finish - start);
 end;
 
 function TEmployee.GetMonthlyWorkHours() : integer;
@@ -63,7 +70,7 @@ begin
     exit(self.GetDaylyWorkHours() * Time.GetWorkDaysInBound(a, 1, Time.GetDayFromDate(StrToDate(self.Project.Deadline))));
   end;
   if (Time.GetMonthFromDate(Now)-1 < a) and (a <> 1) then
-    exit(self.GetDaylyWorkHours() * Time.GetWorkDaysInMonth(a))
+    exit(self.GetDaylyWorkHours() * Time.GetWorkDaysInMonth(a-1))
   else
     exit(0);
 end;

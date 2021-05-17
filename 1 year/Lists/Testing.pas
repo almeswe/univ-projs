@@ -2,16 +2,29 @@ unit Testing;
 
 interface
 
-uses Winapi.Windows, Vcl.Mask, Vcl.StdCtrls, SysUtils, Defines, Time;
+uses Winapi.Windows, System.Character, Vcl.Mask, Vcl.StdCtrls, SysUtils, Defines, Time;
 
+function IsEditValid(edit : TEdit) : boolean;
 function CheckLongDate(date : string) : boolean;
 function CheckShortDate(date : string) : boolean;
 function IsTextEditEmpty(edit : TEdit) : boolean;
 function IsComboBoxEmpty(box: TComboBox) : boolean;
 function IsMaskEditEmpty(maskedit: TMaskEdit; shorttime : boolean = false) : boolean;
+
 procedure ShowErrorMessageBox(handle : HWND; msg : string; title : string = 'Error');
 
 implementation
+
+function IsEditValid(edit : TEdit) : boolean;
+var i : integer;
+var a : string;
+begin
+  a := edit.Text;
+  for i := 1 to length(Trim(edit.Text)) do
+  if not (((edit.Text[i] <= 'Z') and (edit.Text[i] >= 'A') or (edit.Text[i] <= 'z') and (edit.Text[i] >= 'a')) or (edit.Text[i] = ' ')) then
+    exit(false);
+  exit(true);
+end;
 
 function CheckLongDate(date : string) : boolean;
 var day, mnth, year : string;
@@ -27,6 +40,7 @@ begin
     exit(false);
   exit(true);
 end;
+
 function CheckShortDate(date: string) : boolean;
 var hrs, mins : string;
 begin
@@ -38,6 +52,7 @@ begin
     exit(false);
   exit(true);
 end;
+
 function IsTextEditEmpty(edit: TEdit) : boolean;
 begin
   if Trim(edit.Text) <> '' then
@@ -50,6 +65,7 @@ begin
     exit(true);
   exit(false);
 end;
+
 function IsMaskEditEmpty(maskedit: TMaskEdit; shorttime : boolean = false) : boolean;
 var a : string;
 begin
@@ -62,8 +78,10 @@ begin
       exit(false);
   exit(true);
 end;
+
 procedure ShowErrorMessageBox(handle : HWND; msg: string; title: string = 'Error');
 begin
   MessageBox(handle, PChar(msg), PChar(title), MB_OK + MB_ICONERROR);
 end;
+
 end.
