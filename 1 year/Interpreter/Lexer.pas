@@ -5,222 +5,222 @@ interface
 uses SysUtils, Defines2;
 
 type TLexer = record
-  var inited : bool;
+  Inited : bool;
 
-  var curr_file     : string;
-  var curr_char     : char;
-  var curr_char_pos : int;
+  CurrentCharPos : int;
+  CurrentChar    : char;
+  CurrentFile    : string;
 
-  var expr : string;
+  Expression : string;
 
-  var errors : TErrors;
-  var tokens : TTokens;
+  Errors : TErrors;
+  Tokens : TTokens;
 
-  procedure init(input : string);
-  procedure init_no_file(expr : string);
-  procedure process_file(path : string; out line : string);
+  procedure Init(input : string);
+  procedure InitNoFile(expr : string);
+  procedure ProcessFile(path : string; out line : string);
 
-  procedure discard();
-  procedure get_next_char();
+  procedure Discard();
+  procedure GetNextChar();
 
-  procedure tokenize();
-  procedure append_token(token : TToken);
-  procedure append_error(msg : string; pos : integer);
+  procedure Tokenize();
+  procedure AppendToken(token : TToken);
+  procedure AppendError(msg : string; pos : integer);
 
-  function recognize_op()  : TToken;
-  function recognize_num() : TToken;
-  function recognize_var() : TToken;
-  function recognize_paren() : TToken;
+  function RecognizeOp()  : TToken;
+  function RecognizeNum() : TToken;
+  function RecognizeVar() : TToken;
+  function RecognizeParen() : TToken;
 
-  function is_errored() : bool;
+  function IsErrored() : bool;
 
-  function is_op()     : bool;
-  function is_digit()  : bool;
-  function is_letter() : bool;
-  function is_wspace() : bool;
-  function is_paren()  : bool;
+  function IsOp()     : bool;
+  function IsDigit()  : bool;
+  function IsLetter() : bool;
+  function IsWspace() : bool;
+  function IsParen()  : bool;
 end;
 
 implementation
 
-procedure TLexer.init(input : string);
+procedure TLexer.Init(input : string);
 begin
   if FileExists(input) then begin
-    self.inited := true;
-    self.curr_file := input;
-    self.curr_char_pos := 0;
-    self.process_file(input, self.expr);
+    self.Inited := true;
+    self.CurrentFile := input;
+    self.CurrentCharPos := 0;
+    self.ProcessFile(input, self.Expression);
   end
   else
-    self.init_no_file(input);
+    self.InitNoFile(input);
 end;
 
-procedure TLexer.init_no_file(expr : string);
+procedure TLexer.InitNoFile(expr : string);
 begin
-  self.inited := true;
+  self.Inited := true;
 
-  self.expr := expr;
-  self.curr_file := NO_FILE;
-  self.curr_char_pos := 0;
+  self.Expression := expr;
+  self.CurrentFile := NO_FILE;
+  self.CurrentCharPos := 0;
 end;
 
-procedure TLexer.process_file(path : string; out line : string);
-var raw_data_file : TextFile;
+procedure TLexer.ProcessFile(path : string; out line : string);
+var rawDataFile : TextFile;
 begin
-    AssignFile(raw_data_file, path);
-    Reset(raw_data_file);
-    if eof(raw_data_file) then
-      self.append_error('File is empty.', 0)
+    AssignFile(rawDataFile, path);
+    Reset(rawDataFile);
+    if eof(rawDataFile) then
+      self.AppendError('File is empty.', 0)
     else
-      readln(raw_data_file, line);
-    CloseFile(raw_data_file);
+      readln(rawDataFile, line);
+    CloseFile(rawDataFile);
 end;
 
-procedure TLexer.discard();
+procedure TLexer.Discard();
 begin
-  if not self.inited then
+  if not self.Inited then
     raise Exception.Create('Call init procedure first!');
-  self.expr      := '';
-  self.curr_file := '';
-  self.inited    := false;
-  self.curr_char_pos := 0;
-  SetLength(self.errors, 0);
-  SetLength(self.tokens, 0);
+  self.Expression      := '';
+  self.CurrentFile := '';
+  self.Inited    := false;
+  self.CurrentCharPos := 0;
+  SetLength(self.Errors, 0);
+  SetLength(self.Tokens, 0);
 end;
 
-procedure TLexer.get_next_char();
+procedure TLexer.GetNextChar();
 begin
-  if not self.inited then
+  if not self.Inited then
     raise Exception.Create('Call init procedure first!');
-  if self.curr_char_pos+1 > length(self.expr) then
-    self.curr_char := EOL_CH
+  if self.CurrentCharPos+1 > length(self.Expression) then
+    self.CurrentChar := EOL_CH
   else begin
-    inc(self.curr_char_pos);
-    self.curr_char := self.expr[self.curr_char_pos];
+    inc(self.CurrentCharPos);
+    self.CurrentChar := self.Expression[self.CurrentCharPos];
   end;
 end;
 
-procedure TLexer.tokenize();
+procedure TLexer.Tokenize();
 begin
-  SetLength(self.tokens, 0);
-  if not self.inited then
+  SetLength(self.Tokens, 0);
+  if not self.Inited then
     raise Exception.Create('Call init procedure first!');
-  self.get_next_char;
-  while self.curr_char <> EOL_CH do begin
-      if self.is_op() then begin
-        self.append_token(self.recognize_op());
+  self.GetNextChar;
+  while self.CurrentChar <> EOL_CH do begin
+      if self.IsOp() then begin
+        self.AppendToken(self.RecognizeOp());
         continue;
       end;
-      if self.is_paren() then begin
-        self.append_token(self.recognize_paren());
+      if self.IsParen() then begin
+        self.AppendToken(self.RecognizeParen());
         continue;
       end;
-      if self.is_letter() then begin
-        self.append_token(self.recognize_var());
+      if self.IsLetter() then begin
+        self.AppendToken(self.RecognizeVar());
         continue;
       end;
-      if self.is_digit() then begin
-        self.append_token(self.recognize_num());
+      if self.IsDigit() then begin
+        self.AppendToken(self.RecognizeNum());
         continue;
       end;
-      if not self.is_wspace() then
-        self.append_error('Bad character met: [' + self.curr_char + ']', self.curr_char_pos );
-      self.get_next_char;
+      if not self.IsWspace() then
+        self.AppendError('Bad character met: [' + self.CurrentChar + ']', self.CurrentCharPos );
+      self.GetNextChar;
   end;
 end;
 
-procedure TLexer.append_token(token : TToken);
+procedure TLexer.AppendToken(token : TToken);
 begin
-  if not self.inited then
+  if not self.Inited then
     raise Exception.Create('Call init procedure first!');
-  SetLength(self.tokens, length(self.tokens) + 1);
-  tokens[length(self.tokens) - 1] := token;
+  SetLength(self.Tokens, length(self.Tokens) + 1);
+  Tokens[length(self.Tokens) - 1] := token;
 end;
 
-procedure TLexer.append_error(msg: string; pos: integer);
+procedure TLexer.AppendError(msg: string; pos: integer);
 var error : TError;
 var loc   : TPosition;
 begin
-  if not self.inited then
+  if not self.Inited then
     raise Exception.Create('Call init procedure first!');
-  loc   := new_position(pos, self.curr_file);
-  error := new_error(msg, loc, TErrorKind.LEXER_ERROR);
-  SetLength(self.errors, length(self.errors) + 1);
-  self.errors[length(self.errors) - 1] := error;
+  loc   := NewPosition(pos, self.CurrentFile);
+  error := NewError(msg, loc, TErrorKind.LEXER_ERROR);
+  SetLength(self.Errors, length(self.Errors) + 1);
+  self.Errors[length(self.Errors) - 1] := error;
 end;
 
-function TLexer.recognize_op() : TToken;
+function TLexer.RecognizeOp() : TToken;
 var token : TToken;
 var loc   : TPosition;
 begin
-   if not self.inited then
+   if not self.Inited then
     raise Exception.Create('Call init procedure first!');
-   loc   := new_position(self.curr_char_pos, self.curr_file);
-   token := new_token(self.curr_char, loc, TTokenKind.Op);
-   self.get_next_char;
+   loc   := NewPosition(self.CurrentCharPos, self.CurrentFile);
+   token := NewToken(self.CurrentChar, loc, TTokenKind.Op);
+   self.GetNextChar;
    exit(token);
 end;
 
-function TLexer.recognize_num() : TToken;
+function TLexer.RecognizeNum() : TToken;
 var token : TToken;
 var loc   : TPosition;
 begin
-  if not self.inited then
+  if not self.Inited then
     raise Exception.Create('Call init procedure first!');
-   loc   := new_position(self.curr_char_pos, self.curr_file);
-   token := new_token('', loc, TTokenKind.Constant);
-   while (self.curr_char <> EOL_CH) and (self.is_digit()) do begin
-       token.data := token.data + self.curr_char;
-       self.get_next_char;
+   loc   := NewPosition(self.CurrentCharPos, self.CurrentFile);
+   token := NewToken('', loc, TTokenKind.Constant);
+   while (self.CurrentChar <> EOL_CH) and (self.IsDigit()) do begin
+       token.Data := token.Data + self.CurrentChar;
+       self.GetNextChar;
    end;
    exit(token);
 end;
 
-function TLexer.recognize_var() : TToken;
+function TLexer.RecognizeVar() : TToken;
 var token : TToken;
 var loc   : TPosition;
 begin
-  if not self.inited then
+  if not self.Inited then
     raise Exception.Create('Call init procedure first!');
-   loc   := new_position(self.curr_char_pos, self.curr_file);
-   token := new_token('', loc, TTokenKind.Variable);
-   while (self.curr_char <> EOL_CH) and self.is_letter() do begin
-       token.data := token.data + self.curr_char;
-       self.get_next_char;
+   loc   := NewPosition(self.CurrentCharPos, self.CurrentFile);
+   token := NewToken('', loc, TTokenKind.Variable);
+   while (self.CurrentChar <> EOL_CH) and self.IsLetter() do begin
+       token.Data := token.Data + self.CurrentChar;
+       self.GetNextChar;
    end;
    exit(token);
 end;
 
-function TLexer.recognize_paren() : TToken;
+function TLexer.RecognizeParen() : TToken;
 var token : TToken;
 var loc   : TPosition;
 begin
-  if not self.inited then
+  if not self.Inited then
     raise Exception.Create('Call init procedure first!');
-   loc   := new_position(self.curr_char_pos, self.curr_file);
-   token := new_token(self.curr_char, loc, TTokenKind.OpenParen);
-   case self.curr_char of
-      '(' : token.kind := TTokenKind.OpenParen;
-      ')' : token.kind := TTokenKind.CloseParen;
+   loc   := NewPosition(self.CurrentCharPos, self.CurrentFile);
+   token := NewToken(self.CurrentChar, loc, TTokenKind.OpenParen);
+   case self.CurrentChar of
+      '(' : token.Kind := TTokenKind.OpenParen;
+      ')' : token.Kind := TTokenKind.CloseParen;
    end;
-   self.get_next_char;
+   self.GetNextChar;
    exit(token);
 end;
 
-function TLexer.is_errored() : bool;
+function TLexer.IsErrored() : bool;
 begin
-  if not self.inited then
+  if not self.Inited then
     raise Exception.Create('Call init procedure first!');
-  if length(self.errors) > 0 then
+  if length(self.Errors) > 0 then
     exit(true);
   exit(false);
 end;
 
-function TLexer.is_op() : bool;
+function TLexer.IsOp() : bool;
 begin
-  if not self.inited then
+  if not self.Inited then
     raise Exception.Create('Call init procedure first!');
-  case self.curr_char of
+  case self.CurrentChar of
        '+' : exit(true);
        '-' : exit(true);
        '*' : exit(true);
@@ -230,41 +230,41 @@ begin
   exit(false);
 end;
 
-function TLexer.is_letter() : bool;
+function TLexer.IsLetter() : bool;
 begin
-  if not self.inited then
+  if not self.Inited then
     raise Exception.Create('Call init procedure first!');
-  if (self.curr_char <= 'Z') and (self.curr_char >= 'A') or
-     (self.curr_char <= 'z') and (self.curr_char >= 'a') then
+  if (self.CurrentChar <= 'Z') and (self.CurrentChar >= 'A') or
+     (self.CurrentChar <= 'z') and (self.CurrentChar >= 'a') then
     exit(true)
   else
     exit(false);
 end;
 
-function TLexer.is_digit() : bool;
+function TLexer.IsDigit() : bool;
 begin
-  if not self.inited then
+  if not self.Inited then
     raise Exception.Create('Call init procedure first!');
-  if (self.curr_char <= '9') and (self.curr_char >= '0') then
+  if (self.CurrentChar <= '9') and (self.CurrentChar >= '0') then
     exit(true)
   else
     exit(false);
 end;
 
-function TLexer.is_wspace() : bool;
+function TLexer.IsWspace() : bool;
 begin
-  if not self.inited then
+  if not self.Inited then
     raise Exception.Create('Call init procedure first!');
-  if self.curr_char = ' ' then
+  if self.CurrentChar = ' ' then
     exit(true);
   exit(false);
 end;
 
-function TLexer.is_paren() : bool;
+function TLexer.IsParen() : bool;
 begin
-  if not self.inited then
+  if not self.Inited then
     raise Exception.Create('Call init procedure first!');
-  if (self.curr_char = ')')  or (self.curr_char = '(') then
+  if (self.CurrentChar = ')')  or (self.CurrentChar = '(') then
     exit(true);
   exit(false);
 end;

@@ -5,127 +5,125 @@ interface
 uses SysUtils, Stack2, Defines2;
 
 type TConverter = record
-  var inited : bool;
+  Inited : bool;
 
-  var notation : string;
-  var stack    : TStack;
-  var errors   : TErrors;
-  var actions  : TActions;
+  Notation : string;
+  Stack    : TStack;
+  Errors   : TErrors;
+  Actions  : TActions;
 
-  procedure init();
-  procedure discard();
-  procedure convert(tokens : TTokens);
+  procedure Init();
+  procedure Discard();
+  procedure Convert(tokens : TTokens);
 
-  procedure append_action(data : string; kind : TActionKind; out value : string);
-  procedure execute_action(data : string; kind : TActionKind; out value : string);
+  procedure AppendAction(data : string; kind : TActionKind; out value : string);
+  procedure ExecuteAction(data : string; kind : TActionKind; out value : string);
 
-  function is_errored() : bool;
+  function IsErrored() : bool;
 
-  function is_paren(str : string) : bool;
-  function is_cl_paren(str : string) : bool;
-  function is_op_paren(str : string) : bool;
+  function IsParen(str : string) : bool;
+  function IsCloseParen(str : string) : bool;
+  function IsOpenParen(str : string) : bool;
 
-  function get_op_priority(op : string) : int;
+  function GetOperatorPriority(op : string) : int;
 end;
 
 implementation
 
-procedure TConverter.init();
+procedure TConverter.Init();
 begin
-  self.inited := true;
-  self.notation := '';
-  self.stack.init();
+  self.Inited := true;
+  self.Notation := '';
+  self.Stack.Init();
 end;
 
-procedure TConverter.discard();
+procedure TConverter.Discard();
 begin
-  if not self.inited then
+  if not self.Inited then
     raise Exception.Create('Call init procedure first!');
-  self.stack.clear();
-  self.inited := false;
-  self.notation := '';
-  SetLength(self.errors, 0);
-  SetLength(self.actions, 0);
+  self.Stack.Clear();
+  self.Inited := false;
+  SetLength(self.Errors, 0);
+  SetLength(self.Actions, 0);
 end;
 
-procedure TConverter.convert(tokens : TTokens);
+procedure TConverter.Convert(tokens : TTokens);
 var i : int;
-var out_value : string;
+var outValue : string;
 begin
-    if not self.inited then
+    if not self.Inited then
       raise Exception.Create('Call init procedure first!');
-   self.notation := '';
-   SetLength(self.actions, 0);
+   self.Notation := '';
+   SetLength(self.Actions, 0);
    for i := 0 to length(tokens)-1 do begin
-       case tokens[i].kind of
+       case tokens[i].Kind of
           TTokenKind.Constant, TTokenKind.Variable: begin
-            self.append_action(tokens[i].data, TActionKind.APPEND, out_value);
+            self.AppendAction(tokens[i].Data, TActionKind.APPEND, outValue);
           end;
 
           TTokenKind.Op: begin
-            while (not self.stack.empty()) and (self.get_op_priority(self.stack.top().data) >= self.get_op_priority(tokens[i].data)) do begin
-              self.append_action(self.stack.top().data, TActionKind.POP, out_value);
-              self.notation := self.notation + out_value;
+            while (not self.Stack.Empty()) and (self.GetOperatorPriority(self.Stack.Top().data) >= self.GetOperatorPriority(tokens[i].Data)) do begin
+              self.AppendAction(self.Stack.Top().data, TActionKind.POP, outValue);
+              self.Notation := self.Notation + outValue;
             end;
-            self.append_action(tokens[i].data, TActionKind.PUSH, out_value);
+            self.AppendAction(tokens[i].Data, TActionKind.PUSH, outValue);
           end;
 
           TTokenKind.OpenParen, TTokenKind.CloseParen: begin
-            if self.is_cl_paren(tokens[i].data) then begin
-              while (not self.stack.empty()) and (not self.is_op_paren(self.stack.top().data)) do begin
-                if not self.is_paren(self.stack.top().data) then begin
-                  self.append_action(self.stack.top().data, TActionKind.POP, out_value);
-                  self.notation := self.notation + out_value;
+            if self.IsCloseParen(tokens[i].Data) then begin
+              while (not self.Stack.Empty()) and (not self.IsOpenParen(self.Stack.Top().data)) do begin
+                if not self.IsParen(self.Stack.Top().data) then begin
+                  self.AppendAction(self.Stack.Top().data, TActionKind.POP, outValue);
+                  self.Notation := self.Notation + outValue;
                 end;
               end;
-              if not self.stack.empty() then
-                self.append_action(self.stack.top().data, TActionKind.POP, out_value);
+              if not self.Stack.Empty() then
+                self.AppendAction(self.Stack.Top().data, TActionKind.POP, outValue);
             end
             else
-              //if not self.stack.empty() then
-                self.append_action(tokens[i].data, TActionKind.PUSH, out_value);
+              self.AppendAction(tokens[i].Data, TActionKind.PUSH, outValue);
           end;
        end;
    end;
 
-   while not self.stack.empty() do begin
-      self.append_action(self.stack.top().data, TActionKind.POP, out_value);
-      self.notation := self.notation + out_value;
+   while not self.Stack.Empty() do begin
+      self.AppendAction(self.Stack.Top().data, TActionKind.POP, outValue);
+      self.Notation := self.Notation + outValue;
    end;
 end;
 
-procedure TConverter.append_action(data: string; kind: TActionKind; out value : string);
+procedure TConverter.AppendAction(data: string; kind: TActionKind; out value : string);
 begin
-  if not self.inited then
+  if not self.Inited then
     raise Exception.Create('Call init procedure first!');
-  SetLength(self.actions, length(self.actions)+1);
-  self.actions[length(self.actions)-1] := new_action(data, kind);;
-  self.execute_action(data, kind, value);
+  SetLength(self.Actions, length(self.Actions)+1);
+  self.Actions[length(self.Actions)-1] := NewAction(data, kind);;
+  self.ExecuteAction(data, kind, value);
 end;
 
-procedure TConverter.execute_action(data : string; kind : TActionKind; out value : string);
+procedure TConverter.ExecuteAction(data : string; kind : TActionKind; out value : string);
 begin
-  if not self.inited then
+  if not self.Inited then
     raise Exception.Create('Call init procedure first!');
   case kind of
-    TActionKind.POP   : value := self.stack.pop().data;
-    TActionKind.PUSH  : self.stack.push(data);
-    TActionKind.APPEND: self.notation := self.notation + data;
+    TActionKind.POP   : value := self.Stack.Pop().data;
+    TActionKind.PUSH  : self.Stack.Push(data);
+    TActionKind.APPEND: self.Notation := self.Notation + data;
   end;
 end;
 
-function TConverter.is_errored() : bool;
+function TConverter.IsErrored() : bool;
 begin
-  if not self.inited then
+  if not self.Inited then
     raise Exception.Create('Call init procedure first!');
-  if length(self.errors) > 0 then
+  if length(self.Errors) > 0 then
     exit(true);
   exit(false);
 end;
 
-function TConverter.is_paren(str : string) : bool;
+function TConverter.IsParen(str : string) : bool;
 begin
-   if not self.inited then
+   if not self.Inited then
     raise Exception.Create('Call init procedure first!');
    case str[1] of
       '(',')' : exit(true);
@@ -133,27 +131,27 @@ begin
    exit(false);
 end;
 
-function TConverter.is_cl_paren(str : string) : bool;
+function TConverter.IsCloseParen(str : string) : bool;
 begin
-  if not self.inited then
+  if not self.Inited then
     raise Exception.Create('Call init procedure first!');
   if str[1] = ')' then
       exit(true);
    exit(false);
 end;
 
-function TConverter.is_op_paren(str : string) : bool;
+function TConverter.IsOpenParen(str : string) : bool;
 begin
-  if not self.inited then
+  if not self.Inited then
     raise Exception.Create('Call init procedure first!');
   if str[1] = '(' then
       exit(true);
    exit(false);
 end;
 
-function TConverter.get_op_priority(op: string) : int;
+function TConverter.GetOperatorPriority(op: string) : int;
 begin
-  if not self.inited then
+  if not self.Inited then
     raise Exception.Create('Call init procedure first!');
   case op[1] of
        '(',')' : exit(1);

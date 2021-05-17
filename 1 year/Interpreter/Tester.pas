@@ -5,68 +5,67 @@ interface
 uses SysUtils, Defines2;
 
 type TTester = record
-  var inited : bool;
+  Inited : bool;
 
-  var curr_token_num : int;
-  var curr_token     : TToken;
-  var tokens         : TTokens;
-  var errors         : TErrors;
+  CurrTokenNum : int;
+  CurrToken    : TToken;
+  Tokens       : TTokens;
+  Errors       : TErrors;
 
-  procedure init(tokens : TTokens);
-  procedure discard();
+  procedure Init(tokens : TTokens);
+  procedure Discard();
 
-  procedure test_for_errors();
-  procedure test_operand();
-  procedure test_operator();
+  procedure TestForErrors();
+  procedure TestOperand();
+  procedure TestOperator();
 
-  procedure get_next_token();
+  procedure GetNextToken();
 
-  //
-  procedure append_error(msg : string; pos : TPosition);
-  procedure append_error_formatted(expected : string; met : string);
-  //
-  function has_errors() : bool;
+  procedure AppendError(msg : string; pos : TPosition);
+  procedure AppendErrorFormatted(expected : string; met : string);
+
+  function HasErrors() : bool;
 
 end;
 
 implementation
 
-procedure TTester.init(tokens : TTokens);
+procedure TTester.Init(tokens : TTokens);
 begin
-  self.inited := true;
-  self.tokens := tokens;
-  self.curr_token_num := -1;
-  SetLength(errors, 0);
+  self.Inited := true;
+  self.Tokens := tokens;
+  self.CurrTokenNum := -1;
+  SetLength(Errors, 0);
 end;
 
-procedure TTester.discard();
+procedure TTester.Discard();
 begin
-  if not self.inited then
+  if not self.Inited then
     raise Exception.Create('Call init procedure first!');
-  self.inited := false;
-  self.curr_token_num := -1;
-  SetLength(tokens, 0);
-  SetLength(errors, 0);
+  self.Inited := false;
+  self.CurrTokenNum := -1;
+  SetLength(Tokens, 0);
+  SetLength(Errors, 0);
 end;
 
-procedure TTester.test_for_errors();
+procedure TTester.TestForErrors();
 var i : int;
 var paren_pairs : int;
 begin
-  if not self.inited then
+  if not self.Inited then
     raise Exception.Create('Call init procedure first!');
   paren_pairs := 0;
-  get_next_token;
+  GetNextToken;
   //
-  for i := 0 to length(self.tokens)-1 do begin
+  for i := 0 to length(self.Tokens)-1 do begin
   //
-    case self.curr_token.kind of
+    case self.CurrToken.Kind of
       TTokenKind.Constant, TTokenKind.Variable: begin
-        self.test_operand;
+        self.TestOperand;
       end;
 
       TTokenKind.Op: begin
-        self.test_operator;
+        self.TestOperator;
       end;
 
       TTokenKind.OpenParen: begin
@@ -77,90 +76,90 @@ begin
         dec(paren_pairs);
       end;
     end;
-    get_next_token;
+    GetNextToken;
   end;
   if paren_pairs <> 0 then
-    self.append_error('Paren-pairs balance expected.', self.curr_token.pos);
+    self.AppendError('Paren-pairs balance expected.', self.CurrToken.Pos);
 end;
 
-procedure TTester.test_operand();
+procedure TTester.TestOperand();
 var prev_token : TToken;
 var forw_token : TToken;
 begin
   //check right
-  if self.curr_token_num > 0 then begin
-    prev_token := self.tokens[self.curr_token_num-1];
-    case prev_token.kind of
+  if self.CurrTokenNum > 0 then begin
+    prev_token := self.Tokens[self.CurrTokenNum-1];
+    case prev_token.Kind of
       TTokenKind.CloseParen, TTokenKind.Constant, TTokenKind.Variable:
-        self.append_error('Operator before operand expected, but met: [' + prev_token.data + ']',prev_token.pos);
+        self.AppendError('Operator before operand expected, but met: [' + prev_token.Data + ']',prev_token.Pos);
     end;
   end;
   //check left
-  if self.curr_token_num < length(self.tokens)-1 then begin
-    forw_token := self.tokens[self.curr_token_num+1];
-    case forw_token.kind of
+  if self.CurrTokenNum < length(self.Tokens)-1 then begin
+    forw_token := self.Tokens[self.CurrTokenNum+1];
+    case forw_token.Kind of
       TTokenKind.OpenParen, TTokenKind.Constant, TTokenKind.Variable:
-        self.append_error('Operator after operand expected, but met: [' + forw_token.data + ']',forw_token.pos);
+        self.AppendError('Operator after operand expected, but met: [' + forw_token.Data + ']',forw_token.Pos);
     end;
   end;
 end;
 
-procedure TTester.test_operator();
+procedure TTester.TestOperator();
 var prev_token : TToken;
 var forw_token : TToken;
 begin
   //check right
-  if self.curr_token_num > 0 then begin
-    prev_token := self.tokens[self.curr_token_num-1];
-    case prev_token.kind of
+  if self.CurrTokenNum > 0 then begin
+    prev_token := self.Tokens[self.CurrTokenNum-1];
+    case prev_token.Kind of
       TTokenKind.Op, TTokenKind.OpenParen:
-        self.append_error('Operand before operator expected, but met: [' + prev_token.data + ']',prev_token.pos);
+        self.AppendError('Operand before operator expected, but met: [' + prev_token.Data + ']',prev_token.Pos);
     end;
   end
   else
-    self.append_error('Operand before operator expected, but met: [' + self.curr_token.data + ']', self.curr_token.pos);
+    self.AppendError('Operand before operator expected, but met: [' + self.CurrToken.Data + ']', self.CurrToken.Pos);
   //check left
-  if self.curr_token_num < length(self.tokens)-1 then begin
-    forw_token := self.tokens[self.curr_token_num+1];
-    case forw_token.kind of
+  if self.CurrTokenNum < length(self.Tokens)-1 then begin
+    forw_token := self.Tokens[self.CurrTokenNum+1];
+    case forw_token.Kind of
       TTokenKind.Op, TTokenKind.CloseParen:
-        self.append_error('Operand after operator expected, but met: [' + forw_token.data + ']',forw_token.pos);
+        self.AppendError('Operand after operator expected, but met: [' + forw_token.Data + ']',forw_token.Pos);
     end;
   end
   else
   //fix printing
-    self.append_error('Operand after operator expected, but met: [' + self.curr_token.data + ']',self.curr_token.pos);
+    self.AppendError('Operand after operator expected, but met: [' + self.CurrToken.Data + ']',self.CurrToken.Pos);
 end;
 
-procedure TTester.get_next_token();
+procedure TTester.GetNextToken();
 begin
-  if not self.inited then
+  if not self.Inited then
     raise Exception.Create('Call init procedure first!');
-  if self.curr_token_num + 1 > length(self.tokens)-1 then begin
-    self.curr_token := new_token('EOL', new_position(self.curr_token.pos.pos_in + length(self.curr_token.data), self.curr_token.pos.target),TTokenKind.EOL);
+  if self.CurrTokenNum + 1 > length(self.Tokens)-1 then begin
+    self.CurrToken := NewToken('EOL', NewPosition(self.CurrToken.Pos.PosIn + length(self.CurrToken.Data), self.CurrToken.Pos.Target),TTokenKind.EOL);
   end
   else begin
-    inc(self.curr_token_num);
-    self.curr_token := self.tokens[self.curr_token_num];
+    inc(self.CurrTokenNum);
+    self.CurrToken := self.Tokens[self.CurrTokenNum];
   end;
 end;
 
-procedure TTester.append_error(msg : string; pos : TPosition);
+procedure TTester.AppendError(msg : string; pos : TPosition);
 begin
-  if not self.inited then
+  if not self.Inited then
     raise Exception.Create('Call init procedure first!');
-  SetLength(self.errors, length(self.errors)+1);
-  self.errors[length(self.errors)-1] := new_error(msg, pos, TErrorKind.CONVERTER_ERROR);
+  SetLength(self.Errors, length(self.Errors)+1);
+  self.Errors[length(self.Errors)-1] := NewError(msg, pos, TErrorKind.CONVERTER_ERROR);
 end;
 
-procedure TTester.append_error_formatted(expected : string; met : string);
+procedure TTester.AppendErrorFormatted(expected : string; met : string);
 begin
-  self.append_error(expected + ' expected, but met: [' + met + ']', self.curr_token.pos);
+  self.AppendError(expected + ' expected, but met: [' + met + ']', self.CurrToken.Pos);
 end;
 
-function TTester.has_errors() : bool;
+function TTester.HasErrors() : bool;
 begin
-  if length(self.errors) > 0 then
+  if length(self.Errors) > 0 then
     exit(true);
   exit(false);
 end;

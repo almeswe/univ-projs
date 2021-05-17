@@ -5,84 +5,82 @@ interface
 uses SysUtils, Lexer, Tester, Converter2, Defines2;
 
 type TInterpreter = record
-  notation : string;
+  Notation : string;
 
-  lexer  : TLexer;
-  tokens : TTokens;
-  tester : TTester;
-  converter : TConverter;
+  Lexer  : TLexer;
+  Tokens : TTokens;
+  Tester : TTester;
+  Converter : TConverter;
 
-  actions : TActions;
-  errors  : TErrors;
+  Actions : TActions;
+  Errors  : TErrors;
 
-  procedure init(data : string);
-  procedure discard();
-  procedure interpret();
+  procedure Init(input : string);
+  procedure Discard();
+  procedure Interpret();
 
-  procedure save_to_file(path : string);
+  procedure SaveToFile(path : string);
 
-  function is_errored() : bool;
+  function IsErrored() : bool;
 end;
 
 implementation
 
-procedure TInterpreter.init(data: string);
+procedure TInterpreter.Init(input : string);
 begin
-  self.lexer.init(data);
-  self.converter.init();
+  self.Lexer.Init(input);
+  self.Converter.Init();
 end;
 
-procedure TInterpreter.discard();
+procedure TInterpreter.Discard();
 begin
-  SetLength(self.errors, 0);
-  SetLength(self.actions, 0);
-
-  self.notation := '';
-  self.lexer.discard;
-  self.converter.discard;
+  self.Lexer.Discard;
+  self.Converter.Discard;
+  SetLength(self.Errors, 0);
+  SetLength(self.Actions, 0);
 end;
 
-procedure TInterpreter.interpret();
+procedure TInterpreter.Interpret();
 begin
-  self.lexer.tokenize();
-  self.tokens := self.lexer.tokens;
+  self.Lexer.Tokenize();
+  self.Tokens := self.Lexer.Tokens;
 
-  if self.lexer.is_errored() then
-    self.errors := self.lexer.errors
+  if self.Lexer.IsErrored() then
+    self.Errors := self.Lexer.Errors
   else begin
-    self.tester.init(self.tokens);
-    self.tester.test_for_errors();
-    if self.tester.has_errors() then begin
-      self.errors := self.tester.errors;
-      self.tester.discard();
+    self.Tester.Init(self.Tokens);
+    self.Tester.TestForErrors();
+    if self.Tester.HasErrors() then begin
+      self.Errors := self.Tester.Errors;
+      self.Tester.Discard();
     end
     else begin
-      self.tester.discard();
-      self.converter.convert(self.tokens);
-      if self.converter.is_errored() then
-        self.errors := self.converter.errors
+      self.Tester.Discard();
+      self.Converter.Convert(self.Tokens);
+      if self.Converter.IsErrored() then
+        self.Errors := self.Converter.Errors
       else begin
-        self.actions := self.converter.actions;
-        self.notation := self.converter.notation;
+        self.Actions := self.Converter.Actions;
+        self.Notation := self.Converter.Notation;
       end;
     end;
   end;
 end;
 
-procedure TInterpreter.save_to_file(path : string);
+procedure TInterpreter.SaveToFile(path : string);
 var destination : TextFile;
 begin
   if FileExists(path) then begin
     AssignFile(destination, path);
     Rewrite(destination);
-    Writeln(destination, self.notation);
+    Writeln(destination, self.Notation);
     CloseFile(destination);
   end;
 end;
 
-function TInterpreter.is_errored() : boolean;
+function TInterpreter.IsErrored() : boolean;
 begin
-  if length(self.errors) > 0 then
+  if length(self.Errors) > 0 then
     exit(true);
   exit(false);
 end;

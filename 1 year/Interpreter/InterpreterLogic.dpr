@@ -18,16 +18,16 @@ begin
   while true do begin
     write('>');
     readln(expr);
-    interp.init(expr);
-    interp.interpret;
+    interp.Init(expr);
+    interp.Interpret;
 
-    if not interp.is_errored then
-      writeln(interp.notation)
+    if not interp.IsErrored then
+      writeln(interp.Notation)
     else
-      for i := 0 to length(interp.errors)-1 do
-          writeln(interp.errors[i].to_string());
+      for i := 0 to length(interp.Errors)-1 do
+          writeln(interp.Errors[i].ToString());
 
-    interp.discard;
+    interp.Discard;
   end;
 end.
 

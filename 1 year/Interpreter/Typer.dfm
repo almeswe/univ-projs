@@ -2,6 +2,7 @@ object TypeForm: TTypeForm
   Left = 0
   Top = 0
   ActiveControl = TypeEdit
+  Caption = 'Typer'
   ClientHeight = 228
   ClientWidth = 491
   Color = clWhite
@@ -62,7 +63,7 @@ object TypeForm: TTypeForm
     Left = 8
     Top = 21
     Width = 475
-    Height = 20
+    Height = 23
     Anchors = [akLeft, akTop, akRight]
     Font.Charset = RUSSIAN_CHARSET
     Font.Color = clWindowText
@@ -71,7 +72,7 @@ object TypeForm: TTypeForm
     Font.Style = []
     ParentFont = False
     TabOrder = 1
-    OnKeyPress = TypeEditKeyPress
+    OnChange = TypeEditChange
   end
   object SaveButton: TButton
     Left = 318

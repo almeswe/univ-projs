@@ -12,118 +12,118 @@ type bool = boolean;
 type float = real;
 
 type TPosition = record
-   pos_in : int;
-   target : string;
+   PosIn  : int;
+   Target : string;
 end;
 
 type TErrorKind = (LEXER_ERROR, CONVERTER_ERROR);
 type TError = record
-  msg  : string;
-  pos  : TPosition;
-  kind : TErrorKind;
+  Msg  : string;
+  Pos  : TPosition;
+  Kind : TErrorKind;
 
-  function to_string() : string;
+  function ToString() : string;
 end;
 type TErrors = array of TError;
 
 type TTokenKind = (Op, OpenParen, CloseParen, Constant, Variable, EOL);
 type TToken = record
-  data : string;
-  pos  : TPosition;
-  kind : TTokenKind;
+  Data : string;
+  Pos  : TPosition;
+  Kind : TTokenKind;
 
-  function to_string() : string;
+  function ToString() : string;
 end;
 type TTokens = array of TToken;
 
 type TActionKind = (PUSH, POP, APPEND);
 type TAction = record
-  data : string;
-  kind : TActionKind;
+  Data : string;
+  Kind : TActionKind;
 
-  function to_string() : string;
+  function ToString() : string;
 end;
 type TActions = array of TAction;
 
-function new_action(data : string; kind : TActionKind) : TAction;
-function new_position(pos_in : int; target : string = NO_FILE) : TPosition;
-function new_error(msg : string; pos : TPosition; kind : TErrorKind) : TError;
-function new_token(data : string; pos : TPosition; kind : TTokenKind) : TToken;
+function NewAction(data : string; kind : TActionKind) : TAction;
+function NewPosition(pos_in : int; target : string = NO_FILE) : TPosition;
+function NewError(msg : string; pos : TPosition; kind : TErrorKind) : TError;
+function NewToken(data : string; pos : TPosition; kind : TTokenKind) : TToken;
 
 implementation
 
-function TToken.to_string() : string;
+function TToken.ToString() : string;
 begin
-  case self.kind of
-    TTokenKind.Op:         exit('Operator: ' + self.data);
-    TTokenKind.Constant:   exit('Constant: ' + self.data);
-    TTokenKind.Variable:   exit('Variable: ' + self.data);
-    TTokenKind.OpenParen:  exit('Op-Paren: ' + self.data);
-    TTokenKind.CloseParen: exit('Cl-Paren: ' + self.data);
+  case self.Kind of
+    TTokenKind.Op:         exit('Operator: ' + self.Data);
+    TTokenKind.Constant:   exit('Constant: ' + self.Data);
+    TTokenKind.Variable:   exit('Variable: ' + self.Data);
+    TTokenKind.OpenParen:  exit('Op-Paren: ' + self.Data);
+    TTokenKind.CloseParen: exit('Cl-Paren: ' + self.Data);
   end;
 end;
 
-function TError.to_string() : string;
+function TError.ToString() : string;
 var str : string;
 begin
-  case self.kind of
+  case self.Kind of
     TErrorKind.LEXER_ERROR:     str := '[Lexer error]: ';
     TErrorKind.CONVERTER_ERROR: str := '[Converter error]: ';
   end;
 
-  str := str + msg + ' <';
+  str := str + Msg + ' <';
 
-  if self.pos.target <> NO_FILE then
-    str := str + 'file: '+ self.pos.target + ' ';
-  str := str + 'in pos : ' + inttostr(self.pos.pos_in);
+  if self.Pos.Target <> NO_FILE then
+    str := str + 'file: '+ self.Pos.Target + ' ';
+  str := str + 'in pos : ' + inttostr(self.Pos.PosIn);
   str := str + '>';
   exit(str);
 end;
 
-function TAction.to_string(): string;
+function TAction.ToString(): string;
 begin
-  case self.kind of
-    TActionKind.PUSH:   exit('PUSH  : ' + self.data);
-    TActionKind.POP:    exit('POP   : ' + self.data);
-    TActionKind.APPEND: exit('APPEND: ' + self.data);
+  case self.Kind of
+    TActionKind.PUSH:   exit('PUSH  : ' + self.Data);
+    TActionKind.POP:    exit('POP   : ' + self.Data);
+    TActionKind.APPEND: exit('APPEND: ' + self.Data);
   end;
 end;
 
-function new_action(data : string; kind : TActionKind) : TAction;
+function NewAction(data : string; kind : TActionKind) : TAction;
 var action : ^TAction;
 begin
   new(action);
-  action.data := data;
-  action.kind := kind;
+  action.Data := data;
+  action.Kind := kind;
   exit(action^);
 end;
 
-function new_position(pos_in : int; target : string = NO_FILE) : TPosition;
+function NewPosition(pos_in : int; target : string = NO_FILE) : TPosition;
 var position : ^TPosition;
 begin
   new(position);
-  position.pos_in := pos_in;
-  position.target := target;
+  position.PosIn := pos_in;
+  position.Target := target;
   exit(position^);
 end;
 
-function new_error(msg : string; pos : TPosition; kind : TErrorKind) : TError;
+function NewError(msg : string; pos : TPosition; kind : TErrorKind) : TError;
 var error : ^TError;
 begin
   new(error);
-  error.msg := msg;
-  error.pos := pos;
-  error.kind := kind;
+  error.Msg := msg;
+  error.Pos := pos;
+  error.Kind := kind;
   exit(error^);
 end;
 
-function new_token(data : string; pos : TPosition; kind : TTokenKind) : TToken;
+function NewToken(data : string; pos : TPosition; kind : TTokenKind) : TToken;
 var token : ^TToken;
 begin
   new(token);
-  token.data := data;
-  token.pos := pos;
-  token.kind := kind;
+  token.Data := data;
+  token.Pos := pos;
+  token.Kind := kind;
   exit(token^);
 end;
 

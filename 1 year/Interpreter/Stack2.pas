@@ -9,51 +9,51 @@ type TCell = record
   data : string;
 end;
 type TStack = record
-  head : ^TCell;
+  Head : ^TCell;
 
-  procedure init();
-  procedure clear();
-  procedure push(data : string);
+  procedure Init();
+  procedure Clear();
+  procedure Push(data : string);
 
-  function pop() : TCell;
-  function top() : TCell;
+  function Pop() : TCell;
+  function Top() : TCell;
 
-  function size()  : integer;
-  function empty() : boolean;
+  function Size()  : integer;
+  function Empty() : boolean;
 end;
 
-procedure test();
+procedure Test();
 
 implementation
 
-procedure TStack.init();
+procedure TStack.Init();
 begin
-  self.head := nil;
+  self.Head := nil;
 end;
 
-procedure TStack.push(data : string);
+procedure TStack.Push(data : string);
 var temp : ^TCell;
 begin
   New(temp);
   temp.data := data;
-  if self.head = nil then begin
-    self.head := @(temp^);
-    self.head.next := nil;
+  if self.Head = nil then begin
+    self.Head := @(temp^);
+    self.Head.next := nil;
   end
   else begin
-    temp.next := @(self.head^);
-    self.head := @(temp^);
+    temp.next := @(self.Head^);
+    self.Head := @(temp^);
   end;
 end;
 
-procedure TStack.clear();
+procedure TStack.Clear();
 var i     : integer;
 var temp  : ^TCell;
 var cells : array of ^TCell;
 
 begin
   SetLength(cells,0);
-  temp := @(self.head^);
+  temp := @(self.Head^);
   while temp <> nil do begin
     SetLength(cells,Length(cells)+1);
     cells[Length(cells)-1] := @(temp^);
@@ -62,42 +62,42 @@ begin
 
   for i := 0 to Length(cells)-1 do
     dispose(cells[i]);
-  self.head := nil;
+  self.Head := nil;
 end;
 
-function TStack.pop() : TCell;
+function TStack.Pop() : TCell;
 var temp : TCell;
 begin
-  temp := self.head^;
-  dispose(self.head);
-  if self.empty then
+  temp := self.Head^;
+  dispose(self.Head);
+  if self.Empty then
     raise Exception.Create('Cannot pop from empty stack!');
   if temp.next = nil then
-    self.head := nil
+    self.Head := nil
   else
-    self.head := @(temp.next^);
+    self.Head := @(temp.next^);
   exit(temp);
 end;
 
-function TStack.top() : TCell;
+function TStack.Top() : TCell;
 begin
-  if self.head = nil then
+  if self.Head = nil then
     raise Exception.Create('Top is unaccessable, stack is empty!');
-  exit(self.head^);
+  exit(self.Head^);
 end;
 
-function TStack.empty() : boolean;
+function TStack.Empty() : boolean;
 begin
-  if self.head = nil then
+  if self.Head = nil then
     exit(true);
   exit(false);
 end;
 
-function TStack.size() : integer;
+function TStack.Size() : integer;
 var len  : integer;
 var temp : ^TCell;
 begin
-   temp := @(self.head^);
+   temp := @(self.Head^);
    len  := 0;
    while temp <> nil do begin
       if temp.next = nil then
@@ -109,18 +109,18 @@ begin
    exit(len);
 end;
 
-procedure test();
+procedure Test();
 var s : TStack;
 var i : integer;
 var c : TCell;
 var e : boolean;
 begin
-  s.init();
+  s.Init();
   for i := 1 to 10000000 do
-    s.push('123');
+    s.Push('123');
   readln;
   for i := 1 to 10000000 do
-    s.pop();
+    s.Pop();
   readln;
 end;
 
