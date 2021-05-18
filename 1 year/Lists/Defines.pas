@@ -7,6 +7,8 @@ uses SysUtils, Time;
 type TEmployeeShedule = record
   Start  : string[5];
   Finish : string[5];
+
+  function ToString() : string;
 end;
 type TEmployeeProject = record
   Name : string[20];
@@ -48,6 +50,11 @@ begin
   employee.Midname := '';
 
   exit(employee);
+end;
+
+function TEmployeeShedule.ToString() : string;
+begin
+  exit(self.Start + ' - ' + self.Finish);
 end;
 
 function TEmployee.GetDaylyWorkHours() : integer;

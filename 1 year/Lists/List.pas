@@ -4,6 +4,8 @@ interface
 
 uses SysUtils, Defines;
 
+type TSearchOptions = (ByNSM, ByProjectName, ByProjectTask, ByProjectDeadline, ByShedule);
+
 type TCustomListItem = record
   Next : ^TCustomListItem;
   Data : TEmployee;
@@ -29,6 +31,8 @@ type TCustomList = record
   function GetData(const index : integer) : TEmployee;
   function GetByName(name : string; out index : integer) : TEmployee;
   function GetByExtendedName(name : string; out index : integer) : TEmployee;
+
+  function Search(data : string; options : TSearchOptions) : TCustomList;
 
 end;
 
@@ -230,6 +234,33 @@ begin
     end;
   end;
   Index := -1;
+end;
+
+function TCustomList.Search(data : string; options : TSearchOptions) : TCustomList;
+var i : integer;
+var list : TCustomList;
+begin
+  list.Init;
+  for i := 0 to self.Size()-1 do begin
+    case options of
+      TSearchOptions.ByNSM:
+        if self.GetData(i).ToNameString() = data then
+          list.Append(self.GetData(i));
+      TSearchOptions.ByProjectName:
+        if self.GetData(i).Project.Name = data then
+          list.Append(self.GetData(i));
+      TSearchOptions.ByProjectTask:
+        if self.GetData(i).Project.Task = data then
+          list.Append(self.GetData(i));
+      TSearchOptions.ByProjectDeadline:
+        if self.GetData(i).Project.Deadline = data then
+          list.Append(self.GetData(i));
+      TSearchOptions.ByShedule:
+        if self.GetData(i).Shedule.ToString() = data then
+          list.Append(self.GetData(i));
+    end;
+  end;
+  exit(list);
 end;
 
 end.

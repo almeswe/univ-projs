@@ -28,8 +28,7 @@ type
     function IsEmployeeSpecified() : boolean;
   end;
 
-var
-  ETypeForm: TETypeForm;
+var ETypeForm: TETypeForm;
 
 implementation
 

@@ -10,7 +10,8 @@ uses
   ECorrector in 'ECorrector.pas' {ECorrectForm},
   Testing in 'Testing.pas',
   ETyper in 'ETyper.pas' {ETypeForm},
-  Time in 'Time.pas';
+  Time in 'Time.pas',
+  ESearcher in 'ESearcher.pas' {ESearchForm};
 
 {$R *.res}
 
@@ -21,5 +22,6 @@ begin
   Application.CreateForm(TEConstructorForm, EConstructorForm);
   Application.CreateForm(TECorrectForm, ECorrectForm);
   Application.CreateForm(TETypeForm, ETypeForm);
+  Application.CreateForm(TESearchForm, ESearchForm);
   Application.Run;
 end.

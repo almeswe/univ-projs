@@ -148,7 +148,7 @@ object MainForm: TMainForm
   end
   object SETasksRadioButton: TRadioButton
     Left = 747
-    Top = 168
+    Top = 190
     Width = 114
     Height = 17
     Anchors = [akTop, akRight]
@@ -182,7 +182,7 @@ object MainForm: TMainForm
   end
   object SENTasksRadioButton: TRadioButton
     Left = 747
-    Top = 191
+    Top = 213
     Width = 176
     Height = 17
     Anchors = [akTop, akRight]
@@ -198,7 +198,7 @@ object MainForm: TMainForm
   end
   object AEHRadioButton: TRadioButton
     Left = 747
-    Top = 145
+    Top = 167
     Width = 176
     Height = 17
     Anchors = [akTop, akRight]
@@ -211,6 +211,22 @@ object MainForm: TMainForm
     ParentFont = False
     TabOrder = 10
     OnClick = AEHRadioButtonClick
+  end
+  object SearchRadioButton: TRadioButton
+    Left = 747
+    Top = 144
+    Width = 62
+    Height = 17
+    Anchors = [akTop, akRight]
+    Caption = 'Search'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -12
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    ParentFont = False
+    TabOrder = 11
+    OnClick = SearchRadioButtonClick
   end
   object OpenDialog: TOpenDialog
     Left = 40

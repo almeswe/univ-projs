@@ -5,7 +5,7 @@ interface
 uses
   System.SysUtils, System.Classes, System.IOUtils,
   Vcl.Forms, Vcl.StdCtrls, Vcl.Mask, Vcl.Controls, Vcl.Dialogs, Vcl.ComCtrls,
-  Defines, DB, Testing, List, Time, ETyper, ECreator, ECorrector;
+  Defines, DB, Testing, List, Time, ETyper, ECreator, ECorrector, ESearcher;
 
 type TMainForm = class(TForm)
 
@@ -23,6 +23,7 @@ type TMainForm = class(TForm)
     NoneRadioButton: TRadioButton;
     SENTasksRadioButton: TRadioButton;
     AEHRadioButton: TRadioButton;
+    SearchRadioButton: TRadioButton;
 
     procedure FormResize(Sender: TObject);
     procedure FormCreate(Sender: TObject);
@@ -36,6 +37,7 @@ type TMainForm = class(TForm)
 
     procedure AEHRadioButtonClick(Sender: TObject);
     procedure NoneRadioButtonClick(Sender: TObject);
+    procedure SearchRadioButtonClick(Sender: TObject);
     procedure SETasksRadioButtonClick(Sender: TObject);
     procedure SENTasksRadioButtonClick(Sender: TObject);
 
@@ -43,9 +45,10 @@ type TMainForm = class(TForm)
     procedure DataListViewColumnClick(Sender: TObject; Column: TListColumn);
 
     private
-      type TSortKind = (None, SETasks, SENTasks, AEHours);
+      type TSortKind = (None, SETasks, SENTasks, AEHours, ESearched);
 
       var Employees : TCustomList;
+      var SearchedEmployees : TCustomList;
       var CurrentSort : TSortKind;
 
       var SpecifiedEmployee : TEmployee;
@@ -55,6 +58,7 @@ type TMainForm = class(TForm)
       procedure RefreshSETasks();
       procedure RefreshAEHours();
       procedure RefreshSENTasks();
+      procedure RefreshSearched();
       procedure AddEmployee(employee : TEmployee);
 
       procedure GetSpecifiedEmployee();
@@ -85,6 +89,9 @@ begin
 
     TSortKind.AEHours:
       self.RefreshAEHours;
+
+    TSortKind.ESearched:
+      self.RefreshSearched;
   end;
 
   self.FormResize(nil);
@@ -153,15 +160,22 @@ begin
   list.Clear;
 end;
 
+procedure TMainForm.RefreshSearched();
+var i : integer;
+begin
+  for i := 0 to self.SearchedEmployees.Size()-1 do
+    self.AddEmployee(self.SearchedEmployees.GetData(i));
+end;
+
 procedure TMainForm.AddEmployee(employee : TEmployee);
 var item : TListItem;
 begin
   item := self.DataListView.Items.Add;
-  item.Caption := employee.Name + ' ' + employee.Surname + ' ' + employee.Midname;
+  item.Caption := employee.ToNameString();
   item.SubItems.Add(employee.Project.Name);
   item.SubItems.Add(employee.Project.Task);
   item.SubItems.Add(employee.Project.Deadline);
-  item.SubItems.Add(employee.Shedule.Start + ' - ' + employee.Shedule.Finish);
+  item.SubItems.Add(employee.Shedule.ToString());
   if self.CurrentSort = TSortKind.AEHours then
     if Time.GetPreviousMonth() - Time.GetMonthFromDate(StrToDate(employee.Project.Deadline)) < 2 then
       item.SubItems.Add(IntToStr(employee.GetMonthlyWorkHours()))
@@ -220,6 +234,23 @@ begin
       DB.SaveToTextFile(self.OpenDialog.FileName, self.Employees);
 end;
 
+procedure TMainForm.SearchRadioButtonClick(Sender: TObject);
+var SearchForm : TESearchForm;
+begin
+  SearchForm := TESearchForm.Create(self);
+  SearchForm.SetArgs(self.Employees);
+  SearchForm.Position := TPosition.poScreenCenter;
+  SearchForm.ShowModal;
+  if SearchForm.IsEmployeesSearched() then begin
+    self.SearchedEmployees := SearchForm.GetSearchedEmployees();
+    self.CurrentSort := TSortKind.ESearched;
+    self.Refresh;
+  end
+  else
+    self.NoneRadioButton.Checked := true;
+  SearchForm.Release;
+end;
+
 procedure TMainForm.NoneRadioButtonClick(Sender: TObject);
 begin
   self.CurrentSort := TSortKind.None;
@@ -272,7 +303,7 @@ end;
 
 procedure TMainForm.CorrectButtonClick(Sender: TObject);
 var Name : string;
-var Index : integer;
+var Index, SearchedIndex : integer;
 var CorrectForm : TECorrectForm;
 begin
   if self.DataListView.Selected <> nil then begin
@@ -282,6 +313,10 @@ begin
     CorrectForm.Position := TPosition.poScreenCenter;
     CorrectForm.ShowModal;
     if CorrectForm.IsEmployeeCorrected() then begin
+      if self.CurrentSort = TSortKind.ESearched then begin
+        self.SearchedEmployees.GetByExtendedName(Name, SearchedIndex);
+        self.SearchedEmployees.SetData(SearchedIndex, CorrectForm.GetCorrectedEmployee());
+      end;
       self.Employees.SetData(Index, CorrectForm.GetCorrectedEmployee());
       self.Refresh;
     end;
@@ -312,6 +347,7 @@ begin
           self.DataListView.Font.Size := self.DataListView.Font.Size - 1;
     end;
   end;
+  Key := #10;
 end;
 
 procedure TMainForm.DeleteButtonClick(Sender: TObject);
@@ -319,6 +355,8 @@ var Name : string;
 begin
   if self.DataListView.Selected <> nil then begin
     Name := self.DataListView.Selected.Caption + ' ' + self.DataListView.Selected.SubItems[0] + ' ' + self.DataListView.Selected.SubItems[1];
+    if self.CurrentSort = TSortKind.ESearched then
+      self.SearchedEmployees.DeleteByExtendedName(Name);
     self.Employees.DeleteByExtendedName(Name);
     self.DataListView.DeleteSelected;
   end
@@ -329,6 +367,8 @@ end;
 procedure TMainForm.ClearButtonClick(Sender: TObject);
 begin
   self.DataListView.Clear;
+  if self.CurrentSort = TSortKind.ESearched then
+    self.SearchedEmployees.Clear;
   self.Employees.Clear;
   self.Refresh;
 end;
