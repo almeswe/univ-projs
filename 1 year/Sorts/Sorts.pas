@@ -4,75 +4,107 @@ interface
 
 uses Defines;
 
-function QuickSort(data : TIntArray; out comps,perms : uint) : TIntArray;
+function QuickSort(data : TIntArray; out comps,perms : uint; fcall : bool = true) : TIntArray;
 function ShakeSort(data : TIntArray; out comps,perms : uint) : TIntArray;
-function BubbleSort(data : TIntArray; out comps,perms : uint) : TIntArray;
-function SSelectionSort(data : TIntArray; out comps,perms : uint) : TIntArray;
+function StraightSelectionSort(data : TIntArray; out comps,perms : uint) : TIntArray;
 
 procedure PrintArray(data : TIntArray);
-function CreateArray(size : int; kind : TArrayCreationKind = RANDOM_A) : TIntArray;
+function CreateArray(size : int; kind : TGenKind = RandomArray) : TIntArray;
+function CopyArray(arr : TIntArray) : TIntArray;
 
 implementation
+
+type TSwapPerms = (Zero  = 0,
+                   One   = 1,
+                   Two   = 2,
+                   Three = 3);
+
+var comps, perms : uint;
+
+procedure InitCounters();
+begin
+  comps := 0;
+  perms := 0;
+end;
+
+procedure SetCounters(var locperms, loccomps : uint);
+begin
+  locperms := perms;
+  loccomps := comps;
+end;
 
 function Len(arr1:TIntArray) : int; inline;
 begin
   exit(Length(arr1));
 end;
 
-function Equal(a,b : int; var count : uint) : bool; inline;
+function Equal(a,b : int) : bool;
 begin
-  inc(count);
+  inc(comps);
   if a = b then
     exit(true);
   exit(false);
 end;
 
-function GreaterEqualThen(a,b : int; var count : uint) : bool; inline;
+function GreaterEqualThen(a,b : int) : bool; inline;
 begin
-  inc(count);
+  inc(comps);
   if a >= b then
     exit(true);
   exit(false);
 end;
 
-function GreaterThan(a,b : int; var count : uint) : bool; inline;
+function GreaterThan(a,b : int) : bool;
 begin
-  inc(count);
+  inc(comps);
   if a > b then
     exit(true);
   exit(false);
 end;
 
-function LessEqualThen(a,b : int; var count : uint) : bool; inline;
+function LessEqualThen(a,b : int) : bool; inline;
 begin
-  inc(count);
+  inc(comps);
   if a <= b then
     exit(true);
   exit(false);
 end;
 
-function LessThan(a,b : int; var count : uint) : bool; inline;
+function LessThan(a,b : int) : bool;
 begin
-  inc(count);
+  inc(comps);
   if a < b then
     exit(true);
   exit(false);
 end;
 
-procedure Append(element : int; var arr : TIntArray; var count : uint); inline;
+procedure Append(element : int; var arr : TIntArray);
 begin
-  inc(count);
+  inc(perms);
   SetLength(arr, len(arr)+1);
   arr[len(arr)-1] := element;
 end;
 
-procedure Swap(var a,b : int; var count : uint); inline;
+procedure IndirectSwap(var a,b,c : int; elems : TSwapPerms = TSwapPerms.Two);
+begin
+  perms := perms+ord(elems);
+  a := b;
+  b := c;
+end;
+
+procedure Swap(var a,b : int; elems : TSwapPerms = TSwapPerms.Two);
 var buff : int;
 begin
+  perms := perms+ord(elems);
   buff := a;
   a := b;
   b := buff;
-  inc(count);
+end;
+
+procedure Assign(var a,b : int);
+begin
+  inc(perms);
+  a := b;
 end;
 
 function ConcatArrays(arr1, arr2, arr3 : TIntArray) : TIntArray;
@@ -98,96 +130,89 @@ begin
     exit(resultArr);
 end;
 
-function BubbleSort(data : TIntArray; out comps, perms : uint) : TIntArray;
-var i,j : int;
-var swaps : bool;
-begin
-  for i := 0 to len(data)-1 do begin
-      swaps := false;
-      for j := 0 to len(data)-2-i do begin
-        if LessThan(data[j+1], data[j], comps) then begin
-          swaps := true;
-          swap(data[j], data[j+1], perms);
-        end;
-      end;
-      if not swaps then
-        break;
-  end;
-  exit(data);
-end;
-
 function ShakeSort(data : TIntArray; out comps, perms : uint) : TIntArray;
-var i,j : int;
-var swaps : bool;
+var i, k : int;
 var rbound, lbound : int;
 begin
-  swaps := true;
-
-  lbound := 0;
+  InitCounters();
+  lbound := 1;
   rbound := len(data)-1;
-
-  while (lbound < rbound) and swaps do begin
-    swaps := false;
-    for i := lbound to rbound-1 do begin
-      if LessThan(data[i+1], data[i], comps) then begin
-        swaps := true;
-        swap(data[i+1], data[i], perms);
-      end;
-    end;
-    for i := rbound-1 downto lbound+1 do begin
-      if GreaterThan(data[i-1], data[i], comps) then begin
-        swaps := true;
-        swap(data[i-1], data[i], perms);
+  k := len(data)-1;
+  repeat
+    for i := rbound downto lbound do begin
+      if GreaterThan(data[i-1], data[i]) then begin
+        k := i;
+        Swap(data[i-1], data[i]);
       end;
     end;
     inc(lbound);
-    dec(rbound);
-  end;
-  exit(data);
-end;
 
-function SSelectionSort(data : TIntArray; out comps, perms : uint) : TIntArray;
-var i,j : int;
-var min : int;
-begin
-  for i := 0 to len(data)-1 do begin
-    min := data[i];
-    for j := i+1 to len(data)-1 do
-      if LessThan(data[j], min, comps) then begin
-        min := data[j];
-        swap(data[j], data[i], perms);
+    for i := lbound to rbound do begin
+      if GreaterThan(data[i-1], data[i]) then begin
+        k := i;
+        Swap(data[i-1], data[i]);
       end;
-  end;
+    end;
+    dec(rbound);
+
+  until lbound > rbound;
+  SetCounters(perms, comps);
   exit(data);
 end;
 
-function QuickSort(data : TIntArray; out comps, perms : uint) : TIntArray;
+function StraightSelectionSort(data : TIntArray; out comps, perms : uint) : TIntArray;
+var x : int;
+var i,j,k : int;
+begin
+  InitCounters();
+  for i := 0 to len(data)-2 do begin
+    k := i;
+    Assign(x, data[i]);
+    for j := i+1 to len(data)-1 do begin
+      if LessThan(data[j], x) then begin
+        k := j;
+        Assign(x, data[k]);
+      end;
+    end;
+    IndirectSwap(data[k], data[i], x, TSwapPerms.Two);
+  end;
+  SetCounters(perms, comps);
+  exit(data);
+end;
+
+function QuickSort(data : TIntArray; out comps, perms : uint; fcall : bool = true) : TIntArray;
 var i : int;
 var pivot : int;
-var less_arr, equal_arr, greater_arr : TIntArray;
+var lessArr, equalArr, greaterArr : TIntArray;
 begin
+  if fcall then
+    InitCounters();
+
   if len(data) <= 1 then
     exit(data);
 
+  //Assign(pivot, data[len(data) div 2]);
   pivot := data[len(data) div 2];
-
   for i := 0 to len(data)-1 do begin
-    if LessThan(data[i], pivot, comps) then begin
-      append(data[i], less_arr, perms);
+    if GreaterThan(data[i], pivot) then begin
+      Sorts.Append(data[i], greaterArr);
       continue;
     end;
 
-    if Equal(data[i], pivot, comps) then begin
-      append(data[i], equal_arr, perms);
+    if Equal(data[i], pivot) then begin
+      Sorts.Append(data[i], equalArr);
       continue;
     end;
 
-    if GreaterThan(data[i], pivot, comps) then begin
-      append(data[i], greater_arr, perms);
+    if LessThan(data[i], pivot) then begin
+      Sorts.Append(data[i], lessArr);
       continue;
     end;
   end;
-  exit(ConcatArrays(QuickSort(less_arr, comps, perms), equal_arr, QuickSort(greater_arr, comps, perms)));
+  data := ConcatArrays(QuickSort(lessArr, comps, perms, false), equalArr, QuickSort(greaterArr, comps, perms, false));
+  if fcall then
+    SetCounters(perms, comps);
+  exit(data);
 end;
 
 procedure PrintArray(data : TIntArray);
@@ -197,7 +222,7 @@ begin
       writeln(data[i]);
 end;
 
-function CreateArray(size : int; kind : TArrayCreationKind = RANDOM_A) : TIntArray;
+function CreateArray(size : int; kind : TGenKind = RandomArray) : TIntArray;
 var i : int;
 var data : TIntArray;
 begin
@@ -205,12 +230,22 @@ begin
   SetLength(data,size);
   for i := 0 to size-1 do begin
     case kind of
-      SORTED_A   : data[i] := i+1;
-      RANDOM_A   : data[i] := 1+random(15);
-      REVERSED_A : data[i] := size-i;
+      SortedArray   : data[i] := i+1;
+      RandomArray   : data[i] := 1+random(15);
+      ReversedArray : data[i] := size-i;
     end;
   end;
   exit(data);
+end;
+
+function CopyArray(arr : TIntArray) : TIntArray;
+var i : int;
+var newarr : TIntArray;
+begin
+  SetLength(newarr, length(arr));
+  for i := 0 to length(arr)-1 do
+    newarr[i] := arr[i];
+  exit(newarr);
 end;
 
 end.

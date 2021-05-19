@@ -1,0 +1,30 @@
+object DiagramForm: TDiagramForm
+  Left = 0
+  Top = 0
+  BorderStyle = bsDialog
+  Caption = 'Diagrams'
+  ClientHeight = 475
+  ClientWidth = 494
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  OnCreate = FormCreate
+  OnShow = FormShow
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Surface: TImage
+    Left = 0
+    Top = 0
+    Width = 494
+    Height = 475
+    Align = alClient
+    ExplicitLeft = 312
+    ExplicitTop = 144
+    ExplicitWidth = 105
+    ExplicitHeight = 105
+  end
+end

@@ -1,0 +1,48 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <ProjectGuid>{904F96F6-123A-405B-9BCC-D6C6A7FBB871}</ProjectGuid>
+    </PropertyGroup>
+    <ItemGroup>
+        <Projects Include="Logic.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="UI.dproj">
+            <Dependencies/>
+        </Projects>
+    </ItemGroup>
+    <ProjectExtensions>
+        <Borland.Personality>Default.Personality.12</Borland.Personality>
+        <Borland.ProjectType/>
+        <BorlandProject>
+            <Default.Personality/>
+        </BorlandProject>
+    </ProjectExtensions>
+    <Target Name="Logic">
+        <MSBuild Projects="Logic.dproj"/>
+    </Target>
+    <Target Name="Logic:Clean">
+        <MSBuild Projects="Logic.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="Logic:Make">
+        <MSBuild Projects="Logic.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="UI">
+        <MSBuild Projects="UI.dproj"/>
+    </Target>
+    <Target Name="UI:Clean">
+        <MSBuild Projects="UI.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="UI:Make">
+        <MSBuild Projects="UI.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="Build">
+        <CallTarget Targets="Logic;UI"/>
+    </Target>
+    <Target Name="Clean">
+        <CallTarget Targets="Logic:Clean;UI:Clean"/>
+    </Target>
+    <Target Name="Make">
+        <CallTarget Targets="Logic:Make;UI:Make"/>
+    </Target>
+    <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
+</Project>

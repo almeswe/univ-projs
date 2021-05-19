@@ -98,8 +98,20 @@
         <DelphiCompile Include="$(MainSource)">
             <MainSource>MainSource</MainSource>
         </DelphiCompile>
+        <DCCReference Include="Calc.pas">
+            <Form>CalcForm</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
         <DCCReference Include="Main.pas">
             <Form>MainForm</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
+        <DCCReference Include="Diagram.pas">
+            <Form>DiagramForm</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
+        <DCCReference Include="DiagramOptions.pas">
+            <Form>DiagramOptionsForm</Form>
             <FormType>dfm</FormType>
         </DCCReference>
         <BuildConfiguration Include="Release">
