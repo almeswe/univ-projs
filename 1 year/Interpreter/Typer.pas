@@ -5,7 +5,7 @@ interface
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls,
-  Interpreter, Defines2;
+  Interpreter, Defines2, Visualizer;
 
 type TTypeForm = class(TForm)
     TypeEdit : TEdit;
@@ -23,11 +23,14 @@ type TTypeForm = class(TForm)
     procedure SaveButtonClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure TypeEditChange(Sender: TObject);
-
+    procedure InfoListBoxKeyPress(Sender: TObject; var Key: Char);
+    procedure ShowButtonClick(Sender: TObject);
   private
      Interpreter : TInterpreter;
 
      procedure RunInterpreter();
+     procedure CreateVisualForm();
+     procedure ChangeFont(bySize : integer);
      procedure SetStateForButtons(state : bool);
   public
 
@@ -42,6 +45,15 @@ implementation
 procedure TTypeForm.FormCreate(Sender: TObject);
 begin
   self.OpenDialog.Create(self);
+end;
+
+procedure TTypeForm.InfoListBoxKeyPress(Sender: TObject; var Key: Char);
+begin
+  case Key of
+    '+' : self.ChangeFont(2);
+    '-' : self.ChangeFont(-2);
+  end;
+  Key := #10;
 end;
 
 procedure TTypeForm.RunInterpreter();
@@ -64,10 +76,36 @@ begin
   self.Interpreter.Discard;
 end;
 
+procedure TTypeForm.CreateVisualForm();
+var visualForm : TVisualForm;
+begin
+  visualForm := TVisualForm.Create(self);
+  visualForm.SetArgs(self.Interpreter.Source, self.Interpreter.Actions);
+  visualForm.DrawVisualization;
+  visualForm.ShowModal;
+  visualForm.Release;
+end;
+
+procedure TTypeForm.ChangeFont(bySize : integer);
+begin
+  if bySize > 0 then begin
+    if self.InfoListBox.Font.Size + bySize <= 25 then
+      self.InfoListBox.Font.Size := self.InfoListBox.Font.Size + bySize;
+  end
+  else
+    if self.InfoListBox.Font.Size + bySize >= 9 then
+      self.InfoListBox.Font.Size := self.InfoListBox.Font.Size + bySize;
+end;
+
 procedure TTypeForm.SetStateForButtons(state : bool);
 begin
   self.ShowButton.Enabled := state;
   self.SaveButton.Enabled := state;
+end;
+
+procedure TTypeForm.ShowButtonClick(Sender: TObject);
+begin
+  self.CreateVisualForm();
 end;
 
 procedure TTypeForm.SaveButtonClick(Sender: TObject);

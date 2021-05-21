@@ -62,8 +62,8 @@ begin
           end;
 
           TTokenKind.Op: begin
-            while (not self.Stack.Empty()) and (self.GetOperatorPriority(self.Stack.Top().data) >= self.GetOperatorPriority(tokens[i].Data)) do begin
-              self.AppendAction(self.Stack.Top().data, TActionKind.POP, outValue);
+            while (not self.Stack.Empty()) and (self.GetOperatorPriority(self.Stack.Top().Data) >= self.GetOperatorPriority(tokens[i].Data)) do begin
+              self.AppendAction(self.Stack.Top().Data, TActionKind.POP, outValue);
               self.Notation := self.Notation + outValue;
             end;
             self.AppendAction(tokens[i].Data, TActionKind.PUSH, outValue);
@@ -71,14 +71,14 @@ begin
 
           TTokenKind.OpenParen, TTokenKind.CloseParen: begin
             if self.IsCloseParen(tokens[i].Data) then begin
-              while (not self.Stack.Empty()) and (not self.IsOpenParen(self.Stack.Top().data)) do begin
-                if not self.IsParen(self.Stack.Top().data) then begin
-                  self.AppendAction(self.Stack.Top().data, TActionKind.POP, outValue);
+              while (not self.Stack.Empty()) and (not self.IsOpenParen(self.Stack.Top().Data)) do begin
+                if not self.IsParen(self.Stack.Top().Data) then begin
+                  self.AppendAction(self.Stack.Top().Data, TActionKind.POP, outValue);
                   self.Notation := self.Notation + outValue;
                 end;
               end;
               if not self.Stack.Empty() then
-                self.AppendAction(self.Stack.Top().data, TActionKind.POP, outValue);
+                self.AppendAction(self.Stack.Top().Data, TActionKind.POP, outValue);
             end
             else
               self.AppendAction(tokens[i].Data, TActionKind.PUSH, outValue);
@@ -87,7 +87,7 @@ begin
    end;
 
    while not self.Stack.Empty() do begin
-      self.AppendAction(self.Stack.Top().data, TActionKind.POP, outValue);
+      self.AppendAction(self.Stack.Top().Data, TActionKind.POP, outValue);
       self.Notation := self.Notation + outValue;
    end;
 end;
@@ -106,7 +106,7 @@ begin
   if not self.Inited then
     raise Exception.Create('Call init procedure first!');
   case kind of
-    TActionKind.POP   : value := self.Stack.Pop().data;
+    TActionKind.POP   : value := self.Stack.Pop().Data;
     TActionKind.PUSH  : self.Stack.Push(data);
     TActionKind.APPEND: self.Notation := self.Notation + data;
   end;

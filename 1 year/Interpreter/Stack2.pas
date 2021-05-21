@@ -5,9 +5,10 @@ interface
 uses SysUtils;
 
 type TCell = record
-  next : ^TCell;
-  data : string;
+  Next : ^TCell;
+  Data : string;
 end;
+
 type TStack = record
   Head : ^TCell;
 
@@ -17,6 +18,7 @@ type TStack = record
 
   function Pop() : TCell;
   function Top() : TCell;
+  function Get(const index : integer) : string;
 
   function Size()  : integer;
   function Empty() : boolean;
@@ -35,13 +37,13 @@ procedure TStack.Push(data : string);
 var temp : ^TCell;
 begin
   New(temp);
-  temp.data := data;
+  temp.Data := data;
   if self.Head = nil then begin
     self.Head := @(temp^);
-    self.Head.next := nil;
+    self.Head.Next := nil;
   end
   else begin
-    temp.next := @(self.Head^);
+    temp.Next := @(self.Head^);
     self.Head := @(temp^);
   end;
 end;
@@ -57,7 +59,7 @@ begin
   while temp <> nil do begin
     SetLength(cells,Length(cells)+1);
     cells[Length(cells)-1] := @(temp^);
-    temp := @(temp.next^);
+    temp := @(temp.Next^);
   end;
 
   for i := 0 to Length(cells)-1 do
@@ -72,10 +74,10 @@ begin
   dispose(self.Head);
   if self.Empty then
     raise Exception.Create('Cannot pop from empty stack!');
-  if temp.next = nil then
+  if temp.Next = nil then
     self.Head := nil
   else
-    self.Head := @(temp.next^);
+    self.Head := @(temp.Next^);
   exit(temp);
 end;
 
@@ -84,6 +86,23 @@ begin
   if self.Head = nil then
     raise Exception.Create('Top is unaccessable, stack is empty!');
   exit(self.Head^);
+end;
+
+function TStack.Get(const index : integer) : string;
+var i : integer;
+var current : ^TCell;
+begin
+  if index < 0 then
+    raise Exception.Create('Negative index is not supplied!');
+  if self.Head = nil then
+    raise Exception.Create('Top is unaccessable, stack is empty!');
+  current := @(self.Head^);
+  for i := 1 to index do begin
+    if current.Next = nil then
+       raise Exception.Create('Element with index ' + IntToStr(index) + ' does not exist!');
+    current := @(current.Next^);
+  end;
+  exit(current^.Data);
 end;
 
 function TStack.Empty() : boolean;
@@ -100,10 +119,10 @@ begin
    temp := @(self.Head^);
    len  := 0;
    while temp <> nil do begin
-      if temp.next = nil then
+      if temp.Next = nil then
         temp := nil
       else
-        temp := @(temp.next^);
+        temp := @(temp.Next^);
       inc(len);
    end;
    exit(len);

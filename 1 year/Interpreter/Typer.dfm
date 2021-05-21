@@ -12,6 +12,7 @@ object TypeForm: TTypeForm
   Font.Name = 'Tahoma'
   Font.Style = []
   OldCreateOrder = False
+  Position = poScreenCenter
   OnCreate = FormCreate
   DesignSize = (
     491
@@ -20,7 +21,7 @@ object TypeForm: TTypeForm
   TextHeight = 13
   object EnterExprLabel: TLabel
     Left = 8
-    Top = 1
+    Top = 3
     Width = 133
     Height = 14
     Caption = 'Enter Expression : '
@@ -58,6 +59,7 @@ object TypeForm: TTypeForm
     ItemHeight = 14
     ParentFont = False
     TabOrder = 0
+    OnKeyPress = InfoListBoxKeyPress
   end
   object TypeEdit: TEdit
     Left = 8
@@ -104,6 +106,7 @@ object TypeForm: TTypeForm
     Font.Style = [fsBold]
     ParentFont = False
     TabOrder = 3
+    OnClick = ShowButtonClick
   end
   object OpenDialog: TOpenDialog
     Left = 280

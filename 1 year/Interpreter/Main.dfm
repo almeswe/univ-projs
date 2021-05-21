@@ -14,11 +14,12 @@ object Menu: TMenu
   OldCreateOrder = False
   Position = poScreenCenter
   OnCreate = FormCreate
+  OnDestroy = FormDestroy
   OnPaint = FormPaint
   PixelsPerInch = 96
   TextHeight = 13
   object TypeManuallyButton: TSpeedButton
-    Left = 8
+    Left = 11
     Top = 8
     Width = 222
     Height = 221

@@ -5,6 +5,7 @@ interface
 uses SysUtils, Lexer, Tester, Converter2, Defines2;
 
 type TInterpreter = record
+  Source : string;
   Notation : string;
 
   Lexer  : TLexer;
@@ -30,6 +31,7 @@ procedure TInterpreter.Init(input : string);
 begin
   self.Lexer.Init(input);
   self.Converter.Init();
+  self.Source := input;
 end;
 
 procedure TInterpreter.Discard();
@@ -37,7 +39,6 @@ begin
   self.Lexer.Discard;
   self.Converter.Discard;
   SetLength(self.Errors, 0);
-  SetLength(self.Actions, 0);
 end;
 
 procedure TInterpreter.Interpret();

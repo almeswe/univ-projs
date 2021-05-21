@@ -4,7 +4,7 @@ interface
 
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls, Vcl.StdCtrls, Vcl.Buttons,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls, Vcl.StdCtrls, Vcl.Buttons, ShellApi,
   Typer;
 
 type TMenu = class(TForm)
@@ -18,6 +18,7 @@ type TMenu = class(TForm)
     procedure TypeManuallyButtonClick(Sender: TObject);
     procedure ExploreButtonClick(Sender: TObject);
     procedure FormPaint(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
 
   private
     const DEFAULT_DRAG_DROP_IMAGE = 'images\drag.bmp';
@@ -26,6 +27,8 @@ type TMenu = class(TForm)
 
     procedure RenderImageOnPanel(path : string = DEFAULT_DRAG_DROP_IMAGE);
     procedure CreateTyperForm(input : string);
+  protected
+    procedure WNDropFiles(var Msg : TMessage); message WM_DROPFILES;
 
   public
     { Public declarations }
@@ -56,10 +59,22 @@ var key : char;
 begin
   key := Char(13);
   type_form := TTypeForm.Create(self);
-  type_form.Position := poScreenCenter;
   type_form.TypeEdit.Text := input;
   type_form.ShowModal;
   type_form.Release;
+end;
+
+procedure TMenu.WNDropFiles(var Msg : TMessage);
+var s : string;
+var namelen : integer;
+begin
+  namelen := DragQueryFile(Msg.WParam, 0, nil, 0) + 1;
+  SetLength(s, namelen);
+  self.RenderImageOnPanel(ACTIVE_DRAG_DROP_IMAGE);
+  DragQueryFile(Msg.WParam, 0, Pointer(s), namelen);
+  self.CreateTyperForm(s);
+  self.DragDropPanel.Invalidate;
+  DragFinish(Msg.WParam);
 end;
 
 procedure TMenu.TypeManuallyButtonClick(Sender: TObject);
@@ -76,6 +91,12 @@ end;
 procedure TMenu.FormCreate(Sender: TObject);
 begin
   self.OpenDialog.Create(self);
+  DragAcceptFiles(self.Handle, true);
+end;
+
+procedure TMenu.FormDestroy(Sender: TObject);
+begin
+  DragAcceptFiles(self.Handle, false);
 end;
 
 procedure TMenu.FormPaint(Sender: TObject);
