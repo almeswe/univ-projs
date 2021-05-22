@@ -144,7 +144,7 @@ begin
   if not self.Inited then
     raise Exception.Create('Call init procedure first!');
   loc   := NewPosition(pos, self.CurrentFile);
-  error := NewError(msg, loc, TErrorKind.LEXER_ERROR);
+  error := NewError(msg, loc, TErrorKind.LexerError);
   SetLength(self.Errors, length(self.Errors) + 1);
   self.Errors[length(self.Errors) - 1] := error;
 end;

@@ -31,7 +31,7 @@ procedure TInterpreter.Init(input : string);
 begin
   self.Lexer.Init(input);
   self.Converter.Init();
-  self.Source := input;
+  self.Source := self.Lexer.Expression;
 end;
 
 procedure TInterpreter.Discard();

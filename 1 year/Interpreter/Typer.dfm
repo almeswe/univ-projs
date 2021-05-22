@@ -34,7 +34,7 @@ object TypeForm: TTypeForm
   end
   object InfoLabel: TLabel
     Left = 8
-    Top = 54
+    Top = 58
     Width = 98
     Height = 14
     Caption = 'Information : '

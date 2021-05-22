@@ -16,7 +16,8 @@ type TPosition = record
    Target : string;
 end;
 
-type TErrorKind = (LEXER_ERROR, CONVERTER_ERROR);
+type TErrorKind = (LexerError, ConverterError);
+
 type TError = record
   Msg  : string;
   Pos  : TPosition;
@@ -27,6 +28,7 @@ end;
 type TErrors = array of TError;
 
 type TTokenKind = (Op, OpenParen, CloseParen, Constant, Variable, EOL);
+
 type TToken = record
   Data : string;
   Pos  : TPosition;
@@ -36,13 +38,16 @@ type TToken = record
 end;
 type TTokens = array of TToken;
 
-type TActionKind = (PUSH, POP, APPEND);
+type TActionKind = (Push, Pop, Append);
+
 type TAction = record
   Data : string;
   Kind : TActionKind;
 
   function ToString() : string;
+  function ToLogString() : string;
 end;
+
 type TActions = array of TAction;
 
 function NewAction(data : string; kind : TActionKind) : TAction;
@@ -67,8 +72,8 @@ function TError.ToString() : string;
 var str : string;
 begin
   case self.Kind of
-    TErrorKind.LEXER_ERROR:     str := '[Lexer error]: ';
-    TErrorKind.CONVERTER_ERROR: str := '[Converter error]: ';
+    TErrorKind.LexerError:     str := '[Lexer error]: ';
+    TErrorKind.ConverterError: str := '[Converter error]: ';
   end;
 
   str := str + Msg + ' <';
@@ -83,9 +88,18 @@ end;
 function TAction.ToString(): string;
 begin
   case self.Kind of
-    TActionKind.PUSH:   exit('PUSH  : ' + self.Data);
-    TActionKind.POP:    exit('POP   : ' + self.Data);
-    TActionKind.APPEND: exit('APPEND: ' + self.Data);
+    TActionKind.Push:   exit('PUSH  : ' + self.Data);
+    TActionKind.Pop:    exit('POP   : ' + self.Data);
+    TActionKind.Append: exit('APPEND: ' + self.Data);
+  end;
+end;
+
+function TAction.ToLogString() : string;
+begin
+  case self.Kind of
+    TActionKind.Push:   exit('Push operator [' + self.Data + '] on to the stack.');
+    TActionKind.Pop:    exit('Pop element [' + self.Data + '] from the stack.');
+    TActionKind.Append: exit('Append operand [' + self.Data + '] to the notation.');
   end;
 end;
 

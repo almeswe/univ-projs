@@ -149,7 +149,7 @@ begin
   if not self.Inited then
     raise Exception.Create('Call init procedure first!');
   SetLength(self.Errors, length(self.Errors)+1);
-  self.Errors[length(self.Errors)-1] := NewError(msg, pos, TErrorKind.CONVERTER_ERROR);
+  self.Errors[length(self.Errors)-1] := NewError(msg, pos, TErrorKind.ConverterError);
 end;
 
 procedure TTester.AppendErrorFormatted(expected : string; met : string);

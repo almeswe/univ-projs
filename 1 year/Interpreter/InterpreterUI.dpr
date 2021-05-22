@@ -11,8 +11,8 @@ uses
 begin
   Application.Initialize;
   Application.MainFormOnTaskbar := True;
-  //Application.CreateForm(TMenu, Menu);
+  Application.CreateForm(TMenu, Menu);
   Application.CreateForm(TTypeForm, TypeForm);
-  //Application.CreateForm(TVisualForm, VisualForm);
+  Application.CreateForm(TVisualForm, VisualForm);
   Application.Run;
 end.

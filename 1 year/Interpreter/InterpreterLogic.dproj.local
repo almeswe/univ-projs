@@ -1,37 +1,37 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <BorlandProject>
 	<Transactions>
-    <Transaction>1899.12.30 00:00:00.000.693,=E:\курсовой\Unit1.pas</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.665,=E:\курсовой\Unit1.pas</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.542,E:\курсовой\Unit1.pas=E:\курсовой\Stack2.pas</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.481,=E:\курсовой\Unit1.pas</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.304,=E:\курсовой\Unit1.pas</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.548,=E:\курсовой\Unit1.pas</Transaction>
     <Transaction>1899.12.30 00:00:00.000.665,=E:\курсовой\Unit1.pas</Transaction>
     <Transaction>1899.12.30 00:00:00.000.439,=E:\курсовой\Unit1.pas</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.721,E:\курсовой\Lexer.pas=E:\курсовой\Unit1.pas</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.410,C:\Users\Almes\Desktop\курсовой\Defines.pas=C:\Users\Almes\Desktop\курсовой\Unit1.pas</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.174,E:\university-projects\univ-projs\1 year\Interpreter\InterpreterUnit.pas=E:\university-projects\univ-projs\1 year\Interpreter\Interpreter.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.721,E:\курсовой\Unit1.pas=E:\курсовой\Lexer.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.548,=E:\курсовой\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.665,=E:\курсовой\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.481,=E:\курсовой\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.304,=E:\курсовой\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.748,E:\курсовой\Unit1.pas=E:\курсовой\Defines2.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.426,E:\university-projects\univ-projs\1 year\Interpreter\InterpreterUnit.pas=E:\university-projects\univ-projs\1 year\Interpreter\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.440,E:\university-projects\univ-projs\1 year\Interpreter\InterpreterLogic.dproj=E:\university-projects\univ-projs\1 year\Interpreter\Interpreter.dproj</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.272,C:\Users\Almes\Desktop\курсовой\Stack.pas=C:\Users\Almes\Desktop\курсовой\StackImpl.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.542,E:\курсовой\Stack2.pas=E:\курсовой\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.770,E:\курсовой\Unit1.pas=E:\курсовой\Converter2.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.842,E:\курсовой\Unit1.pas=E:\курсовой\List.pas</Transaction>
     <Transaction>1899.12.30 00:00:00.000.464,=E:\university-projects\univ-projs\1 year\Interpreter\Unit1.pas</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.986,E:\курсовой\Unit1.pas=E:\курсовой\Assembler.pas</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.186,E:\курсовой\Unit1.pas=E:\курсовой\Tester.pas</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.426,E:\university-projects\univ-projs\1 year\Interpreter\Unit1.pas=E:\university-projects\univ-projs\1 year\Interpreter\InterpreterUnit.pas</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.748,E:\курсовой\Defines2.pas=E:\курсовой\Unit1.pas</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.892,C:\Users\Almes\Documents\Embarcadero\Studio\Projects\Project1.dproj=C:\Users\Almes\Desktop\курсовой\Project1.dproj</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.693,=E:\курсовой\Unit1.pas</Transaction>
     <Transaction>1899.12.30 00:00:00.000.347,=E:\university-projects\univ-projs\Interpreter (1 year)\Unit1.pas</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.056,E:\university-projects\univ-projs\Interpreter (1 year)\Unit1.pas=E:\university-projects\univ-projs\Interpreter (1 year)\Tests.pas</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.440,E:\university-projects\univ-projs\1 year\Interpreter\Interpreter.dproj=E:\university-projects\univ-projs\1 year\Interpreter\InterpreterLogic.dproj</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.807,C:\Users\Almes\Desktop\курсовой\Parser.pas=C:\Users\Almes\Desktop\курсовой\Converter.pas</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.272,C:\Users\Almes\Desktop\курсовой\StackImpl.pas=C:\Users\Almes\Desktop\курсовой\Stack.pas</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.642,E:\курсовой\Assembler.pas=E:\курсовой\Linker.pas</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.931,E:\курсовой\Interpreter.dproj=E:\курсовой\Project1.dproj</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.101,=C:\Users\Almes\Desktop\курсовой\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.931,E:\курсовой\Project1.dproj=E:\курсовой\Interpreter.dproj</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.056,E:\university-projects\univ-projs\Interpreter (1 year)\Tests.pas=E:\university-projects\univ-projs\Interpreter (1 year)\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.363,C:\Users\Almes\Desktop\курсовой\Other.pas=C:\Users\Almes\Desktop\курсовой\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.642,E:\курсовой\Linker.pas=E:\курсовой\Assembler.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.145,C:\Users\Almes\Desktop\курсовой\Parser.pas=C:\Users\Almes\Desktop\курсовой\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.986,E:\курсовой\Assembler.pas=E:\курсовой\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.807,C:\Users\Almes\Desktop\курсовой\Converter.pas=C:\Users\Almes\Desktop\курсовой\Parser.pas</Transaction>
     <Transaction>1899.12.30 00:00:00.000.715,=C:\Users\Almes\Desktop\курсовой\Unit1.pas</Transaction>
     <Transaction>1899.12.30 00:00:00.000.695,=C:\Users\Almes\Desktop\курсовой\Unit1.pas</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.145,C:\Users\Almes\Desktop\курсовой\Unit1.pas=C:\Users\Almes\Desktop\курсовой\Parser.pas</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.770,E:\курсовой\Converter2.pas=E:\курсовой\Unit1.pas</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.842,E:\курсовой\List.pas=E:\курсовой\Unit1.pas</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.363,C:\Users\Almes\Desktop\курсовой\Unit1.pas=C:\Users\Almes\Desktop\курсовой\Other.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.892,C:\Users\Almes\Desktop\курсовой\Project1.dproj=C:\Users\Almes\Documents\Embarcadero\Studio\Projects\Project1.dproj</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.101,=C:\Users\Almes\Desktop\курсовой\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.186,E:\курсовой\Tester.pas=E:\курсовой\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.174,E:\university-projects\univ-projs\1 year\Interpreter\Interpreter.pas=E:\university-projects\univ-projs\1 year\Interpreter\InterpreterUnit.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.410,C:\Users\Almes\Desktop\курсовой\Unit1.pas=C:\Users\Almes\Desktop\курсовой\Defines.pas</Transaction>
   </Transactions>
 	<ProjectSortOrder AutoSort="0" SortType="0">
     <File Path="Stack2.pas"/>
