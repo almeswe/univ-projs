@@ -66,13 +66,13 @@ begin
   self.ShowArray(arr, self.CalcArrayListBox);
   case sort of
     TSortOption.QuickSort:
-       arr := Sorts.QuickSort(arr, comps, perms);
+       Sorts.QuickSort(arr, 1, length(arr)-1, comps, perms);
 
     TSortOption.ShakeSort:
-       arr := Sorts.ShakeSort(arr, comps, perms);
+       Sorts.ShakeSort(arr, comps, perms);
 
     TSortOption.StraightSelectionSort:
-       arr := Sorts.StraightSelectionSort(arr, comps, perms);
+       Sorts.StraightSelectionSort(arr, comps, perms);
   end;
   self.ShowArray(arr, self.CalcSortedArrayListBox);
   self.CalcPermsCountLabel.Caption := IntToStr(perms);

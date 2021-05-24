@@ -77,7 +77,7 @@ begin
    item.SubItems.Add(IntToStr(comps));
    data := CopyArray(copied);
 
-   Sorts.QuickSort(data, comps, perms);
+   Sorts.QuickSort(data, 0, length(data)-1, comps, perms);
    item.SubItems.Add(IntToStr(perms));
    item.SubItems.Add(IntToStr(comps));
 end;

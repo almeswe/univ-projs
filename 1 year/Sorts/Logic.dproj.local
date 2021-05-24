@@ -1,16 +1,16 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <BorlandProject>
 	<Transactions>
+    <Transaction>1899.12.30 00:00:00.000.829,E:\university-projects\univ-projs\1 year\Sorts\General.pas=E:\university-projects\univ-projs\1 year\Sorts\Sorts.pas</Transaction>
     <Transaction>1899.12.30 00:00:00.000.556,=C:\Users\Almes\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.587,E:\university-projects\univ-projs\1 year\Sorts\General.pas=E:\university-projects\univ-projs\1 year\Sorts\Sorts.pas</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.759,E:\labs\2 семестр\лаба 5\sort tests\Laba5.dproj=E:\labs\2 семестр\лаба 5\sort tests\Project1.dproj</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.664,C:\Users\Almes\Documents\Embarcadero\Studio\Projects\Unit1.pas=E:\labs\2 семестр\лаба 5\sort tests\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.267,E:\university-projects\univ-projs\1 year\Sorts\Sorts.dproj=E:\university-projects\univ-projs\1 year\Sorts\Laba5.dproj</Transaction>
     <Transaction>1899.12.30 00:00:00.000.519,=E:\university-projects\univ-projs\1 year\Sorts\Unit1.pas</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.631,E:\university-projects\univ-projs\1 year\Sorts\Unit1.pas=E:\university-projects\univ-projs\1 year\Sorts\Defines.pas</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.577,E:\labs\2 семестр\лаба 5\sort tests\Unit1.pas=E:\labs\2 семестр\лаба 5\sort tests\Sorts.pas</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.813,E:\university-projects\univ-projs\1 year\Sorts\Sorts.dproj=E:\university-projects\univ-projs\1 year\Sorts\Logic.dproj</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.411,E:\labs\2 семестр\лаба 5\sort tests\Project1.dproj=C:\Users\Almes\Documents\Embarcadero\Studio\Projects\Project1.dproj</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.267,E:\university-projects\univ-projs\1 year\Sorts\Laba5.dproj=E:\university-projects\univ-projs\1 year\Sorts\Sorts.dproj</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.829,E:\university-projects\univ-projs\1 year\Sorts\Sorts.pas=E:\university-projects\univ-projs\1 year\Sorts\General.pas</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.664,E:\labs\2 семестр\лаба 5\sort tests\Unit1.pas=C:\Users\Almes\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.587,E:\university-projects\univ-projs\1 year\Sorts\Sorts.pas=E:\university-projects\univ-projs\1 year\Sorts\General.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.759,E:\labs\2 семестр\лаба 5\sort tests\Project1.dproj=E:\labs\2 семестр\лаба 5\sort tests\Laba5.dproj</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.813,E:\university-projects\univ-projs\1 year\Sorts\Logic.dproj=E:\university-projects\univ-projs\1 year\Sorts\Sorts.dproj</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.577,E:\labs\2 семестр\лаба 5\sort tests\Sorts.pas=E:\labs\2 семестр\лаба 5\sort tests\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.631,E:\university-projects\univ-projs\1 year\Sorts\Defines.pas=E:\university-projects\univ-projs\1 year\Sorts\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.411,C:\Users\Almes\Documents\Embarcadero\Studio\Projects\Project1.dproj=E:\labs\2 семестр\лаба 5\sort tests\Project1.dproj</Transaction>
   </Transactions>
 </BorlandProject>

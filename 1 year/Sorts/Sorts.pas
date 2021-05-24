@@ -4,9 +4,9 @@ interface
 
 uses Defines;
 
-function QuickSort(data : TIntArray; out comps,perms : uint; fcall : bool = true) : TIntArray;
-function ShakeSort(data : TIntArray; out comps,perms : uint) : TIntArray;
-function StraightSelectionSort(data : TIntArray; out comps,perms : uint) : TIntArray;
+procedure QuickSort(var data : TIntArray; lbound, rbound: uint; out comps,perms : uint; fcall : bool = true);
+procedure ShakeSort(var data : TIntArray; out comps,perms : uint);
+procedure StraightSelectionSort(var data : TIntArray; out comps,perms : uint);
 
 procedure PrintArray(data : TIntArray);
 function CreateArray(size : int; kind : TGenKind = RandomArray) : TIntArray;
@@ -62,7 +62,7 @@ begin
   exit(false);
 end;
 
-function LessEqualThen(a,b : int) : bool; inline;
+function LessEqualThan(a,b : int) : bool; inline;
 begin
   inc(comps);
   if a <= b then
@@ -92,7 +92,7 @@ begin
   b := c;
 end;
 
-procedure Swap(var a,b : int; elems : TSwapPerms = TSwapPerms.Two);
+procedure Swap(var a,b : int; elems : TSwapPerms = TSwapPerms.Three);
 var buff : int;
 begin
   perms := perms+ord(elems);
@@ -130,7 +130,38 @@ begin
     exit(resultArr);
 end;
 
-function ShakeSort(data : TIntArray; out comps, perms : uint) : TIntArray;
+procedure QuickSort(var data: TIntArray; lbound, rbound: uint; out comps, perms : uint; fcall : bool = true);
+var pivot : int;
+var i, j : int;
+begin
+  if fcall then
+    InitCounters();
+
+  i := lbound;
+  j := rbound;
+  pivot := data[(lbound + rbound) div 2];
+
+  while i <= j do
+  begin
+    while LessThan(data[i], pivot) do
+      inc(i);
+    while GreaterThan(data[j], pivot) do
+      dec(j);
+    if i <= j then begin
+      Swap(data[i], data[j]);
+      inc(i);
+      dec(j);
+    end;
+  end;
+  if lbound < j then
+    QuickSort(data, lbound, j, perms, comps, false);
+  if rbound > i then
+    QuickSort(data, i, rbound, perms, comps, false);
+  if fcall then
+    SetCounters(perms, comps);
+end;
+
+procedure ShakeSort(var data : TIntArray; out comps, perms : uint);
 var i, k : int;
 var rbound, lbound : int;
 begin
@@ -145,7 +176,7 @@ begin
         Swap(data[i-1], data[i]);
       end;
     end;
-    inc(lbound);
+    lbound := k + 1;
 
     for i := lbound to rbound do begin
       if GreaterThan(data[i-1], data[i]) then begin
@@ -153,14 +184,13 @@ begin
         Swap(data[i-1], data[i]);
       end;
     end;
-    dec(rbound);
+    rbound := k - 1;
 
   until lbound > rbound;
   SetCounters(perms, comps);
-  exit(data);
 end;
 
-function StraightSelectionSort(data : TIntArray; out comps, perms : uint) : TIntArray;
+procedure StraightSelectionSort(var data : TIntArray; out comps, perms : uint);
 var x : int;
 var i,j,k : int;
 begin
@@ -177,10 +207,9 @@ begin
     IndirectSwap(data[k], data[i], x, TSwapPerms.Two);
   end;
   SetCounters(perms, comps);
-  exit(data);
 end;
 
-function QuickSort(data : TIntArray; out comps, perms : uint; fcall : bool = true) : TIntArray;
+{function QuickSort(data : TIntArray; out comps, perms : uint; fcall : bool = true) : TIntArray;
 var i : int;
 var pivot : int;
 var lessArr, equalArr, greaterArr : TIntArray;
@@ -213,7 +242,7 @@ begin
   if fcall then
     SetCounters(perms, comps);
   exit(data);
-end;
+end;}
 
 procedure PrintArray(data : TIntArray);
 var i : int;

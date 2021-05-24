@@ -53,7 +53,6 @@ object MainForm: TMainForm
     TabOrder = 0
     ViewStyle = vsReport
     OnKeyPress = DataListViewKeyPress
-    ExplicitLeft = 8
   end
   object OpenButtonsGroupBox: TGroupBox
     Left = 8

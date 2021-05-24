@@ -1,21 +1,21 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <BorlandProject>
 	<Transactions>
-    <Transaction>1899.12.30 00:00:00.000.417,E:\university-projects\univ-projs\1 year\Sorts\Unit1.dfm=E:\university-projects\univ-projs\1 year\Sorts\Diagram.dfm</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.977,E:\university-projects\univ-projs\1 year\Sorts\Calc.dfm=E:\university-projects\univ-projs\1 year\Sorts\Main.dfm</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.252,C:\Users\Almes\Documents\Embarcadero\Studio\Projects\Unit2.dfm=C:\Users\Almes\Documents\Embarcadero\Studio\Projects\Main.dfm</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.417,E:\university-projects\univ-projs\1 year\Sorts\Unit1.pas=E:\university-projects\univ-projs\1 year\Sorts\Diagram.pas</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.895,=E:\university-projects\univ-projs\1 year\Sorts\Unit1.pas</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.752,=E:\university-projects\univ-projs\1 year\Sorts\Unit1.pas</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.338,C:\Users\Almes\Documents\Embarcadero\Studio\Projects\Project1.dproj=C:\Users\Almes\Documents\Embarcadero\Studio\Projects\UI.dproj</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.605,E:\university-projects\univ-projs\1 year\Sorts\Main.dfm=E:\university-projects\univ-projs\1 year\Sorts\Unit1.dfm</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.286,C:\Users\Almes\Documents\Embarcadero\Studio\Projects\UI.dproj=C:\Users\Almes\Documents\Embarcadero\Studio\Projects\UI.dproj</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.605,E:\university-projects\univ-projs\1 year\Sorts\Main.pas=E:\university-projects\univ-projs\1 year\Sorts\Unit1.pas</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.252,C:\Users\Almes\Documents\Embarcadero\Studio\Projects\Unit2.pas=C:\Users\Almes\Documents\Embarcadero\Studio\Projects\Main.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.417,E:\university-projects\univ-projs\1 year\Sorts\Diagram.dfm=E:\university-projects\univ-projs\1 year\Sorts\Unit1.dfm</Transaction>
     <Transaction>1899.12.30 00:00:00.000.406,=C:\Users\Almes\Documents\Embarcadero\Studio\Projects\Unit2.pas</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.977,E:\university-projects\univ-projs\1 year\Sorts\Calc.pas=E:\university-projects\univ-projs\1 year\Sorts\Main.pas</Transaction>
-    <Transaction>2021.05.19 20:32:13.536,=E:\university-projects\univ-projs\1 year\Sorts\Unit1.pas</Transaction>
-    <Transaction>2021.05.19 20:32:22.438,E:\university-projects\univ-projs\1 year\Sorts\DiagramOptions.dfm=E:\university-projects\univ-projs\1 year\Sorts\Unit1.dfm</Transaction>
-    <Transaction>2021.05.19 20:32:22.438,E:\university-projects\univ-projs\1 year\Sorts\DiagramOptions.pas=E:\university-projects\univ-projs\1 year\Sorts\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.977,E:\university-projects\univ-projs\1 year\Sorts\Main.pas=E:\university-projects\univ-projs\1 year\Sorts\Calc.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.252,C:\Users\Almes\Documents\Embarcadero\Studio\Projects\Main.dfm=C:\Users\Almes\Documents\Embarcadero\Studio\Projects\Unit2.dfm</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.417,E:\university-projects\univ-projs\1 year\Sorts\Diagram.pas=E:\university-projects\univ-projs\1 year\Sorts\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.252,C:\Users\Almes\Documents\Embarcadero\Studio\Projects\Main.pas=C:\Users\Almes\Documents\Embarcadero\Studio\Projects\Unit2.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.605,E:\university-projects\univ-projs\1 year\Sorts\Unit1.dfm=E:\university-projects\univ-projs\1 year\Sorts\Main.dfm</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.438,E:\university-projects\univ-projs\1 year\Sorts\Unit1.dfm=E:\university-projects\univ-projs\1 year\Sorts\DiagramOptions.dfm</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.895,=E:\university-projects\univ-projs\1 year\Sorts\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.536,=E:\university-projects\univ-projs\1 year\Sorts\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.752,=E:\university-projects\univ-projs\1 year\Sorts\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.438,E:\university-projects\univ-projs\1 year\Sorts\Unit1.pas=E:\university-projects\univ-projs\1 year\Sorts\DiagramOptions.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.977,E:\university-projects\univ-projs\1 year\Sorts\Main.dfm=E:\university-projects\univ-projs\1 year\Sorts\Calc.dfm</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.338,C:\Users\Almes\Documents\Embarcadero\Studio\Projects\UI.dproj=C:\Users\Almes\Documents\Embarcadero\Studio\Projects\Project1.dproj</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.286,C:\Users\Almes\Documents\Embarcadero\Studio\Projects\UI.dproj=C:\Users\Almes\Documents\Embarcadero\Studio\Projects\UI.dproj</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.605,E:\university-projects\univ-projs\1 year\Sorts\Unit1.pas=E:\university-projects\univ-projs\1 year\Sorts\Main.pas</Transaction>
   </Transactions>
 </BorlandProject>
