@@ -5,7 +5,7 @@ interface
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls, Vcl.StdCtrls, Vcl.Buttons, ShellApi,
-  Typer;
+  Typer, Defines;
 
 type TMenu = class(TForm)
     DragDropPanel: TPanel;
@@ -14,24 +14,21 @@ type TMenu = class(TForm)
     TypeManuallyButton: TSpeedButton;
     OpenDialog: TOpenDialog;
 
-    procedure FormCreate(Sender: TObject);
-    procedure TypeManuallyButtonClick(Sender: TObject);
-    procedure ExploreButtonClick(Sender: TObject);
     procedure FormPaint(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
+    procedure ExploreButtonClick(Sender: TObject);
+    procedure TypeManuallyButtonClick(Sender: TObject);
 
   private
     const DEFAULT_DRAG_DROP_IMAGE = 'images\drag.bmp';
     const ACTIVE_DRAG_DROP_IMAGE  = 'images\dragactive.bmp';
-
 
     procedure RenderImageOnPanel(path : string = DEFAULT_DRAG_DROP_IMAGE);
     procedure CreateTyperForm(input : string);
   protected
     procedure WNDropFiles(var Msg : TMessage); message WM_DROPFILES;
 
-  public
-    { Public declarations }
   end;
 
 var Menu: TMenu;
@@ -54,19 +51,17 @@ begin
 end;
 
 procedure TMenu.CreateTyperForm(input : string);
-var type_form : TTypeForm;
-var key : char;
+var typeForm : TTypeForm;
 begin
-  key := Char(13);
-  type_form := TTypeForm.Create(self);
-  type_form.TypeEdit.Text := input;
-  type_form.ShowModal;
-  type_form.Release;
+  typeForm := TTypeForm.Create(self);
+  typeForm.TypeEdit.Text := input;
+  typeForm.ShowModal;
+  typeForm.Release;
 end;
 
 procedure TMenu.WNDropFiles(var Msg : TMessage);
 var s : string;
-var namelen : integer;
+var namelen : int;
 begin
   namelen := DragQueryFile(Msg.WParam, 0, nil, 0) + 1;
   SetLength(s, namelen);

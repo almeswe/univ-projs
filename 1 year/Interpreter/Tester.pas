@@ -2,7 +2,7 @@ unit Tester;
 
 interface
 
-uses SysUtils, Defines2;
+uses SysUtils, Defines;
 
 type TTester = record
   Inited : bool;
@@ -25,7 +25,6 @@ type TTester = record
   procedure AppendErrorFormatted(expected : string; met : string);
 
   function HasErrors() : bool;
-
 end;
 
 implementation
@@ -50,15 +49,14 @@ end;
 
 procedure TTester.TestForErrors();
 var i : int;
-var paren_pairs : int;
+var parenPairs : int;
 begin
   if not self.Inited then
     raise Exception.Create('Call init procedure first!');
-  paren_pairs := 0;
+  parenPairs := 0;
   GetNextToken;
-  //
+
   for i := 0 to length(self.Tokens)-1 do begin
-  //
     case self.CurrToken.Kind of
       TTokenKind.Constant, TTokenKind.Variable: begin
         self.TestOperand;
@@ -69,61 +67,61 @@ begin
       end;
 
       TTokenKind.OpenParen: begin
-        inc(paren_pairs);
+        inc(parenPairs);
       end;
 
       TTokenKind.CloseParen: begin
-        dec(paren_pairs);
+        dec(parenPairs);
       end;
     end;
     GetNextToken;
   end;
-  if paren_pairs <> 0 then
+  if parenPairs <> 0 then
     self.AppendError('Paren-pairs balance expected.', self.CurrToken.Pos);
 end;
 
 procedure TTester.TestOperand();
-var prev_token : TToken;
-var forw_token : TToken;
+var prevToken : TToken;
+var forwToken : TToken;
 begin
   //check right
   if self.CurrTokenNum > 0 then begin
-    prev_token := self.Tokens[self.CurrTokenNum-1];
-    case prev_token.Kind of
+    prevToken := self.Tokens[self.CurrTokenNum-1];
+    case prevToken.Kind of
       TTokenKind.CloseParen, TTokenKind.Constant, TTokenKind.Variable:
-        self.AppendError('Operator before operand expected, but met: [' + prev_token.Data + ']',prev_token.Pos);
+        self.AppendError('Operator before operand expected, but met: [' + prevToken.Data + ']',prevToken.Pos);
     end;
   end;
   //check left
   if self.CurrTokenNum < length(self.Tokens)-1 then begin
-    forw_token := self.Tokens[self.CurrTokenNum+1];
-    case forw_token.Kind of
+    forwToken := self.Tokens[self.CurrTokenNum+1];
+    case forwToken.Kind of
       TTokenKind.OpenParen, TTokenKind.Constant, TTokenKind.Variable:
-        self.AppendError('Operator after operand expected, but met: [' + forw_token.Data + ']',forw_token.Pos);
+        self.AppendError('Operator after operand expected, but met: [' + forwToken.Data + ']',forwToken.Pos);
     end;
   end;
 end;
 
 procedure TTester.TestOperator();
-var prev_token : TToken;
-var forw_token : TToken;
+var prevToken : TToken;
+var forwToken : TToken;
 begin
   //check right
   if self.CurrTokenNum > 0 then begin
-    prev_token := self.Tokens[self.CurrTokenNum-1];
-    case prev_token.Kind of
+    prevToken := self.Tokens[self.CurrTokenNum-1];
+    case prevToken.Kind of
       TTokenKind.Op, TTokenKind.OpenParen:
-        self.AppendError('Operand before operator expected, but met: [' + prev_token.Data + ']',prev_token.Pos);
+        self.AppendError('Operand before operator expected, but met: [' + prevToken.Data + ']',prevToken.Pos);
     end;
   end
   else
     self.AppendError('Operand before operator expected, but met: [' + self.CurrToken.Data + ']', self.CurrToken.Pos);
   //check left
   if self.CurrTokenNum < length(self.Tokens)-1 then begin
-    forw_token := self.Tokens[self.CurrTokenNum+1];
-    case forw_token.Kind of
+    forwToken := self.Tokens[self.CurrTokenNum+1];
+    case forwToken.Kind of
       TTokenKind.Op, TTokenKind.CloseParen:
-        self.AppendError('Operand after operator expected, but met: [' + forw_token.Data + ']',forw_token.Pos);
+        self.AppendError('Operand after operator expected, but met: [' + forwToken.Data + ']',forwToken.Pos);
     end;
   end
   else
@@ -165,4 +163,3 @@ begin
 end;
 
 end.
-

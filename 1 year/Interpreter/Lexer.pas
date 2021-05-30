@@ -2,7 +2,7 @@ unit Lexer;
 
 interface
 
-uses SysUtils, Defines2;
+uses SysUtils, Defines;
 
 type TLexer = record
   Inited : bool;
@@ -25,7 +25,7 @@ type TLexer = record
 
   procedure Tokenize();
   procedure AppendToken(token : TToken);
-  procedure AppendError(msg : string; pos : integer);
+  procedure AppendError(msg : string; pos : int);
 
   function RecognizeOp()  : TToken;
   function RecognizeNum() : TToken;
@@ -60,7 +60,7 @@ begin
   self.Inited := true;
 
   self.Expression := expr;
-  self.CurrentFile := NO_FILE;
+  self.CurrentFile := NoFile;
   self.CurrentCharPos := 0;
 end;
 
@@ -93,7 +93,7 @@ begin
   if not self.Inited then
     raise Exception.Create('Call init procedure first!');
   if self.CurrentCharPos+1 > length(self.Expression) then
-    self.CurrentChar := EOL_CH
+    self.CurrentChar := EolChar
   else begin
     inc(self.CurrentCharPos);
     self.CurrentChar := self.Expression[self.CurrentCharPos];
@@ -106,7 +106,7 @@ begin
   if not self.Inited then
     raise Exception.Create('Call init procedure first!');
   self.GetNextChar;
-  while self.CurrentChar <> EOL_CH do begin
+  while self.CurrentChar <> EolChar do begin
       if self.IsOp() then begin
         self.AppendToken(self.RecognizeOp());
         continue;
@@ -137,7 +137,7 @@ begin
   Tokens[length(self.Tokens) - 1] := token;
 end;
 
-procedure TLexer.AppendError(msg: string; pos: integer);
+procedure TLexer.AppendError(msg: string; pos: int);
 var error : TError;
 var loc   : TPosition;
 begin
@@ -169,7 +169,7 @@ begin
     raise Exception.Create('Call init procedure first!');
    loc   := NewPosition(self.CurrentCharPos, self.CurrentFile);
    token := NewToken('', loc, TTokenKind.Constant);
-   while (self.CurrentChar <> EOL_CH) and (self.IsDigit()) do begin
+   while (self.CurrentChar <> EolChar) and (self.IsDigit()) do begin
        token.Data := token.Data + self.CurrentChar;
        self.GetNextChar;
    end;
@@ -184,7 +184,7 @@ begin
     raise Exception.Create('Call init procedure first!');
    loc   := NewPosition(self.CurrentCharPos, self.CurrentFile);
    token := NewToken('', loc, TTokenKind.Variable);
-   while (self.CurrentChar <> EOL_CH) and self.IsLetter() do begin
+   while (self.CurrentChar <> EolChar) and self.IsLetter() do begin
        token.Data := token.Data + self.CurrentChar;
        self.GetNextChar;
    end;

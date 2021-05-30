@@ -2,7 +2,7 @@ unit Interpreter;
 
 interface
 
-uses SysUtils, Lexer, Tester, Converter2, Defines2;
+uses SysUtils, Lexer, Tester, Converter, Defines;
 
 type TInterpreter = record
   Source : string;

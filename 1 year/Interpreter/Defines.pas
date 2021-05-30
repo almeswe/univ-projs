@@ -1,22 +1,23 @@
-unit Defines2;
+unit Defines;
 
 interface
 
 uses SysUtils;
 
-const EOL_CH  = #10;
-const NO_FILE = 'No file';
+const EolChar = #10;
+const NoFile  = 'No file';
 
 type int  = integer;
 type bool = boolean;
-type float = real;
+
+type TActionKind = (Push, Pop, Append);
+type TErrorKind  = (LexerError, ConverterError);
+type TTokenKind  = (Op, OpenParen, CloseParen, Constant, Variable, EOL);
 
 type TPosition = record
    PosIn  : int;
    Target : string;
 end;
-
-type TErrorKind = (LexerError, ConverterError);
 
 type TError = record
   Msg  : string;
@@ -25,9 +26,6 @@ type TError = record
 
   function ToString() : string;
 end;
-type TErrors = array of TError;
-
-type TTokenKind = (Op, OpenParen, CloseParen, Constant, Variable, EOL);
 
 type TToken = record
   Data : string;
@@ -36,9 +34,6 @@ type TToken = record
 
   function ToString() : string;
 end;
-type TTokens = array of TToken;
-
-type TActionKind = (Push, Pop, Append);
 
 type TAction = record
   Data : string;
@@ -48,10 +43,12 @@ type TAction = record
   function ToLogString() : string;
 end;
 
+type TTokens  = array of TToken;
+type TErrors  = array of TError;
 type TActions = array of TAction;
 
 function NewAction(data : string; kind : TActionKind) : TAction;
-function NewPosition(pos_in : int; target : string = NO_FILE) : TPosition;
+function NewPosition(posIn : int; target : string = NoFile) : TPosition;
 function NewError(msg : string; pos : TPosition; kind : TErrorKind) : TError;
 function NewToken(data : string; pos : TPosition; kind : TTokenKind) : TToken;
 
@@ -78,7 +75,7 @@ begin
 
   str := str + Msg + ' <';
 
-  if self.Pos.Target <> NO_FILE then
+  if self.Pos.Target <> NoFile then
     str := str + 'file: '+ self.Pos.Target + ' ';
   str := str + 'in pos : ' + inttostr(self.Pos.PosIn);
   str := str + '>';
@@ -112,11 +109,11 @@ begin
   exit(action^);
 end;
 
-function NewPosition(pos_in : int; target : string = NO_FILE) : TPosition;
+function NewPosition(posIn : int; target : string = NoFile) : TPosition;
 var position : ^TPosition;
 begin
   new(position);
-  position.PosIn := pos_in;
+  position.PosIn := posIn;
   position.Target := target;
   exit(position^);
 end;

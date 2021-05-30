@@ -170,10 +170,10 @@
         <DelphiCompile Include="$(MainSource)">
             <MainSource>MainSource</MainSource>
         </DelphiCompile>
-        <DCCReference Include="Stack2.pas"/>
-        <DCCReference Include="Converter2.pas"/>
+        <DCCReference Include="Stack.pas"/>
+        <DCCReference Include="Converter.pas"/>
         <DCCReference Include="Lexer.pas"/>
-        <DCCReference Include="Defines2.pas"/>
+        <DCCReference Include="Defines.pas"/>
         <DCCReference Include="Tester.pas"/>
         <DCCReference Include="Tests.pas"/>
         <DCCReference Include="Interpreter.pas"/>

@@ -4,7 +4,7 @@ interface
 
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls, Defines2, Stack2,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls, Defines, Stack,
   Vcl.StdCtrls, Vcl.Buttons;
 
 type
@@ -13,7 +13,6 @@ type
     NextStepButton: TSpeedButton;
     PreviousStepButton: TSpeedButton;
     procedure FormCreate(Sender: TObject);
-    procedure Button1Click(Sender: TObject);
     procedure NextStepButtonClick(Sender: TObject);
     procedure PreviousStepButtonClick(Sender: TObject);
     procedure FormKeyPress(Sender: TObject; var Key: Char);
@@ -57,9 +56,10 @@ begin
 end;
 
 function TVisualForm.DeleteAllSpaces(source : string) : string;
-var i : integer;
+var i : int;
 var newstr : string;
 begin
+  newstr := '';
   for i := 1 to length(source) do
     if source[i] <> ' ' then
       newstr := newstr + source[i];
@@ -67,7 +67,7 @@ begin
 end;
 
 function TVisualForm.DeleteLastAction(source : string; action : TAction) : string;
-var i : integer;
+var i : int;
 var str : string;
 begin
   str := '';
@@ -116,7 +116,7 @@ const StackSeparator = StackUpperBorderWidth - StackCellMargin;
 const StackMaxCountForRender = 10;
 const StackImagePath = 'images\stack.bmp';
 
-var i : integer;
+var i : int;
 var bmp : TBitmap;
 begin
   bmp := TBitmap.Create;
@@ -165,12 +165,6 @@ begin
   end;
 end;
 
-procedure TVisualForm.Button1Click(Sender: TObject);
-begin
-  self.Back;
-  self.DrawVisualization;
-end;
-
 procedure TVisualForm.NextStepButtonClick(Sender: TObject);
 begin
   if self.CurrentActionIndex >= length(self.Actions)-1 then
@@ -191,11 +185,25 @@ procedure TVisualForm.DrawNotation;
 const PosX = 450;
 const PosY = 100;
 const MaxNotationWidth = 300;
+
+var i : int;
+var text : string;
 begin
+  i := 1;
+  text := '';
   with self.SurfaceImage.Canvas do begin
     Font.Size := 15;
     Font.Color := clGreen;
-    TextOut(PosX, PosY, self.Notation);
+    if TextWidth(self.Notation) > MaxNotationWidth then begin
+      while (i <= length(self.Notation)-1) and (TextWidth(text) < MaxNotationWidth) do begin
+        text := text + self.Notation[i];
+        inc(i);
+      end;
+      text := text + '...';
+    end
+    else
+      text := self.Notation;
+    TextOut(PosX, PosY, text);
   end;
 
   with self.SurfaceImage.Canvas do begin
@@ -209,13 +217,28 @@ const PosX = 450;
 const PosY = 300;
 const MaxSourceWidth = 300;
 
+const BorderWidth = 350;
+const BorderHeight = 30;
+
+var i : int;
 var text : string;
 begin
-  text := self.Source;
+  i := 1;
+  text := '';
   with self.SurfaceImage.Canvas do begin
     Font.Size := 15;
     Font.Color := clBlack;
-    TextOut(PosX, PosY, self.Source);
+    if TextWidth(self.Source) > MaxSourceWidth then begin
+      while (i <= length(self.Source)-1) and (TextWidth(text) < MaxSourceWidth) do begin
+        text := text + self.Source[i];
+        inc(i);
+      end;
+      text := text + '...';
+    end
+    else
+      text := self.Source;
+
+    TextOut(PosX, PosY, text);
   end;
 
   with self.SurfaceImage.Canvas do begin
@@ -250,21 +273,25 @@ procedure TVisualForm.DrawCaret;
 const PosX = 450;
 const PosY = 330;
 
-var i : integer;
+var i : int;
+var offset : int;
 var caret : string;
-var offset : integer;
 begin
   caret := '';
   offset := 0;    
   with self.SurfaceImage.Canvas do begin
     Font.Size := 15;
+
     for i := 0 to self.CurrentActionIndex-1 do
       if (self.Actions[i].Kind <> TActionKind.POP) then
         offset := offset + TextWidth(self.Actions[i].Data)
       else
        if (self.Actions[i].Data = '(') then
         offset := offset + TextWidth(self.Actions[i].Data);
-        
+
+    if offset > 300 then
+      exit;
+
     if (self.CurrentActionIndex <> -1) and (self.CurrentActionIndex <> length(self.Actions)-1) then
       for i := 1 to length(self.Actions[self.CurrentActionIndex].Data) do
         caret := caret + '^';
@@ -304,8 +331,8 @@ end;
 procedure TVisualForm.FormKeyPress(Sender: TObject; var Key: Char);
 begin
   case Key of
-    'd' : self.NextStepButtonClick(nil);
-    'a' : self.PreviousStepButtonClick(nil);
+    'd', 'â' : self.NextStepButtonClick(nil);
+    'a', 'ô' : self.PreviousStepButtonClick(nil);
   end;
 end;
 

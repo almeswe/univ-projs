@@ -1,4 +1,4 @@
-unit Stack2;
+unit Stack;
 
 interface
 
@@ -23,8 +23,6 @@ type TStack = record
   function Size()  : integer;
   function Empty() : boolean;
 end;
-
-procedure Test();
 
 implementation
 
@@ -52,7 +50,6 @@ procedure TStack.Clear();
 var i     : integer;
 var temp  : ^TCell;
 var cells : array of ^TCell;
-
 begin
   SetLength(cells,0);
   temp := @(self.Head^);
@@ -126,21 +123,6 @@ begin
       inc(len);
    end;
    exit(len);
-end;
-
-procedure Test();
-var s : TStack;
-var i : integer;
-var c : TCell;
-var e : boolean;
-begin
-  s.Init();
-  for i := 1 to 10000000 do
-    s.Push('123');
-  readln;
-  for i := 1 to 10000000 do
-    s.Pop();
-  readln;
 end;
 
 end.

@@ -5,7 +5,7 @@ interface
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls,
-  Interpreter, Defines2, Visualizer;
+  Interpreter, Defines, Visualizer;
 
 type TTypeForm = class(TForm)
     TypeEdit : TEdit;
@@ -30,7 +30,7 @@ type TTypeForm = class(TForm)
 
      procedure RunInterpreter();
      procedure CreateVisualForm();
-     procedure ChangeFont(bySize : integer);
+     procedure ChangeFont(bySize : int);
      procedure SetStateForButtons(state : bool);
   public
 
@@ -86,7 +86,7 @@ begin
   visualForm.Release;
 end;
 
-procedure TTypeForm.ChangeFont(bySize : integer);
+procedure TTypeForm.ChangeFont(bySize : int);
 begin
   if bySize > 0 then begin
     if self.InfoListBox.Font.Size + bySize <= 25 then

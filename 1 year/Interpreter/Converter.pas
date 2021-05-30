@@ -1,8 +1,8 @@
-unit Converter2;
+unit Converter;
 
 interface
 
-uses SysUtils, Stack2, Defines2;
+uses SysUtils, Stack, Defines;
 
 type TConverter = record
   Inited : bool;
@@ -22,8 +22,8 @@ type TConverter = record
   function IsErrored() : bool;
 
   function IsParen(str : string) : bool;
-  function IsCloseParen(str : string) : bool;
   function IsOpenParen(str : string) : bool;
+  function IsCloseParen(str : string) : bool;
 
   function GetOperatorPriority(op : string) : int;
 end;

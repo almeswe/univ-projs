@@ -2,10 +2,10 @@
 
 uses
   SysUtils,
-  Stack2 in 'Stack2.pas',
-  Converter2 in 'Converter2.pas',
+  Stack in 'Stack.pas',
+  Converter in 'Converter.pas',
   Lexer in 'Lexer.pas',
-  Defines2 in 'Defines2.pas',
+  Defines in 'Defines.pas',
   Tester in 'Tester.pas',
   Tests in 'Tests.pas',
   Interpreter in 'Interpreter.pas';
