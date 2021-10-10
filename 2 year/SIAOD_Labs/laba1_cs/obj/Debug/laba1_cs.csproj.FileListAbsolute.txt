@@ -1,0 +1,10 @@
+C:\Users\HP\source\repos\univ-projs\2 year\SIAOD_Labs\laba1_cs\bin\Debug\laba1_cs.exe.config
+C:\Users\HP\source\repos\univ-projs\2 year\SIAOD_Labs\laba1_cs\bin\Debug\laba1_cs.exe
+C:\Users\HP\source\repos\univ-projs\2 year\SIAOD_Labs\laba1_cs\bin\Debug\laba1_cs.pdb
+C:\Users\HP\source\repos\univ-projs\2 year\SIAOD_Labs\laba1_cs\obj\Debug\laba1_cs.csproj.AssemblyReference.cache
+C:\Users\HP\source\repos\univ-projs\2 year\SIAOD_Labs\laba1_cs\obj\Debug\Laba1.Form1.resources
+C:\Users\HP\source\repos\univ-projs\2 year\SIAOD_Labs\laba1_cs\obj\Debug\laba1_cs.Properties.Resources.resources
+C:\Users\HP\source\repos\univ-projs\2 year\SIAOD_Labs\laba1_cs\obj\Debug\laba1_cs.csproj.GenerateResource.cache
+C:\Users\HP\source\repos\univ-projs\2 year\SIAOD_Labs\laba1_cs\obj\Debug\laba1_cs.csproj.CoreCompileInputs.cache
+C:\Users\HP\source\repos\univ-projs\2 year\SIAOD_Labs\laba1_cs\obj\Debug\laba1_cs.exe
+C:\Users\HP\source\repos\univ-projs\2 year\SIAOD_Labs\laba1_cs\obj\Debug\laba1_cs.pdb
