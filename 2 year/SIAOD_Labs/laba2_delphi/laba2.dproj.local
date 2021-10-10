@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<BorlandProject>
+	<Transactions>
+    <Transaction>2021.10.10 14:38:40.812,D:\university-projects\univ-projs\2 year\SIAOD_Labs\laba2_delphi\laba2.dproj=C:\Users\almeswe\Documents\Embarcadero\Studio\Projects\Project1.dproj</Transaction>
+    <Transaction>2021.10.10 14:40:50.835,=D:\university-projects\univ-projs\2 year\SIAOD_Labs\laba2_delphi\Unit1.pas</Transaction>
+    <Transaction>2021.10.10 14:40:57.945,D:\university-projects\univ-projs\2 year\SIAOD_Labs\laba2_delphi\List.pas=D:\university-projects\univ-projs\2 year\SIAOD_Labs\laba2_delphi\Unit1.pas</Transaction>
+    <Transaction>2021.10.10 14:41:08.325,D:\university-projects\univ-projs\2 year\SIAOD_Labs\laba2_delphi\LinkedList.pas=D:\university-projects\univ-projs\2 year\SIAOD_Labs\laba2_delphi\List.pas</Transaction>
+  </Transactions>  <ProjectSortOrder AutoSort="0" SortType="0">
+    <File Path="LinkedList.pas"/>
+  </ProjectSortOrder>
+</BorlandProject>

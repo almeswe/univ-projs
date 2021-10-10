@@ -1,0 +1,172 @@
+unit LinkedList;
+
+interface
+
+uses SysUtils;
+
+type int = integer;
+type bool = boolean;
+
+type PolyData = record
+  Power : int;
+  Coefficient: int;
+end;
+
+type TLinkedListItem = record
+  Data: PolyData;
+  Next: ^TLinkedListItem;
+end;
+
+type TLinkedListItemPtr = ^TLinkedListItem;
+
+type TLinkedList = record
+  Head: ^TLinkedListItem;
+  Last: ^TLinkedListItem;
+
+  procedure Init;
+  procedure Free;
+
+  procedure Add(data: PolyData);
+  procedure RemoveAt(index: int);
+
+  function Size() : int;
+  function GetAt(index: int) : PolyData;
+  function GetItemAt(index: int) : TLinkedListItemPtr;
+  procedure PrintInConsole;
+end;
+
+type TLinkedListPtr = ^TLinkedList;
+
+implementation
+
+procedure TLinkedList.Init;
+begin
+  self.Head := nil;
+  self.Last := nil;
+end;
+
+procedure TLinkedList.Free;
+var i: int;
+var item, dup: ^TLinkedListItem;
+begin
+  item := @(self.Head^);
+  for i := 0 to self.Size()-1 do begin
+    dup := @(item^);
+    item := @(item.Next^);
+    FreeMem(dup);
+  end;
+end;
+
+procedure TLinkedList.Add(data: PolyData);
+var item: ^TLinkedListItem;
+begin
+  New(item);
+  item.Next := nil;
+  item.Data := data;
+
+  if self.Head = nil then begin
+    self.Head := @(item^);
+    self.Last := @(self.Head^);
+  end
+  else begin
+    if self.Head = @(self.Last^) then begin
+      self.Last := @(item^);
+      self.Head.Next := @(self.Last^);
+    end
+    else begin
+      self.Last.Next := @(item^);
+      self.Last := @(item^);
+    end;
+  end;
+end;
+
+procedure TLinkedList.RemoveAt(index: int);
+var i: int;
+var prev, curr, next: ^TLinkedListItem;
+begin
+  prev := nil;
+  if index - 1 >= 0 then
+    prev := self.GetItemAt(index);
+  if prev = nil then
+    curr := @(self.Head^)
+  else
+    curr := @(prev.Next^);
+  if curr = nil then
+    raise Exception.Create('Cannot get item by this index!');
+  next := @(curr.Next^);
+
+  if (prev = nil) and (next = nil) then begin
+     self.Head := nil;
+     self.Last := nil;
+  end
+  else begin
+    if prev = nil then begin
+      self.Head := @(next^);
+    end;
+    if next = nil then begin
+      self.Last := @(prev^);
+      self.Last.Next := nil;
+    end;
+    if (prev <> nil) and (next <> nil) then
+      prev.Next := @(next^);
+  end;
+  FreeMem(curr);
+end;
+
+function TLinkedList.Size() : int;
+var len: int;
+var item: ^TLinkedListItem;
+begin
+  len := 0;
+  item := @(self.Head^);
+  while item <> nil do begin
+    inc(len);
+    item := @(item.Next^);
+  end;
+  exit(len);
+end;
+
+function TLinkedList.GetAt(index: int) : PolyData;
+var i: int;
+var item: ^TLinkedListItem;
+begin
+  item := @(self.Head^);
+  for i := 0 to index-1 do begin
+    if item = nil then
+      raise Exception.Create('Cannot get item by this index!');
+    item := @(item.Next^);
+  end;
+  exit(item.Data);
+end;
+
+
+function TLinkedList.GetItemAt(index: int) : TLinkedListItemPtr;
+var i: int;
+var item: ^TLinkedListItem;
+begin
+  item := @(self.Head^);
+  for i := 0 to index-1 do begin
+    if item = nil then
+      raise Exception.Create('Cannot get item by this index!');
+    item := @(item.Next^);
+  end;
+  exit(item);
+end;
+
+procedure TLinkedList.PrintInConsole;
+var i: int;
+var len: int;
+var data: PolyData;
+begin
+  len := self.Size();
+  for i := 0 to len-1 do begin
+    data := self.GetAt(i);
+    write(data.Coefficient, 'x^', data.Power);
+    if i <> len-1 then begin
+        write(' + ');
+    end;
+  end;
+  writeln;
+end;
+
+end.
