@@ -1,0 +1,4 @@
+﻿  main.c
+C:\Users\HP\source\repos\univ-projs\2 year\PL_labs\laba2\main.c(75,15): warning C4101: 'j': unreferenced local variable
+C:\Users\HP\source\repos\univ-projs\2 year\PL_labs\laba2\main.c(88,7): warning C4101: 'i': unreferenced local variable
+  laba2.vcxproj -> C:\Users\HP\source\repos\univ-projs\2 year\PL_labs\Debug\laba2.exe

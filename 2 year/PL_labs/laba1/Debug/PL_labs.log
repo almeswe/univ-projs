@@ -1,0 +1,5 @@
+﻿  main.c
+C:\Users\HP\source\repos\univ-projs\2 year\PL_labs\laba1\main.c(10,20): warning C4013: 'gets' undefined; assuming extern returning int
+C:\Users\HP\source\repos\univ-projs\2 year\PL_labs\laba1\main.c(12,28): warning C4013: 'strlen' undefined; assuming extern returning int
+C:\Users\HP\source\repos\univ-projs\2 year\PL_labs\laba1\main.c(10,1): warning C4047: 'initializing': 'char *' differs in levels of indirection from 'int'
+  PL_labs.vcxproj -> C:\Users\HP\source\repos\univ-projs\2 year\PL_labs\Debug\laba1.exe
