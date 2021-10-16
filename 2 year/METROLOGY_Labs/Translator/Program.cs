@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
+using Translator.JsTranslator.Lexer;
 using Translator.JsTranslator.Lexer.Input;
 
 namespace Translator
@@ -12,8 +10,7 @@ namespace Translator
     {
         static void Main(string[] args)
         {
-            //var input = new ConsoleInput(Console.ReadLine());
-            var input = new FileInput(@"C:\Users\HP\Desktop\123.txt");
+            /*var input = new FileInput(@"C:\Users\HP\Desktop\123.txt");
             while (true)
             {
                 Console.Write(">");
@@ -28,7 +25,11 @@ namespace Translator
                     case "gc":
                         Console.WriteLine(input.GetCurrentChar()); break;
                 }
-            }
+            }*/
+            var l = new Lexer(new StringInput("12312  123.22 variable return await"));
+            foreach (var t in l.Tokenize())
+                Console.WriteLine(t.ToString());
+            Console.ReadLine();
         }
     }
 }

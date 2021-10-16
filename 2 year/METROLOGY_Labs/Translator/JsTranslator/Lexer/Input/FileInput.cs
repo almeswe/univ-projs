@@ -1,23 +1,24 @@
 ﻿using System;
-using System.IO;
+using Translator.JsTranslator.Exceptions;
 
 namespace Translator.JsTranslator.Lexer.Input
 {
-    public class LexerException : Exception
-    {
-        public LexerException(string message) : base(message) { }
-    }
-
     public sealed class FileInput : ILexerInput
     {
-        public StringInput _input;
+        private StringInput _input;
+
+        public bool IsFile => true;
+        public string File { get; private set; }
 
         public FileInput(string file)
         {
-            if (!File.Exists(file))
+            if (!System.IO.File.Exists(this.File = file))
                 throw new LexerException($"Specified file \'{file}\' does not exists!");
-            this._input = new StringInput(File.ReadAllText(file));
+            this._input = new StringInput(System.IO.File.ReadAllText(file));
         }
+
+        public bool Soi() =>
+            this._input.Soi();
 
         public bool Eoi() =>
             this._input.Eoi();

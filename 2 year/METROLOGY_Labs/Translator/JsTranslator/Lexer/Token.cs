@@ -1,14 +1,60 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Translator.JsTranslator.Lexer
+﻿namespace Translator.JsTranslator.Lexer
 {
     public enum TokenKind
     {
-        TokenKeywordAwait, //Keywords
+        TokenPlus,
+        TokenDash,
+        TokenAsterisk,
+        TokenSlash,
+        TokenModulus,
+        TokenOpParen,
+        TokenClParen,
+        TokenOpBracket,
+        TokenClBracket,
+        TokenOpBrace,
+        TokenClBrace,
+        TokenQuestion,
+        TokenColon,
+        TokenSemicolon,
+        TokenDot,
+        TokenExlMark,
+        TokenLAngle,
+        TokenRAngle,
+        TokenBar,
+        TokenAmpersand,
+        TokenCaret,
+        TokenTilde,
+        TokenAssign,
+        TokenSQuote,
+        TokenDQuote,
+
+        TokenChar,
+        TokenString,
+        TokenNumber,
+        TokenFNumber,
+        TokenIdentifier,
+
+        TokenInc,
+        TokenDec,
+        TokenLShift,
+        TokenRShift,
+        TokenURshift,
+
+        TokenLgEq,
+        TokenLgNeq,
+        TokenLgGEqT,
+        TokenLgLEqT,
+        TokenLgAnd,
+        TokenLgOr,
+        TokenLgTypeEq,
+
+        TokenAddAssign,
+        TokenSubAssign,
+        TokenMulAssign,
+        TokenDivAssign,
+        TokenModAssign,
+
+        TokenKeywordAwait,
         TokenKeywordBreak,
         TokenKeywordCase,
         TokenKeywordCatch,
@@ -39,7 +85,7 @@ namespace Translator.JsTranslator.Lexer
         TokenKeywordPackage,
         TokenKeywordPrivate,
         TokenKeywordProtected,
-        TokenKeywordPublick,
+        TokenKeywordPublic,
         TokenKeywordReturn,
         TokenKeywordSuper,
         TokenKeywordSwitch,
@@ -54,60 +100,24 @@ namespace Translator.JsTranslator.Lexer
         TokenKeywordWhile,
         TokenKeywordWith,
         TokenKeywordYield,
-
-        TokenOpParen, //Keychars
-        TokenClParen,
-        TokenOpBracket,
-        TokenClBracket,
-        TokenOpBrace,
-        TokenClBrace,
-        TokenQuestion,
-        TokenColon,
-        TokenSemicolon,
-        TokenDot,
-        TokenSQuote,
-        TokenDQuote,
-
-        TokenPlus, // ARITH
-        TokenDash,
-        TokenAsterisk,
-        TokenSlash,
-        TokenModulus,
-        TokenInc,
-        TokenDec,
-
-        TokenLgEq, // LOGICAL
-        TokenLgTypeEq, 
-        TokenLgNeq,
-        Token, // "<"
-        Token, // ">"
-        TokenGreaterEqThan,
-        TokenLessEqThan,
-        TokenLgEnd,
-        TokenLgOr,
-        TokenLgNot, 
-
-        TokenAssign, //ASSIGN
-        TokenAddAssign,
-        TokenSubAssign,
-        TokenMulAssign,
-        TokenDivAssign,
-        TokenModAssign,
-        TokenAmpersand,
-        TokenBar,
-        TokenCaret,
-        TokenTilde,
-        TokenLShift,
-        TokenRShift,
-        Token, // ">>>"
+        TokenEOF
     }
 
     public sealed class Token
     {
-        public TokenKind Kind { get; private set; }   
-        public Token()
+        public string Lexeme { get; private set; }
+
+        public TokenKind Kind { get; private set; }
+        public SourceContext Context { get; private set; }
+
+        public Token(TokenKind kind, string lexeme, SourceContext context)
         {
-            
+            this.Kind = kind;
+            this.Lexeme = lexeme;
+            this.Context = context;
         }
+
+        public override string ToString() =>
+            $"{this.Kind}: {this.Lexeme} {this.Context}";
     }
 }

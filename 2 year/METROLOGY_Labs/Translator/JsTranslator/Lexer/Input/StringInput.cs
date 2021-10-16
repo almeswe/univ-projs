@@ -5,9 +5,14 @@
         private int _currentIndex = 0;
 
         public string Input { get; private set; }
+        public bool IsFile => false;
+        public string File => "undefined";
 
         public StringInput(string input) : base() => 
             this.Input = input;
+
+        public bool Soi() =>
+            this._currentIndex <= 0;
 
         public bool Eoi() =>
             this._currentIndex >= this.Input.Length-1;

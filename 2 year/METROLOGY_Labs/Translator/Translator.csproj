@@ -43,11 +43,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="JsTranslator\Lexer\Input\ConsoleInput.cs" />
+    <Compile Include="JsTranslator\Exceptions.cs" />
+    <Compile Include="JsTranslator\Lexer\CharExtensions.cs" />
+    <Compile Include="JsTranslator\Lexer\Input\StringInput.cs" />
     <Compile Include="JsTranslator\Lexer\Input\FileInput.cs" />
     <Compile Include="JsTranslator\Lexer\Input\ILexerInput.cs" />
     <Compile Include="JsTranslator\Lexer\Lexer.cs" />
     <Compile Include="JsTranslator\Lexer\Token.cs" />
+    <Compile Include="JsTranslator\SrcContext.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
