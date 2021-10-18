@@ -14,7 +14,7 @@ namespace Translator.JsTranslator.Lexer.Input
         {
             if (!System.IO.File.Exists(this.File = file))
                 throw new LexerException($"Specified file \'{file}\' does not exists!");
-            this._input = new StringInput(System.IO.File.ReadAllText(file));
+            this._input = new StringInput(System.IO.File.ReadAllText(file) + '\0');
         }
 
         public bool Soi() =>
