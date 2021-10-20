@@ -65,9 +65,7 @@ namespace Laba1
                     i++;
                     a += $"[{i}] {opd.Key} : {opd.Value}\n";
                 }
-                File.WriteAllText("test.txt", a);
-                return;
-
+                new Statistics(metrics).Show();
             }
             catch (TranslatorException te)
             {

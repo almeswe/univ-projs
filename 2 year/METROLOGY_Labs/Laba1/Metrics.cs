@@ -1,24 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using Translator.JsTranslator.Lexer;
 
 namespace Laba1
 {
     public sealed class MetricsAnalyzer
     {
+        private List<Token> _tokens;
+
         public Dictionary<string, int> Operands { get; private set; }
         public Dictionary<string, int> Operators { get; private set; }
 
-        private List<Token> _tokens;
-
         public MetricsAnalyzer(List<Token> tokens)
         {
+            this._tokens = tokens;
             this.Operands = new Dictionary<string, int>();
             this.Operators = new Dictionary<string, int>();
-            this._tokens = tokens;
             this.Analyze();
         }
 
@@ -32,34 +28,56 @@ namespace Laba1
                 if (this.IsOperator(token))
                     this.AddToDictionary(this.Operators,
                         new KeyValuePair<string, int>(token.Lexeme, 1));
-                else if (this.IsStatement(token))
+                // case of: else if ()
+                else if (this.Match(i, TokenKind.TokenKeywordElse))
+                {
+                    if (this.Match(i+1, TokenKind.TokenKeywordIf))
+                        if (this.Match(i + 2, TokenKind.TokenOpParen))
+                            i += 2;
+                }
+                // case of statements with parens on syntax level
+                else if (this.IsStatementWithParens(token))
+                {
+                    if (this.Match(i + 1, TokenKind.TokenOpParen))
+                        i += 1;
                     this.AddToDictionary(this.Operators,
                         new KeyValuePair<string, int>(token.Lexeme, 1));
-                // case of operand (identifer)
-                else if (this.Match(i, TokenKind.TokenIdentifier))
-                    this.AddToDictionary(this.Operands,
+                }
+                // case of statements without parens on syntax level
+                else if (this.IsStatementWithoutParens(token))
+                    this.AddToDictionary(this.Operators,
                         new KeyValuePair<string, int>(token.Lexeme, 1));
-                // case of: function identifer()
+                // case of: function()
                 else if (this.Match(i, TokenKind.TokenKeywordFunction))
                 {
-                    if (this.Match(i+1, TokenKind.TokenIdentifier))
-                        if (this.Match(i+2, TokenKind.TokenOpParen))
-                            i+=2; // skip name and op paren 
+                    if (this.Match(i + 1, TokenKind.TokenOpParen))
+                        i += 1;
+                }
+                // case of operand (identifer)
+                else if (this.Match(i, TokenKind.TokenKeywordFunction))
+                {
+                    if (this.Match(i + 1, TokenKind.TokenIdentifier))
+                        if (this.Match(i + 2, TokenKind.TokenOpParen))
+                            i += 2; // skip name and op paren 
                 }
                 // case of: identifer()
                 else if (this.Match(i, TokenKind.TokenIdentifier))
                 {
-                    if (this.Match(i+1, TokenKind.TokenOpParen))
+                    if (this.Match(i + 1, TokenKind.TokenOpParen))
                     {
                         this.AddToDictionary(this.Operands,
                             new KeyValuePair<string, int>($"{token.Lexeme}()", 1));
                         i++; // skip op paren
                     }
+                    else
+                        // case of: function identifer()
+                        this.AddToDictionary(this.Operands,
+                            new KeyValuePair<string, int>(token.Lexeme, 1));
                 }
-                // case of: var|let|const identifer
+                // case of: var|let|const identifier
                 else if (this.IsVarDeclarator(token))
-                    if (this.Match(i+1, TokenKind.TokenIdentifier))
-                        i+=1; // skip var|let|const keyword
+                    if (this.Match(i + 1, TokenKind.TokenIdentifier))
+                        i += 1; // skip var|let|const keyword
                 i++;
             }
         }
@@ -100,21 +118,30 @@ namespace Laba1
             return false;
         }
 
-        private bool IsStatement(Token token)
+        private bool IsStatementWithoutParens(Token token)
         {
             if (token.Kind == TokenKind.TokenKeywordTry      ||
-                token.Kind == TokenKind.TokenKeywordSwitch   ||
                 token.Kind == TokenKind.TokenKeywordClass    ||
                 token.Kind == TokenKind.TokenKeywordDo       ||
                 token.Kind == TokenKind.TokenKeywordEnum     ||
-                token.Kind == TokenKind.TokenKeywordFor      ||
-                token.Kind == TokenKind.TokenKeywordIf       ||
                 token.Kind == TokenKind.TokenKeywordBreak    ||
                 token.Kind == TokenKind.TokenKeywordContinue ||
-                token.Kind == TokenKind.TokenKeywordWhile    ||
-                token.Kind == TokenKind.TokenKeywordWith     ||
                 token.Kind == TokenKind.TokenKeywordYield)
                     return true;
+            return false;
+        }
+
+        private bool IsStatementWithParens(Token token)
+        {
+            if (token.Kind == TokenKind.TokenKeywordSwitch ||
+                token.Kind == TokenKind.TokenKeywordFor    ||
+                token.Kind == TokenKind.TokenKeywordCatch  ||
+                token.Kind == TokenKind.TokenKeywordIf     ||
+                token.Kind == TokenKind.TokenKeywordSuper  ||
+                token.Kind == TokenKind.TokenKeywordWhile  ||
+                token.Kind == TokenKind.TokenKeywordWith   ||
+                token.Kind == TokenKind.TokenKeywordSwitch)
+                return true;
             return false;
         }
 
