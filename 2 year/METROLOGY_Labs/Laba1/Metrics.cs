@@ -28,6 +28,17 @@ namespace Laba1
                 if (this.IsOperator(token))
                     this.AddToDictionary(this.Operators,
                         new KeyValuePair<string, int>(token.Lexeme, 1));
+                // case of: this.identifier
+                else if (this.Match(i, TokenKind.TokenKeywordThis))
+                {
+                    if (this.Match(i + 1, TokenKind.TokenDot))
+                        if (this.Match(i + 2, TokenKind.TokenIdentifier))
+                        {
+                            this.AddToDictionary(this.Operands,
+                                new KeyValuePair<string, int>($"this.{this._tokens[i + 2].Lexeme}", 1));
+                            i += 2;
+                        }
+                }
                 // case of: else if ()
                 else if (this.Match(i, TokenKind.TokenKeywordElse))
                 {
