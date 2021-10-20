@@ -47,18 +47,17 @@ namespace Laba1
                 else if (this.IsStatementWithoutParens(token))
                     this.AddToDictionary(this.Operators,
                         new KeyValuePair<string, int>(token.Lexeme, 1));
-                // case of: function()
-                else if (this.Match(i, TokenKind.TokenKeywordFunction))
-                {
-                    if (this.Match(i + 1, TokenKind.TokenOpParen))
-                        i += 1;
-                }
-                // case of operand (identifer)
+                // case of function identifier()
                 else if (this.Match(i, TokenKind.TokenKeywordFunction))
                 {
                     if (this.Match(i + 1, TokenKind.TokenIdentifier))
+                    {
                         if (this.Match(i + 2, TokenKind.TokenOpParen))
                             i += 2; // skip name and op paren 
+                    }
+                    // case of: function()
+                    else if (this.Match(i + 1, TokenKind.TokenOpParen))
+                        i += 1;
                 }
                 // case of: identifer()
                 else if (this.Match(i, TokenKind.TokenIdentifier))
