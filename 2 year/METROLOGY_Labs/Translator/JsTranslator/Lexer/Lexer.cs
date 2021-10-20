@@ -92,6 +92,7 @@ namespace Translator.JsTranslator.Lexer
         {
             "++",
             "--",
+            "**",
             "<<",
             ">>",
             ">>>",
@@ -109,6 +110,15 @@ namespace Translator.JsTranslator.Lexer
             "*=",
             "/=",
             "%=",
+
+            "^=",
+            "|=",
+            "&=",
+            "~=",
+
+            ">>=",
+            "<<=",
+            ">>>=",
         };
 
         private uint _currentLine;

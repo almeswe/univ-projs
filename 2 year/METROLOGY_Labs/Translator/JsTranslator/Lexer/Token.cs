@@ -36,6 +36,7 @@
 
         TokenInc,
         TokenDec,
+        TokenPower,
         TokenLShift,
         TokenRShift,
         TokenURshift,
@@ -53,6 +54,15 @@
         TokenMulAssign,
         TokenDivAssign,
         TokenModAssign,
+
+
+        TokenBwXorAssign,
+        TokenBwOrAssign,
+        TokenBwAndAssign,
+        TokenBwNotAssign,
+        TokenRShiftAssign,
+        TokenLShiftAssign,
+        TokenRUShiftAssign,
 
         TokenKeywordAwait,
         TokenKeywordBreak,
