@@ -17,6 +17,7 @@
         TokenColon,
         TokenSemicolon,
         TokenDot,
+        TokenComma,
         TokenExlMark,
         TokenLAngle,
         TokenRAngle,

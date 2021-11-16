@@ -1,0 +1,15 @@
+D:\university-projects\univ-projs\2 year\METROLOGY_Labs\Laba1\bin\Debug\Laba1.exe.config
+D:\university-projects\univ-projs\2 year\METROLOGY_Labs\Laba1\bin\Debug\Laba1.exe
+D:\university-projects\univ-projs\2 year\METROLOGY_Labs\Laba1\bin\Debug\Laba1.pdb
+D:\university-projects\univ-projs\2 year\METROLOGY_Labs\Laba1\bin\Debug\Translator.exe
+D:\university-projects\univ-projs\2 year\METROLOGY_Labs\Laba1\bin\Debug\Translator.pdb
+D:\university-projects\univ-projs\2 year\METROLOGY_Labs\Laba1\bin\Debug\Translator.exe.config
+D:\university-projects\univ-projs\2 year\METROLOGY_Labs\Laba1\obj\Debug\Laba1.csproj.AssemblyReference.cache
+D:\university-projects\univ-projs\2 year\METROLOGY_Labs\Laba1\obj\Debug\Laba1.MainForm.resources
+D:\university-projects\univ-projs\2 year\METROLOGY_Labs\Laba1\obj\Debug\Laba1.Properties.Resources.resources
+D:\university-projects\univ-projs\2 year\METROLOGY_Labs\Laba1\obj\Debug\Laba1.Statistics.resources
+D:\university-projects\univ-projs\2 year\METROLOGY_Labs\Laba1\obj\Debug\Laba1.csproj.GenerateResource.cache
+D:\university-projects\univ-projs\2 year\METROLOGY_Labs\Laba1\obj\Debug\Laba1.csproj.CoreCompileInputs.cache
+D:\university-projects\univ-projs\2 year\METROLOGY_Labs\Laba1\obj\Debug\Laba1.csproj.CopyComplete
+D:\university-projects\univ-projs\2 year\METROLOGY_Labs\Laba1\obj\Debug\Laba1.exe
+D:\university-projects\univ-projs\2 year\METROLOGY_Labs\Laba1\obj\Debug\Laba1.pdb

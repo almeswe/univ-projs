@@ -1,8 +1,0 @@
-﻿  main.c
-C:\Users\HP\source\repos\univ-projs\2 year\PL_labs\laba3\main.c(12,2): warning C4013: 'gets' undefined; assuming extern returning int
-C:\Users\HP\source\repos\univ-projs\2 year\PL_labs\laba3\main.c(12,11): warning C4047: '=': 'char *' differs in levels of indirection from 'int'
-C:\Users\HP\source\repos\univ-projs\2 year\PL_labs\laba3\main.c(14,25): warning C4013: 'calloc' undefined; assuming extern returning int
-C:\Users\HP\source\repos\univ-projs\2 year\PL_labs\laba3\main.c(29,11): warning C4047: '=': 'char *' differs in levels of indirection from 'int'
-C:\Users\HP\source\repos\univ-projs\2 year\PL_labs\laba3\main.c(67,20): warning C4018: '<': signed/unsigned mismatch
-C:\Users\HP\source\repos\univ-projs\2 year\PL_labs\laba3\main.c(65,1): warning C4047: 'initializing': 'char *' differs in levels of indirection from 'int'
-  laba3.vcxproj -> C:\Users\HP\source\repos\univ-projs\2 year\PL_labs\Debug\laba3.exe

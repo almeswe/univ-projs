@@ -28,6 +28,7 @@ namespace Translator.JsTranslator.Lexer
             ':',
             ';',
             '.',
+            ',',
             '!',
             '<',
             '>',
@@ -157,11 +158,13 @@ namespace Translator.JsTranslator.Lexer
                     tokens.Add(this.GetKeycharToken(current.InSequence(_chars)));
                 this.GetNextChar();
             }
+            tokens.Add(this.GetEOFToken());
             return tokens;
         }
 
         private bool Eoi() =>
             this._input.Eoi();
+
         private bool Soi() =>
             this._input.Soi();
 
@@ -191,8 +194,10 @@ namespace Translator.JsTranslator.Lexer
                 return this._input.GetNextChar();
             }
         }
+
         private char GetCurrentChar() =>
             this._input.GetCurrentChar();
+
         private char UngetCurrentChar()
         {
             if (this.Soi())
@@ -219,9 +224,14 @@ namespace Translator.JsTranslator.Lexer
             }
         }
 
+        private Token GetEOFToken() =>
+            new Token(TokenKind.TokenEOF, "", new SourceContext(this._currentLine, 0,
+                this._currentLineOffset, this.CurrentFile));
+
         private Token GetNumberToken() =>
             // for possible future extensions
             this.GetDecNumberToken();
+
         private Token GetDecNumberToken()
         {
             char current;
@@ -241,6 +251,7 @@ namespace Translator.JsTranslator.Lexer
                 new SourceContext(this._currentLine, (uint)value.Length,
                     start, this.CurrentFile));
         }
+
         private Token GetFloatDecNumberToken(StringBuilder decPart, uint decStart)
         {
             char current;
@@ -279,6 +290,7 @@ namespace Translator.JsTranslator.Lexer
                 new SourceContext(this._currentLine, (uint)value.Length,
                     start, this.CurrentFile));
         }
+
         private Token GetCharacterToken()
         {
             int escapeChar;
@@ -293,6 +305,7 @@ namespace Translator.JsTranslator.Lexer
             return new Token(TokenKind.TokenChar, current.ToString(),
                 new SourceContext(this._currentLine, (uint)(isEscape ? 4 : 3), start, this.CurrentFile));
         }
+
         private Token GetStringToken()
         {
             bool isEscape;
@@ -341,6 +354,7 @@ namespace Translator.JsTranslator.Lexer
             return new Token(kind, str.ToString(),
                 new SourceContext(this._currentLine, (uint)str.Length, start, this.CurrentFile));
         }
+
         private Token GetKeywordToken(StringBuilder keyword, uint start)
         {
             int index = 0;
@@ -391,6 +405,7 @@ namespace Translator.JsTranslator.Lexer
 
         private bool IsKeychar(string keychar) =>
             _keychars.FirstOrDefault(k => k == keychar) != null;
+
         private bool IsKeyword(string identifier) =>
             _keywords.FirstOrDefault(k => k == identifier) != null;
     }

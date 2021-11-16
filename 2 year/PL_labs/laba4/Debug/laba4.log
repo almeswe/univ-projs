@@ -1,6 +1,0 @@
-﻿  main.c
-C:\Users\HP\source\repos\univ-projs\2 year\PL_labs\laba4\main.c(21,27): warning C4013: 'malloc' undefined; assuming extern returning int
-C:\Users\HP\source\repos\univ-projs\2 year\PL_labs\laba4\main.c(34,13): warning C4013: 'gets' undefined; assuming extern returning int
-C:\Users\HP\source\repos\univ-projs\2 year\PL_labs\laba4\main.c(34,22): warning C4047: '=': 'char *' differs in levels of indirection from 'int'
-C:\Users\HP\source\repos\univ-projs\2 year\PL_labs\laba4\main.c(41,11): warning C4018: '<': signed/unsigned mismatch
-  laba4.vcxproj -> C:\Users\HP\source\repos\univ-projs\2 year\PL_labs\Debug\laba4.exe

@@ -1,0 +1,11 @@
+﻿function a(b, d) {
+	if (b > d) {
+		print(d);
+	}
+	else {
+		print(b);
+	}
+	else if (b == d) {
+		print("adasdsa");
+	}
+}

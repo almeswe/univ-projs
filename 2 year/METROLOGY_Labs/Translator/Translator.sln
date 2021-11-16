@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Translator.Diagnostics", ".
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Laba1", "..\Laba1\Laba1.csproj", "{8C6E8EA1-18C8-4739-B918-966656BDD60E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Laba2", "..\Laba2\Laba2.csproj", "{67E76DDB-3CA9-4320-A6BE-13007574351F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{8C6E8EA1-18C8-4739-B918-966656BDD60E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8C6E8EA1-18C8-4739-B918-966656BDD60E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8C6E8EA1-18C8-4739-B918-966656BDD60E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{67E76DDB-3CA9-4320-A6BE-13007574351F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{67E76DDB-3CA9-4320-A6BE-13007574351F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{67E76DDB-3CA9-4320-A6BE-13007574351F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{67E76DDB-3CA9-4320-A6BE-13007574351F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

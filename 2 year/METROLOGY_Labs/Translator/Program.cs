@@ -1,6 +1,7 @@
 ﻿using System;
 
 using Translator.JsTranslator.Lexer;
+using Translator.JsTranslator.Syntax;
 using Translator.JsTranslator.Lexer.Input;
 
 namespace Translator
@@ -10,10 +11,17 @@ namespace Translator
     {
         static void Main(string[] args)
         {
-            var l = new Lexer(new StringInput("+= -= ++ -- === >>> << >> >= <= == != + - * & && |"));
-            foreach (var t in l.Tokenize())
-                Console.WriteLine(t.ToString());
-            Console.ReadLine();
+            while (true)
+            {
+                var lexer = new Lexer(new FileInput(
+                    @"D:\university-projects\univ-projs\2 year\METROLOGY_Labs\Translator\Test.txt"));
+                var parser = new Parser(lexer.Tokenize());
+
+                var ast = parser.Parse();
+                AstRoot.Print(ast, "", true);
+                Console.ReadLine();
+                Console.Clear();
+            }
         }
     }
 }

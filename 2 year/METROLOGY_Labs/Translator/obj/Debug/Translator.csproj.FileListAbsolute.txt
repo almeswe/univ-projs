@@ -1,0 +1,7 @@
+D:\university-projects\univ-projs\2 year\METROLOGY_Labs\Translator\bin\Debug\Translator.exe.config
+D:\university-projects\univ-projs\2 year\METROLOGY_Labs\Translator\bin\Debug\Translator.exe
+D:\university-projects\univ-projs\2 year\METROLOGY_Labs\Translator\bin\Debug\Translator.pdb
+D:\university-projects\univ-projs\2 year\METROLOGY_Labs\Translator\obj\Debug\Translator.csproj.AssemblyReference.cache
+D:\university-projects\univ-projs\2 year\METROLOGY_Labs\Translator\obj\Debug\Translator.csproj.CoreCompileInputs.cache
+D:\university-projects\univ-projs\2 year\METROLOGY_Labs\Translator\obj\Debug\Translator.exe
+D:\university-projects\univ-projs\2 year\METROLOGY_Labs\Translator\obj\Debug\Translator.pdb
