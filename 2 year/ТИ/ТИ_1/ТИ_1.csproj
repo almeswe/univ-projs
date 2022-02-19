@@ -80,5 +80,10 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="tests\метод децимации\" />
+    <Folder Include="tests\столбцовый метод\" />
+    <Folder Include="tests\шифр виженера\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

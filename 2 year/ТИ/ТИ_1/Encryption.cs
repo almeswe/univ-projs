@@ -113,7 +113,7 @@ namespace ТИ_1
             foreach (char item in text)
                 if (this._sample.IndexOf(item) >= 0)
                     ciphertext.Append(this._sample[this._sample.IndexOf(item) * int.Parse(this._key) % 26]);
-            return ciphertext.ToString();
+            return ciphertext.ToString().ToUpper();
         }
 
         public string Decrypt(string cipthertext)
@@ -122,8 +122,8 @@ namespace ТИ_1
             cipthertext = this.ProcessTextInput(cipthertext);
             foreach (char item in cipthertext)
                 if (this._sample.IndexOf(item) >= 0)
-                    text.Append(this._sample[(this._sample.IndexOf(item) + 26) / int.Parse(this._key) % 26]);
-            return text.ToString();
+                    text.Append(this._sample[this._sample.IndexOf(item) * this.InverseModulo(int.Parse(this._key), 26) % 26]);
+            return text.ToString().ToUpper();
         }
 
         private string ProcessTextInput(string text)
@@ -146,19 +146,36 @@ namespace ТИ_1
             a == b ? a == 1 : a > b
                         ? IsCoprime(a - b, b)
                         : IsCoprime(b - a, a);
+
+        private int InverseModulo(int key, int module)
+        {
+            var result = 0;
+            var newResult = 1;
+            var coefficient = module;
+            var newCoefficient = key;
+            while (newCoefficient != 0)
+            {
+                var quotient = coefficient / newCoefficient;
+                (result, newResult) = (newResult, result - quotient * newResult);
+                (coefficient, newCoefficient) = (newCoefficient, coefficient - quotient * newCoefficient);
+            }
+
+            if (coefficient > 1)
+                throw new ArgumentException("Key value is not co prime with alphabet length", nameof(key));
+
+            return result < 0 ? result + module : result;
+        }
     }
 
     public sealed class VigenereMethod : ICryptography
     {
         private string _key;
-        private List<string> _table;
         private string _sample => "абвгдеёжзийклмнопрстуфхцчшщъыьэюя";
 
         public VigenereMethod(string key)
         {
-            this._key = key;
-            this._table = this.GenerateTable();
-            if (!ValidateKey())
+            this._key = key.ToLower();
+            if (!this.ValidateKey())
                 throw new ArgumentException("Incorrect key passed.");
         }
 
@@ -170,8 +187,9 @@ namespace ТИ_1
 
             int count = 0;
             for (int i = 0; i < text.Length; i++)
-                ciphertext.Append(this._sample.IndexOf(text[i]) >= 0 ? 
-                    this._table[this._sample.IndexOf(text[i])][this._sample.IndexOf(shiftedKey[count++])] : text[i]);
+                // cj = (mj + kj) mod n
+                ciphertext.Append(this._sample.IndexOf(text[i]) >= 0 ? (this._sample[(this._sample.IndexOf(text[i])
+                    + this._sample.IndexOf(shiftedKey[count++])) % 33]) : text[i]);
             return ciphertext.ToString().ToUpper();
         }
 
@@ -183,8 +201,9 @@ namespace ТИ_1
 
             int count = 0;
             for (int i = 0; i < shiftedKey.Length; i++)
-                text.Append(this._sample.IndexOf(ciphertext[i]) >= 0 ?
-                    this._sample[this._table[this._sample.IndexOf(shiftedKey[count++])].IndexOf(ciphertext[i])] : ciphertext[i]);
+                // mj = (cj - kj) mod n
+                text.Append(this._sample.IndexOf(ciphertext[i]) >= 0 ? (this._sample[(this._sample.IndexOf(ciphertext[i])
+                    - this._sample.IndexOf(shiftedKey[count++]) + 33) % 33]) : ciphertext[i]);
             return text.ToString().ToUpper();
         }
 
@@ -205,20 +224,6 @@ namespace ТИ_1
             return spreaded.ToString();
         }
 
-        private List<string> GenerateTable()
-        {
-            var table = new List<string>();
-
-            for (int i = 0; i < 33; i++)
-            {
-                var shifted = new StringBuilder(string.Empty);
-                for (int j = 0; j < 33; j++)
-                    shifted.Append(this._sample[(j+i) % 33]);
-                table.Add(shifted.ToString());
-            }
-            return table;
-        }
-
         private string ProcessTextInput(string text)
         {
             var processed = new StringBuilder(string.Empty);
@@ -235,6 +240,6 @@ namespace ТИ_1
             !((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z'));
 
         private bool ValidateKey() =>
-            this._key.All(this.ValidateKeyChar);
+            this._key != string.Empty && this._key.All(this.ValidateKeyChar);
     }
 }

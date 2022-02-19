@@ -41,7 +41,6 @@ namespace ТИ_1
             this.EncryptButton = new System.Windows.Forms.Button();
             this.InputTextBox = new System.Windows.Forms.TextBox();
             this.OutputTextBox = new System.Windows.Forms.TextBox();
-            this.SaveFileDialog = new System.Windows.Forms.SaveFileDialog();
             this.OpenFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.ControlsPanel.SuspendLayout();
             this.MethodGroup.SuspendLayout();
@@ -176,6 +175,7 @@ namespace ТИ_1
             this.InputTextBox.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.InputTextBox.Multiline = true;
             this.InputTextBox.Name = "InputTextBox";
+            this.InputTextBox.ScrollBars = System.Windows.Forms.ScrollBars.Both;
             this.InputTextBox.Size = new System.Drawing.Size(479, 542);
             this.InputTextBox.TabIndex = 3;
             // 
@@ -189,12 +189,14 @@ namespace ТИ_1
             this.OutputTextBox.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.OutputTextBox.Multiline = true;
             this.OutputTextBox.Name = "OutputTextBox";
+            this.OutputTextBox.ScrollBars = System.Windows.Forms.ScrollBars.Both;
             this.OutputTextBox.Size = new System.Drawing.Size(200, 542);
             this.OutputTextBox.TabIndex = 4;
             // 
             // OpenFileDialog
             // 
             this.OpenFileDialog.FileName = "openFileDialog1";
+            this.OpenFileDialog.InitialDirectory = "C:\\Users\\HP\\source\\repos\\univ-projs\\2 year\\ТИ\\ТИ_1\\tests";
             // 
             // MainForm
             // 
@@ -230,7 +232,6 @@ namespace ТИ_1
         private System.Windows.Forms.RadioButton ColumnMethidRadioButton;
         private System.Windows.Forms.Button FromFileButton;
         private System.Windows.Forms.Button SaveOutputButton;
-        private System.Windows.Forms.SaveFileDialog SaveFileDialog;
         private System.Windows.Forms.OpenFileDialog OpenFileDialog;
     }
 }

@@ -44,7 +44,7 @@ namespace ТИ_1
 
         private void SaveOutputButton_Click(object sender, EventArgs e)
         {
-            if (DialogResult.OK == this.SaveFileDialog.ShowDialog())
+            if (DialogResult.OK == this.OpenFileDialog.ShowDialog())
                  File.WriteAllText(this.OpenFileDialog.FileName, this.OutputTextBox.Text);
         }
     }
