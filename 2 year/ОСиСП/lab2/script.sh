@@ -1,22 +1,22 @@
-#!/bin/bash
+#! /bin/bash
 
 count=0
 
-[ $# -ne 3 ] && echo ">$0: Incorrect argument count passed: $# (must be 3)." && exit 1
+[ $# -ne 3 ] && echo ">$0: Incorrect argument count passed!" && exit 1
 
-for item in $(find $1 -follow); do
-    size=$(stat -c %s "$item")
-    
-    if [ $? -ne 0 ]; then
-        echo ">$0: $size"
-        continue
-    fi
+for item in $(find $(realpath $1) -type f 2> /dev/null); do
+    size=$(stat -c %s $item 2> errlog)
 
-    if [ $3 -gt $size ] && [ $2 -lt $size ]; then
+    if [ $? -eq 0 ] && [ $size -lt $3 ] && [ $size -gt $2 ]; then
+        echo "$item : $size"
         count=$((count+1))
-        echo "$count) $item: $size" 
-        if [ $count = "20" ]; then 
-            break
-        fi
+        [ $count -eq 20 ] && break
     fi
+
+    # error printing
+    while read error; do
+        echo "> $0: $error" 
+    done < errlog
 done
+
+exit 0
