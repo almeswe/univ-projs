@@ -13,6 +13,13 @@
 #define get_id(buf)     ((char*)((long long*)(buf+sz_bytes)[0]))
 #define put_id(buf, id) (((long long*)(buf+sz_bytes))[0] = (long long)id)
  
+#define min(a, b) ((a) < (b) ? (a) : (b))
+
+enum {
+    SEND_CHUNK_SIZE = 4096,
+    RECV_CHUNK_SIZE = 4096,
+};
+
 struct prot_hdr {
     uint32_t sz; 
     char     id[8];

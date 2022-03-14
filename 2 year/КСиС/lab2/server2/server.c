@@ -1,10 +1,9 @@
 #include "server.h"
 
 static serv_connection_data connected[10];
-#define connected_count (sizeof connected / sizeof(serv_connection_data))
 
 void add_connection(serv_connection_data connection) {
-    for (int i = 0; i < (sizeof connected / sizeof(serv_connection_data)); i++) {
+    for (int i = 0; i < connected_count; i++) {
         if (connected[i].csockfd == 0) {
             connected[i] = connection;
             return;
@@ -15,7 +14,7 @@ void add_connection(serv_connection_data connection) {
 }
 
 void rem_connection(serv_connection_data connection) {
-    for (int i = 0; i < (sizeof connected / sizeof(serv_connection_data)); i++) {
+    for (int i = 0; i < connected_count; i++) {
         if (connected[i].csockfd == connection.csockfd) {
             memset(&(connected[i]), 0, sizeof connected[i]);
         }
@@ -46,13 +45,14 @@ void serv_broadcast(const char* message, size_t message_size, serv_connection_da
         if (connected[i].csockfd && connected[i].csockfd != con_data.csockfd) {
             size_t sent_ptr = 0;
             while (sent_ptr < message_size) {
-                if ((sent_ptr += send(connected[i].csockfd, 
-                        message+sent_ptr, message_size-sent_ptr, 0)) < 0) {
+                if ((sent_ptr += send(connected[i].csockfd, message + 
+                        sent_ptr, SEND_CHUNK_SIZE, 0)) < 0) {
                     rem_connection(connected[i]);
                     break;
                 }
-                //printf("%u\n", sent_ptr);
+                //printf("sent: <%lu/%luB>\n", sent_ptr, message_size);
             }
+            //printf("\n");
         }
     }
 }
@@ -109,7 +109,7 @@ void serv_serve(serv_connection_data con_data) {
         size_t response_pack_size = 0;
 
         // creating temp buffer for data received from recv
-        create_buf(response, 1024);
+        create_buf(response, RECV_CHUNK_SIZE);
         struct prot_hdr header;
 
         if ((response_pack_size = recv(con_data.csockfd, 
@@ -130,19 +130,21 @@ void serv_serve(serv_connection_data con_data) {
         // retrieving the size of whole response
         header = ((struct prot_hdr*)(response))[0];
         response_size = ntohl(header.sz);
-        printf("<%s : %luB>\n", header.id, response_pack_size);
+        printf("\nrecv: <%s : %luB>\n", header.id, 
+            response_pack_size);
 
         // set start pointer
         response_ptr = response_pack_size;
         // allocating the needed space
-        stretchy = (char*)malloc(response_size*2);
-        stretchy[response_size+16] = 0;
-        strcpy(stretchy+hdr_bytes, response+hdr_bytes);
+        stretchy = (char*)calloc(1, response_size+sizeof response);
+        memcpy(stretchy+hdr_bytes, response+hdr_bytes, 
+            response_pack_size-hdr_bytes);
         ((struct prot_hdr*)stretchy)[0] = header;
         
         // retrieving the data until the pointer 
         // is less than the actual contents length
         while (response_ptr < response_size) {
+            memset(response, 0, sizeof response);
             // perform the same actions as before
             if ((response_pack_size = recv(con_data.csockfd, 
                     response, sizeof response, 0)) <= 0) {
@@ -151,16 +153,17 @@ void serv_serve(serv_connection_data con_data) {
                 }
                 return serv_disconnect(con_data), (void)1;
             }
+            memcpy(stretchy+response_ptr, response, 
+                response_pack_size);
             // shift the pointer by the size of retrieved packet
             response_ptr += response_pack_size;
-            //printf("%u\n", response_ptr);
-            strcpy(stretchy+response_ptr, response);
-            printf("<%s : %luB>\n", header.id, 
+            printf("recv: <%s : %luB>\n", header.id, 
                 response_pack_size);
         }
         // send message to all connected clients
-        serv_broadcast(stretchy, response_size, con_data);
-        //printf("size = %u\n", strlen(stretchy+hdr_bytes)+hdr_bytes);
+        //printf("%s\n", stretchy+12);
+        serv_broadcast(stretchy, response_size + 
+            sizeof response, con_data);
         free(stretchy);
     }
 }

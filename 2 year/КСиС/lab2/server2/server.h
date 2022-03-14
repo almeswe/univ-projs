@@ -1,7 +1,6 @@
 #ifndef SERVER2_H
 #define SERVER2_H
 
-#include <stdlib.h>
 #include <unistd.h>
 #include <arpa/inet.h>
 #include <sys/socket.h>
@@ -12,6 +11,7 @@
 #include <stdbool.h>
 #include <string.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <pthread.h>
 
 #include "../client2/client.h"
@@ -24,6 +24,9 @@
 
 #define create_buf(buf, size) \
     char buf[size]; memset(buf, 0, size)
+
+#define connected_count \
+    (sizeof connected / sizeof(serv_connection_data))
 
 enum {
     REQUEST_BUF_SIZE  = 512,
