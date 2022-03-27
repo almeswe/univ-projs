@@ -1,0 +1,70 @@
+body {
+    margin: 0px;
+    overflow: scroll;
+    background-color: #f2f2f2;
+}
+
+span, h2, h3 {
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+.contents-rect {
+    width: 60%;
+    height: 100vh;
+    margin: 0px 20% 0px 20%;
+    background-color: white;
+}
+
+.contents-container-separator {
+    width: 90%;
+    height: 1px;
+    margin: 0 5% 0 5%;
+    border-radius: 5%;
+    background-color: #f2f2f2;
+}
+
+.contents-music-box-image-container {
+    width: 128px;
+    height: 128px;
+    margin-right: 13px;
+    border: 1px solid #ccc
+}
+
+.contents-music-box-image{
+    width: 100%;
+    height: 100%;
+}
+
+.contemts-music-box-text-container {
+    width: 100%;
+    height: 10%;
+}
+
+.contents-music-box-text {
+    color: #333;
+    display: block;
+    font-size: 12px;
+    padding-left: 2px;
+}
+
+.contents-music-box-artist {
+    color: #999;
+    display: block;
+    font-size: 10px;
+    padding-left: 2px;
+}
+
+.contents-music-link-to-track {
+    text-decoration: none;
+    display: block;
+}
+
+.contents-music-link-to-artist {
+    text-decoration: none;
+    display: block;
+    margin-bottom: 2px;
+}
+
+.contents-music-box {
+    display: block;
+}
