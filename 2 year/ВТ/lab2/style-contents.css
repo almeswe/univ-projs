@@ -2,9 +2,6 @@ body {
     margin: 0px;
     overflow: scroll;
     background-color: #f2f2f2;
-}
-
-span, h2, h3 {
     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
 }
 
@@ -55,16 +52,56 @@ span, h2, h3 {
 }
 
 .contents-music-link-to-track {
-    text-decoration: none;
     display: block;
+    text-decoration: none;
 }
 
 .contents-music-link-to-artist {
-    text-decoration: none;
     display: block;
-    margin-bottom: 2px;
+    margin-bottom: 10px;
+    text-decoration: none;
 }
 
 .contents-music-box {
     display: block;
+}
+
+@media screen and (max-width: 1400px) {
+    .contents-music-box-image-container {
+        width: 100px;
+        height: 100px;
+        margin-right: 15px;
+    }
+
+    .contents-music-box-artist {
+        font-size: 9px;
+    }
+
+    .contents-music-box-text {
+        font-size: 10px;
+    }
+}
+
+@media screen and (max-width: 1235px) {
+    .contents-music-box-image-container {
+        margin-right: 5px;
+    }
+}
+
+@media screen and (max-width: 1165px) {
+    .contents-rect {
+        width: 690px;
+    }
+
+    .contents-music-box-image-container {
+        margin-right: 5px;
+        flex-direction: column;
+    }
+}
+
+@media screen and (min-width: 1500px) {
+    .contents-rect {
+        width: 900px;
+        justify-content: center;
+    }
 }

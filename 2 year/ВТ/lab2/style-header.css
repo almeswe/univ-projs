@@ -128,3 +128,15 @@ body {
     padding-top: 8px;
     text-decoration: none;
 }
+
+@media screen and (min-width: 1500px) {
+    .header-contents {
+        width: 900px;
+    }
+}
+
+@media screen and (max-width: 1165px) {
+    .header-contents {
+        width: 690px;
+    }
+}
