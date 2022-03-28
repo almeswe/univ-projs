@@ -113,3 +113,18 @@ body {
     border: 0px;
     background-color: black;
 }
+
+.header-sign-in-form {
+    width: 20%;
+    height: 100%;
+    float: right;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.header-sign-in-form-link {
+    color: #f2f2f2;
+    font-size: 12px;
+    padding-top: 8px;
+    text-decoration: none;
+}
