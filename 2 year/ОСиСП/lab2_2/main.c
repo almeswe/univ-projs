@@ -8,18 +8,14 @@
 
 #include <sys/stat.h>
 
+#define METADATA_SIZE 4096
+
 #define frmt(source, format, ...) \
     sprintf(source, format, __VA_ARGS__), source
-
-#define create_buf(buf, size) \
-    char buf[size]; memset(buf, 0, sizeof buf)
 
 struct dir_size {
     uint64_t disk_size;
     uint64_t logical_size;
-
-    uint32_t entities_count;
-    uint32_t entities_processed; 
 };
 
 struct file_size {
@@ -27,54 +23,77 @@ struct file_size {
     uint64_t logical_size;
 };
 
+void* xmalloc(size_t size) {
+    void* memory = malloc(size);
+    if (memory == NULL) {
+        perror("Memory allocation failure."), exit(1);
+    }
+}
+
+void* xcalloc(size_t count, size_t cell_size) {
+    void* memory = calloc(count, cell_size);
+    if (memory == NULL) {
+        perror("Memory allocation failure."), exit(1);
+    }
+}
+
+void* xrealloc(void* memblock, size_t size) {
+    void* memory = realloc(memblock, size);
+    if (memory == NULL) {
+        perror("Memory allocation failure."), exit(1);
+    }
+}
+
 struct file_size* get_file_size(const char* file) {
-    create_buf(err_buf, 4096);    
     struct stat st;
     if (stat(file, &st)) {
-        frmt(err_buf, "%s: %s\n", strerror(errno), file);
-        return fputs((char*)err_buf, stderr), NULL;
+        return perror("Cannot get file size"), NULL;
     }
     struct file_size* size = (struct file_size*)
-        calloc(1, sizeof (struct file_size));
+        xcalloc(1, sizeof (struct file_size));
     size->disk_size = st.st_blocks * 512; 
     size->logical_size = st.st_size;
     return size;
 }
 
-struct dir_size* get_dir_size(const char* dir_path) {
-    create_buf(err_buf, 4096);    
+struct dir_size* get_dir_size(char* dir_path) {
     DIR* dir = opendir(dir_path);
     if (dir == NULL) {
-        frmt(err_buf, "Dir \'%s\' does not exists!\n", dir_path);
-        return fputs((char*)err_buf, stderr), NULL;
+        char* error_str = (char*)xcalloc(1, strlen(dir_path) + 35); // 29 is size of error string + null terminator
+        frmt(error_str, "Specified path is incorrect: %s", dir_path);
+        return perror(error_str), free(error_str), NULL;
     }
-
     struct file_size* fsize;
     struct dir_size* child_dir_size;
     struct dir_size* dir_size = (struct dir_size*)
-        calloc(1, sizeof (struct dir_size));
+        xcalloc(1, sizeof (struct dir_size));
     // add up dir's metadata size to disk space  
-    dir_size->disk_size = 4096;
+    dir_size->disk_size = METADATA_SIZE;
 
+    char* new_path = NULL;
     struct dirent* entity;
-    while ((entity = readdir(dir)) != NULL) {
-        create_buf(path_buf, 4096);    
-        strcpy(path_buf, dir_path);
-        strcat(path_buf, "/");
-        strcat(path_buf, entity->d_name);  
+    while ((errno=0, entity = readdir(dir)) != NULL) {
+        if (errno != 0) {
+            return perror("Cannot read new entity using readdir"), NULL;
+        }
+        size_t old_path_size = strlen(dir_path);
+        new_path = xcalloc(1, 5+old_path_size+strlen(entity->d_name));
+        strcpy(new_path, dir_path);
+        strcpy(new_path+old_path_size, "/");
+        strcpy(new_path+old_path_size+1, entity->d_name);
         switch (entity->d_type) {
             case DT_CHR:
             case DT_BLK:
             case DT_LNK:
             case DT_WHT:
-            case DT_SOCK:
             case DT_FIFO:
             case DT_UNKNOWN:
                 break;
             case DT_REG:
-                fsize = get_file_size(path_buf);
+            case DT_SOCK:
+                fsize = get_file_size(new_path);
                 if (fsize) {
-                    dir_size->disk_size += fsize->disk_size;
+                    dir_size->disk_size += fsize->logical_size;
                     dir_size->logical_size += fsize->logical_size;
                     free(fsize);
                 }
@@ -84,8 +103,7 @@ struct dir_size* get_dir_size(const char* dir_path) {
                     strcmp("..", entity->d_name) == 0) {
                         break;
                 }
-
-                child_dir_size = get_dir_size(path_buf);
+                child_dir_size = get_dir_size(new_path);
                 if (child_dir_size) {
                     dir_size->disk_size += child_dir_size->disk_size; 
                     dir_size->logical_size += child_dir_size->logical_size;
@@ -94,34 +112,34 @@ struct dir_size* get_dir_size(const char* dir_path) {
                 break;
         }
     }
-
-    if (dir_size->disk_size != 0) {
-        printf("Dir: %s\n", dir_path);
-        printf("Disk size    : %lu (%luK)\n", dir_size->disk_size, dir_size->disk_size/1024);
-        printf("Logical size : %lu (%luK)\n", dir_size->logical_size, dir_size->logical_size/1024);
-        printf("Usage: %f%%\n\n", (((float)dir_size->logical_size / dir_size->disk_size) * 100));
+    if (closedir(dir) < 0) {
+        return perror("Cannot close read entity using closedir"), NULL;
     }
-    return closedir(dir), dir_size;
+    if (dir_size->disk_size != 0) {
+        printf("%s %lu %lu\n", dir_path, 
+            dir_size->disk_size, dir_size->logical_size);
+    }
+    free(new_path);
+    return dir_size;
 }
 
 int main(int argc, char** argv) {
-    create_buf(err_buf, 4096);    
-    create_buf(abs_path_buf, 4096);    
     if (argc != 2) {
-        frmt(err_buf, "Incorrect argument count passed: %d.\n", argc);
-        return fputs((char*)err_buf, stderr), 1;
+        return perror("Incorrect argument count passed"), 1;
     }
-    char* abs_path_ptr;
     struct dir_size* size;
-    abs_path_ptr = realpath(argv[1], abs_path_buf);
+    char* abs_path_ptr = realpath(argv[1], NULL);
     if (!abs_path_ptr) {
-        frmt(err_buf, "Specified path is incorrect: %s.\n", argv[1]);
-        return fputs((char*)err_buf, stderr), 1;
+        char* error_str = (char*)xcalloc(1, strlen(argv[1]) + 35); // 29 is size of error string + null terminator
+        frmt(error_str, "Specified path is incorrect: %s", argv[1]);
+        return perror(error_str), free(error_str), 1;
     }
     else {
         if (size = get_dir_size(abs_path_ptr)) {
+            printf("%lu %lu %f%%\n\n", size->disk_size, size->logical_size, (((float)size->logical_size / size->disk_size) * 100));
             free(size);
         }
+        free(abs_path_ptr);
     }
     return 0;
 }
