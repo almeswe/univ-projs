@@ -1,0 +1,568 @@
+@import url("style-fonts.css");
+@import url("style-icons.css");
+
+body {
+    margin: 0;
+    padding: 0;
+}
+
+.contents-parent-layer {
+    width: 1152px;
+    height: 3600px;
+    display: block;
+}
+
+.contents-header-layer {
+    width: 100%;
+    height: 133px;
+}
+
+.contents-header-top {
+    height: 31px;
+    background-color: #F2F2F2;
+    display: flex;
+    font-size: 9px;
+    justify-content: space-between;
+}
+
+.header-top-nav-list {
+    height: 100%;
+    float: right;
+    margin-top: 0px;
+    padding-left: 0px;
+    display: inline-flex;
+    justify-content: flex-end;
+}
+
+.header-top-contact {
+    float: left;
+    width: 140px;
+    height: 100%;
+    display: flex;
+    margin-left: 55px;
+    text-align: center;
+    /*background: url("imgs/phone-icon.png") no-repeat left;*/
+}
+
+.header-phone-icon {
+    font-size: 7px;
+    padding-left: 10px;
+    padding-top: 12px;
+}
+
+.header-top-contact-text {
+    display: block;
+    color: #363636;
+    margin-top: 8px;
+    margin-left: 15px;
+    font-weight: 90;
+    font-family: "LatoRegular", monospace;
+}
+
+.header-top-nav-item {
+    width: 114px;
+    height: 100%;
+}
+
+.header-top-separator {
+    width: 1px;
+    border: 0px;
+    height: 10px;
+    margin-top: 11px;
+    background-color: #5E5E5E;
+}
+
+.header-top-nav-item-text {
+    width: 100%;
+    color: #363636;
+    display: block;
+    margin-top: 10px;
+    margin-left: 24px;
+    font-weight: 90;
+    text-decoration: none;
+    font-family: "LatoRegular", monospace;
+}
+
+.header-top-nav-item-text:hover {
+    color: gray;
+}
+
+.contents-header-bottom {
+    width: 100%;
+    height: 102px;
+    margin-left: 65px;
+    display: flex;
+    justify-content: flex-start;
+}
+
+.contents-header-bottom-page-nav-list {
+    height: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.header-bottom-page-nav-item {
+    width: 25%;
+    height: 100%;
+    padding-top: 32px;
+    margin-right: 20px;
+    position: relative;
+    text-align: center;
+}
+
+.header-bottom-page-nav-item-text {
+    width: 100%;
+    color: black;
+    display: block;
+    font-size: 15px;
+    text-decoration: none;
+    font-family: "PlayfairDisplayItalic", monospace;
+}
+
+.header-bottom-page-nav-item-text:hover {
+    color: gray;
+}
+
+.contents-header-bottom-page-logo {
+    margin-top: 13px;
+    margin-left: 165px;
+}
+
+.contents-header-bottom-page-logo-text {
+    color: black;
+    font-size: 57px;
+    text-decoration: none;
+    font-family: "KrinkesDecorPersonal";
+}
+
+.contents-header-bottom-contact-list {
+    height: 100%;
+    display: flex;
+    margin-top: 34px;
+    margin-left: 163px;
+    justify-content: space-between;
+}
+
+img {
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+}
+
+.header-bottom-contact-item-text {
+    width: 23px;
+    height: 23px;
+    display: block;
+    margin-right: 10px;
+    border-radius: 100%;
+    text-decoration: none;
+    border: 2px solid #CEBDA0;
+}
+
+.header-contact-icon {
+    color: #CEBDA0;
+    width: 100%;
+    height: 100%;
+    font-size: 10px;
+    padding-top: 7px;
+    text-align: center;
+}
+
+.main-contents-layer {
+    width: 100%;
+    height: 100%;
+}
+
+.main-contents-leading-box {
+    height: 691px;
+}
+
+.main-contents-leading-box-image {
+    width: 100%;
+    height: 100%;   
+}
+
+.main-contents-leading-box-button {
+    border: 0px;
+    color: white;
+    position: absolute;
+    width: 130px;
+    height: 45px;
+    font-size: 16px;
+    margin-top: 500px;
+    margin-left: -650px;
+    font-family: "LatoBold";
+    background-color: #F09A58;
+}
+
+.main-contents-leading-box-button:hover {
+    background-color: black;
+}
+
+.contents-header-bottom-currencies {
+    width: 100%;
+    height: 100%;
+}
+
+select {
+    -webkit-appearance: none;
+}
+
+.currency-select {
+    width: 73px;
+    height: 29px;
+    margin-top: 34px;
+    margin-left: 33px;
+    color: #F8F8F8;
+    font-size: 9px;
+    padding-left: 13px;
+    font-family: "LatoBold", monospace;
+    background: url("imgs/arrow-icon.png") no-repeat right black;
+}
+
+.currency-option {
+    font-size: 9px;
+    font-family: "LatoBold", monospace;
+}
+
+.main-contents-section-separator {
+    width: 100%;
+    border: 0px;
+    height: 45px;
+    display: flex;
+    margin-top: 67px;
+    margin-left: 60px;
+    margin-bottom: 40px;
+}
+
+.section-subhorizontal-separator {
+    height: 1px;
+    width: 312px;
+    margin-top: 0px;
+    align-self: center;
+    background-color: #EBEBEB;
+}
+
+.section-separator-text-container {
+    width: 220px;
+    margin: 10px;
+    height: 100%;
+    padding-top: 6px;
+    padding-left: 16px;
+    align-self: center;
+    text-align: center;
+}
+
+.section-separator-text {
+    font-size: 24px;
+    font-family: "PlayfairDisplayBoldItalic";
+}
+
+.section-rhombus-icon {
+    width: 50px;
+    height: 15px;
+    display: block;
+    color: #CEBDA0;
+    padding-top: 15px;
+    padding-left: 35px;
+}
+
+img.preview-item {
+    width: 100%;
+    height: 100%;
+}
+
+.main-contents-section-preview {
+    width: 90%;
+    height: 635px;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    margin-left: 5%;
+    margin-right: 5%;
+}
+
+.wide-preview-item {
+    height: 100%;
+    width: 33.33%;
+    margin-left: 15px;
+    margin-right: 15px;
+}
+
+button {
+    font-size: 11px;
+    font-family: "LatoBold";
+}
+
+.short-preview-image-button {
+    border: 0px;
+    width: 87px;
+    height: 34px;
+    color: #F5EBE2;
+    position: absolute;
+    margin-top: 226px;
+    margin-left: -235px;
+    background-color: #F09A58;
+}
+
+.short-preview-image-button:hover {
+    background-color: black;
+}
+
+.short-preview-item {
+    height: 48%;
+    width: 33.33%;
+    margin-top: 6px;
+    margin-bottom: 6px;
+}
+
+.main-contents-section-purchase {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    width: 90%;
+    height: 600px;
+    margin-top: 5%;
+    margin-left: 5%;
+    margin-right: 5%;
+    border: 1px solid #ccc;
+}
+
+.section-purchase-item {
+    width: 23%;
+    height: 44%;
+    align-self: center;
+}
+
+.section-purchase-item-button {
+    border: 0px;
+    height: 37px;
+    color: white;
+    margin-top: 227px;
+    margin-left: -160px;
+    position: absolute;
+    background-color: black;
+}
+
+.section-purchase-item-button:hover {
+    background-color: #F09A58;
+}
+
+.section-purchase-item-image, .section-customers-image {
+    z-index: -1;
+}
+
+.main-contents-section-brands {
+    display: flex;
+    width: 90%;
+    height: 120px;
+    margin-left: 5%;
+    margin-right: 5%;
+    margin-top: 15px;
+    justify-content: space-between;
+}
+
+.section-brands-item {
+    width: 16%;
+    height: 100%;
+}
+
+.main-contents-section-customers {
+    width: 100%;
+    height: 350px;
+}
+
+.section-customers-text-container {
+    width: 100%;
+    height: 100%;
+}
+
+.section-customes-left-text {
+    text-align: left;
+    margin-top: -200px;
+    margin-left: 275px;
+    position: absolute;
+}
+
+.section-customers-phrase-text {
+    color: white;
+    margin-top: 0px;
+    margin-bottom: 5px;
+    font-size: 15px;
+    font-family: "PlayfairDisplayItalic";
+}
+
+.section-customers-name-text {
+    font-size: 25px;
+    color: black;
+    margin-bottom: 0px;
+    font-family: "PlayfairDisplayBoldItalic"; 
+}
+
+.section-customers-role-text {
+    color: gray;
+    font-size: 10px;
+    font-family: "LatoBold"; 
+}
+
+.section-customers-right-text {
+    text-align: right;
+    margin-top: -200px;
+    margin-left: 670px;
+    position: absolute;
+}
+
+.main-contents-footer {
+    width: 100%;
+    height: 600px;
+    background-color: #141414;
+}
+
+.footer-contents {
+    height: 95%;
+}
+
+.footer-contents-navigation {
+    height: 70%;
+    display: flex;
+    font-family: "LatoRegular";
+}
+
+.footer-navigation-block-left {
+    width: 60%;
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.footer-navigation-block-container {
+    width: 22%;
+    padding-top: 50px;
+    padding-left: 40px;
+}
+
+.footer-navigation-container-text {
+    color: white;
+    font-size: 12px;
+    margin-top: 0px;
+    margin-bottom: 30px;
+}
+
+.footer-navigation-container-list {
+    padding-left: 0px;
+}
+
+.footer-navigation-container-item {
+    color: #525252;
+    font-size: 12px;
+    margin-bottom: 10px;
+    text-decoration: none;
+}
+
+.footer-navigation-container-item:hover {
+    color: #727272;
+    text-decoration: underline;
+}
+
+.footer-navigation-block-right {
+    width: 40%;
+    display: flex;
+    padding-top: 50px;
+    margin-left: 50px;
+    flex-direction: column;
+}
+
+.footer-navigation-contacts-container {
+    width: 55%;
+    display: flex;
+    height: 50px;
+    justify-content: space-between;
+}
+
+.contact-circle {
+    color: white;
+    display: block;
+    font-size: 40px;
+    z-index: -1;
+}
+
+.contact-circle-filler {
+    color: black;
+    font-size: 20px;
+    position: absolute;
+    margin-top: 10px;
+    align-self: center;
+}
+
+.footer-navigation-subscribe-text-container {
+    width: 50%;
+    display: flex;
+    flex-wrap: nowrap;
+    margin-top: 20px;
+    justify-content: space-between;
+}
+
+.footer-navigaion-input-container {
+    display: flex;
+    margin-top: 40px;
+    font-family: "LatoRegular";
+}
+
+.input-email {
+    height: 25px;
+    width: 150px;
+    color: white;
+    font-size: 12px;
+    background-color: #141414;
+    border: 1px solid #484848;
+}
+
+.input-email-button {
+    color: white;
+    font-size: 9px;
+    background-color: #484848;
+    border: 1px solid #484848;
+}
+
+.input-email-button:hover {
+    background-color: gray;
+}
+
+.footer-contents-separator {
+    height: 1px;
+    width: 90%;
+    margin-left: 5%;
+    margin-right: 5%;
+    margin-bottom: 30px; 
+    background-color: #3A3A3A;
+}
+
+.footer-contents-about {
+    height: 30%;
+    margin-left: 55px;
+}
+
+.footer-contents-about-text {
+    color: #363636;
+    font-size: 8px;
+    font-family: "LatoRegular";
+}
+
+.footer-contents-about-payments {
+    display: flex;
+    height: 30px;
+    width: 150px;
+    justify-content: space-between;
+}
+
+.footer-contents-payment-method {
+    width: 25%;
+}
+
+.payment-method-icon {
+    color: #535353;
+}
+
+.footer-block {
+    height: 5%;
+    background-color: black;
+}
