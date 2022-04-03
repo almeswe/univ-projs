@@ -57,6 +57,7 @@
     <Compile Include="Tokenizer\TokenKind.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="COMMANDS.txt" />
     <Content Include="EBNF.txt" />
   </ItemGroup>
   <ItemGroup>

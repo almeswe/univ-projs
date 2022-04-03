@@ -1,5 +1,0 @@
-C:\Users\HP\source\repos\univ-projs\2 year\ООТПиСП\Lab1\Geometry\bin\Release\ClassLibrary.dll
-C:\Users\HP\source\repos\univ-projs\2 year\ООТПиСП\Lab1\Geometry\bin\Release\ClassLibrary.pdb
-C:\Users\HP\source\repos\univ-projs\2 year\ООТПиСП\Lab1\Geometry\obj\Release\Geometry.csproj.CoreCompileInputs.cache
-C:\Users\HP\source\repos\univ-projs\2 year\ООТПиСП\Lab1\Geometry\obj\Release\ClassLibrary.dll
-C:\Users\HP\source\repos\univ-projs\2 year\ООТПиСП\Lab1\Geometry\obj\Release\ClassLibrary.pdb

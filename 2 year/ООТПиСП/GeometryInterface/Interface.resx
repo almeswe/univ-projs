@@ -117,7 +117,56 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="ScriptTextBox.Text" xml:space="preserve">
+    <value>%polygon 
+	x: 20, 100, 300, 70, 45
+	y: 70, 140, 8, 111, 34
+;
+
+%line 
+	x: 100, 300
+	y: 400, 400
+;	
+
+
+%circle 
+	center: 200, 100
+	radius: 500
+;
+
+%triangle
+	x: 50, 300, 250
+	y: 40, 60, 40
+;
+
+%rect
+	x: 400
+	y: 400
+	width: 100
+	height: 200
+;
+
+%square 
+	x: 100
+	y: 400
+	side: 55
+;
+
+%ellipse 
+	center: 55, 100
+	width: 444
+	height: 111
+;
+
+
+%dot
+	center: 200, 200
+;</value>
+  </data>
   <metadata name="OpenFileDialog.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>
+  </metadata>
+  <metadata name="$this.TrayHeight" type="System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>25</value>
   </metadata>
 </root>
