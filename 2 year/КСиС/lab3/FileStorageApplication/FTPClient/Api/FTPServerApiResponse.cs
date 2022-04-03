@@ -1,5 +1,4 @@
-﻿using System;
-using System.Net;
+﻿using System.Net;
 
 using RestSharp;
 using Newtonsoft.Json.Linq;
@@ -11,7 +10,6 @@ namespace FTPClient.ServerApi
         public bool IsErrored { get; private set; }
         public string ErrorMessage { get; private set; }
 
-        public Type ResponseType { get; set; }
         public object ResponseData { get; set; }
     
         public string Contents { get; private set; }
@@ -22,7 +20,7 @@ namespace FTPClient.ServerApi
             if (response.StatusCode != HttpStatusCode.OK)
             {
                 this.IsErrored = true;
-                this.ErrorMessage = $"{response.StatusCode}";
+                this.ErrorMessage = $"Server response: {response.StatusCode}";
             }
             else if ((this.JsonObject = JObject.Parse(
                     this.Contents = response.Content)) != null)

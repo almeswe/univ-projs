@@ -3,6 +3,7 @@ using Newtonsoft.Json.Linq;
 
 using RestSharp;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace FTPClient.ServerApi
 {
@@ -24,29 +25,25 @@ namespace FTPClient.ServerApi
         private static string _apiBaseUrl;
         private static RestClient _client;
 
-        public static FTPServerApiResponse GetFile(string path)
+        public static async Task<FTPServerApiResponse> GetFile(string path)
         {
-            var request = new RestRequest($"/get?path={path}");
-            var response = _client.GetAsync(request).Result;
+            var request = new RestRequest($"/get?path={path}", Method.Get);
+            var response = await _client.ExecuteAsync(request);
+            var apiResponse = new FTPServerApiResponse(response);
 
-            var apiResponse = new FTPServerApiResponse(response) {
-                ResponseType = typeof(string)
-            };
             if (!apiResponse.IsErrored)
                 apiResponse.ResponseData = apiResponse.JsonObject
                     .Value<string>("contents");
             return apiResponse;
         }
 
-        public static FTPServerApiResponse GetDirectory(string path)
+        public static async Task<FTPServerApiResponse> GetDirectory(string path)
         {
             var request = new RestRequest(path == null ? 
-                $"/get" : $"/get?path={path}");
-            var response = _client.GetAsync(request).Result;
+                $"/get" : $"/get?path={path}", Method.Get);
+            var response = await _client.ExecuteAsync(request);
+            var apiResponse = new FTPServerApiResponse(response);
 
-            var apiResponse = new FTPServerApiResponse(response) {
-                ResponseType = typeof(IEnumerable<FileSystemEntity>)
-            };
             if (!apiResponse.IsErrored)
             {
                 //todo: make this more convenient
@@ -67,7 +64,29 @@ namespace FTPClient.ServerApi
             return apiResponse;
         }
 
-        public static FTPServerApiResponse GetRootDirectory() =>
-            GetDirectory(null);
+        public static async Task<FTPServerApiResponse> GetRootDirectory() =>
+            await GetDirectory(null);
+
+        public static async Task<FTPServerApiResponse> AppendTextToFile(string path, string text)
+        {
+            var request = new RestRequest($"/post", Method.Post);
+            request.AddBody(new Dictionary<string, object>() {
+                { "absolutePath", path },
+                { "text", text }
+            });
+            var response = await _client.ExecuteAsync(request);
+            return new FTPServerApiResponse(response);
+        }
+
+        public static async Task<FTPServerApiResponse> PutTextToFile(string path, string text)
+        {
+            var request = new RestRequest($"/put", Method.Put);
+            request.AddBody(new Dictionary<string, object>() {
+                { "absolutePath", path },
+                { "text", text }
+            });
+            var response = await _client.ExecuteAsync(request);
+            return new FTPServerApiResponse(response);
+        }
     }
 }

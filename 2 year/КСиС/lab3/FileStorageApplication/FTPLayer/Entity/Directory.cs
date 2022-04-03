@@ -6,13 +6,8 @@ namespace FTPLayer.Entity
     [Serializable]
     public sealed class Directory : FileSystemEntity
     {
-        public Directory(string path) : base(path)
-        {
-            if (!System.IO.Directory.Exists(path))
-                throw new System.IO.DirectoryNotFoundException();
-            //this.Entities = this.GetEntities();
+        public Directory(string path) : base(path) =>
             this.Type = FileSystemEntityType.Directory;
-        }
 
         public IEnumerable<FileSystemEntity> GetEntities()
         {
