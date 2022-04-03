@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace FTPLayer
 {
-    public sealed class DefaultFTPLayer : IFTPLayer
+    public sealed class WindowsFTPLayer : IFTPLayer
     {
         public string GetFile(string path) =>
             System.IO.File.ReadAllText(path);
@@ -12,8 +12,7 @@ namespace FTPLayer
         {
             using (var writer = System.IO.File.AppendText(path))
             {
-                foreach (var line in text.Split('\n'))
-                    writer.WriteLine(line);
+                writer.WriteLine(text);
             }
         }
 

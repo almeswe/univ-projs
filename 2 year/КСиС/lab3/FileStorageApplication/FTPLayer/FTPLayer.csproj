@@ -45,7 +45,7 @@
     <Compile Include="Entity\File.cs" />
     <Compile Include="Entity\FileSystemEntity.cs" />
     <Compile Include="Entity\FileSystemEntityType.cs" />
-    <Compile Include="FTPLayer\DefaultFTPLayer.cs" />
+    <Compile Include="FTPLayer\WindowsFTPLayer.cs" />
     <Compile Include="FTPLayer\FTPLayerException.cs" />
     <Compile Include="FTPLayer\IFTPLayer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

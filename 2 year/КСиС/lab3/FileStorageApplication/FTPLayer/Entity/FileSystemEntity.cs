@@ -4,8 +4,6 @@ namespace FTPLayer.Entity
 {
     public abstract class FileSystemEntity
     {
-        public static string RootPath = "C:\\";
-
         public string AbsolutePath { get; protected set; }
         public FileSystemEntityType Type { get; protected set; }
 

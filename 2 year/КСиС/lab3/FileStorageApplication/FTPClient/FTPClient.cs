@@ -1,14 +1,11 @@
-﻿using FTPClient.ServerApi;
-using FTPLayer.Entity;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
+﻿using System;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Threading.Tasks;
+using System.Collections.Generic;
+
+using FTPLayer.Entity;
+using FTPClient.ServerApi;
 
 namespace FTPClient
 {
@@ -21,7 +18,7 @@ namespace FTPClient
 
         private void FTPClientFormLoad(object sender, EventArgs e)
         {
-            //this.Reload();
+            this.TreeView.Nodes.Add(this.MakeRootNode());
         }
 
         private TreeNode MakeRootNode() =>
@@ -48,6 +45,12 @@ namespace FTPClient
         private void SetLoaded(TreeNode node, bool isLoaded = true) =>
             ((TreeNodeWrapper)node.Tag).IsLoaded = isLoaded;
 
+        private void SetLoadingIcon(TreeNode node) =>
+            node.SelectedImageIndex = 2;
+
+        private void ResetLoadingIcon(TreeNode node) =>
+            node.SelectedImageIndex = 1;
+
         private TreeNodeWrapper GetWrapper(TreeNode node) =>
             ((TreeNodeWrapper)node.Tag);
 
@@ -62,25 +65,77 @@ namespace FTPClient
             this.TreeView.Nodes.Add(this.MakeRootNode());
             this.ReloadNode(this.TreeView.Nodes[0]);
         }
-        
-        private void ReloadNode(TreeNode node, bool expand = false)
+
+        private async void ReloadNode(TreeNode node, bool expand = false)
         {
-            var response = FTPServerApi.GetDirectory(
+            this.SetLoadingIcon(node);
+            var response = await FTPServerApi.GetDirectory(
                 this.GetWrapper(node)?.Entity.AbsolutePath);
-            if (response.IsErrored)
-                this.ShowError(response.ErrorMessage);
-            else
+            if (this.ProcessResponseError(response))
             {
                 node.Nodes.Clear();
-                node.Nodes.AddRange(this.MakeNodesFromEntities(response.ResponseData as 
+                this.TreeView.BeginUpdate();
+                node.Nodes.AddRange(this.MakeNodesFromEntities(response.ResponseData as
                     IEnumerable<FileSystemEntity>).ToArray());
                 if (node.Tag != null)
                     this.SetLoaded(node);
-                if (expand)
-                    node.Expand();
+                this.TreeView.EndUpdate();
             }
-            this.TreeView.EndUpdate();
+            this.ResetLoadingIcon(node);
         }
+
+        private async Task<string> LoadFileNode(TreeNode node)
+        {
+            var wrapper = this.GetWrapper(node);
+            if (wrapper?.Entity.Type != FileSystemEntityType.File)
+                return null;
+            var response = await FTPServerApi.GetFile(
+                wrapper.Entity.AbsolutePath);
+            return this.ProcessResponseError(response) ? 
+                response.ResponseData as string : null;
+        }
+
+        private async void PutToFileNode(TreeNode node)
+        {
+            if (this.TreeNodeIsFile(node))
+            {
+                var contents = await this.LoadFileNode(node);
+                if (contents == null)
+                    return;
+                var result = new FTPClientTextInput(
+                    contents).ShowDialog();
+                if (result == DialogResult.OK)
+                {
+                    var response = await FTPServerApi.PutTextToFile(
+                        this.GetWrapper(node).Entity.AbsolutePath,
+                            FTPClientTextInput.ReturnedText);
+                    this.ProcessResponseError(response);
+                }
+            }
+        }
+
+        private async void AppendToFileNode(TreeNode node)
+        {
+            if (this.TreeNodeIsFile(node))
+            {
+                var result = new FTPClientTextInput("").ShowDialog();
+                if (result == DialogResult.OK)
+                {
+                    var response = await FTPServerApi.AppendTextToFile(
+                        this.GetWrapper(node).Entity.AbsolutePath,
+                            FTPClientTextInput.ReturnedText);
+                    this.ProcessResponseError(response);
+                }
+            }
+        }
+
+        private bool TreeNodeIsFile(TreeNode node) =>
+            this.GetWrapper(node)?.Entity.Type == 
+                FileSystemEntityType.File;
+
+        private bool TreeNodeIsDirectory(TreeNode node) =>
+            this.GetWrapper(node)?.Entity.Type ==
+                FileSystemEntityType.Directory;
 
         private void ReloadButtonClick(object sender, EventArgs e) =>
             this.ReloadRoot();
@@ -97,6 +152,13 @@ namespace FTPClient
                 this.ReloadNode(this.TreeView.SelectedNode);
         }
 
+        private bool ProcessResponseError(FTPServerApiResponse response)
+        {
+            if (response.IsErrored)
+                this.ShowError(response.ErrorMessage);
+            return !response.IsErrored;
+        }
+
         private void TreeViewNodeMouseDoubleClick(object sender, 
             TreeNodeMouseClickEventArgs e)
         {
@@ -106,6 +168,28 @@ namespace FTPClient
             if (e.Button == MouseButtons.Left && !wrapper.IsLoaded)
                 if (wrapper.Entity.Type == FileSystemEntityType.Directory)
                     this.ReloadNode(e.Node, true);
+        }
+
+        private async void OpenFileButtonClick(object sender, EventArgs e)
+        {
+            if (this.TreeView.SelectedNode == null)
+                return;
+            string contents = await this.LoadFileNode(
+                this.TreeView.SelectedNode);
+            if (contents != null)
+                new FTPClientTextViewer(contents).Show();
+        }
+
+        private void AppendToFileButtonClick(object sender, EventArgs e)
+        {
+            if (this.TreeView.SelectedNode != null)
+                this.AppendToFileNode(this.TreeView.SelectedNode);
+        }
+
+        private void PutToFileButtonClick(object sender, EventArgs e)
+        {
+            if (this.TreeView.SelectedNode != null)
+                this.PutToFileNode(this.TreeView.SelectedNode);
         }
     }
 }
