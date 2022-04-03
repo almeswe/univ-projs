@@ -1,0 +1,6 @@
+C:\Users\HP\source\repos\univ-projs\2 year\ООТПиСП\Lab1\Geometry\bin\Debug\ClassLibrary.dll
+C:\Users\HP\source\repos\univ-projs\2 year\ООТПиСП\Lab1\Geometry\bin\Debug\ClassLibrary.pdb
+C:\Users\HP\source\repos\univ-projs\2 year\ООТПиСП\Lab1\Geometry\obj\Debug\Geometry.csproj.AssemblyReference.cache
+C:\Users\HP\source\repos\univ-projs\2 year\ООТПиСП\Lab1\Geometry\obj\Debug\Geometry.csproj.CoreCompileInputs.cache
+C:\Users\HP\source\repos\univ-projs\2 year\ООТПиСП\Lab1\Geometry\obj\Debug\ClassLibrary.dll
+C:\Users\HP\source\repos\univ-projs\2 year\ООТПиСП\Lab1\Geometry\obj\Debug\ClassLibrary.pdb

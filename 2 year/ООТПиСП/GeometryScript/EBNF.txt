@@ -1,0 +1,13 @@
+﻿script               ::= { script-line }
+script-line          ::= '%' shape script-line-argument { ',' script-line-argument } ';'
+script-line-argument ::= argument ':' value { ',' value }
+
+
+shape    ::= 'ellipse' | 'circle' | 'dot' | 'polygon' | 'line' | 'triangle' | 'rect' | 'square'
+value    ::= [0-9]([0-9]*)
+argument ::= [a-zA-Z]([a-zA-Z0-9]*)
+
+-------------------------------
+%rect x:0 y:0 width:0 height:0;
+%сircle center: 0,0 radius:15;
+-------------------------------
