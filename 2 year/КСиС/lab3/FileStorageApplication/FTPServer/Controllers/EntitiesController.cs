@@ -11,7 +11,7 @@ namespace FTPServer.Controllers
     [Route("api/[controller]")]
     public class EntitiesController : ControllerBase
     {
-        private readonly string _rootPath = "D:\\repos";
+        private readonly string _rootPath = Program.RootPath;
         private IFTPLayer _layer = new WindowsFTPLayer();
 
         [HttpGet("{get}")]

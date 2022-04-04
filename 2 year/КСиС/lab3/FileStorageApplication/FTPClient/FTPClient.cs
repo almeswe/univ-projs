@@ -58,10 +58,10 @@ namespace FTPClient
             ((TreeNodeWrapper)node.Tag).IsLoaded = isLoaded;
 
         private void SetLoadingIcon(TreeNode node) =>
-            node.SelectedImageIndex = 2;
+            node.SelectedImageIndex = node.ImageIndex = 2;
 
         private void ResetLoadingIcon(TreeNode node) =>
-            node.SelectedImageIndex = 1;
+            node.SelectedImageIndex = node.ImageIndex = 1;
 
         private TreeNodeWrapper GetWrapper(TreeNode node) =>
             ((TreeNodeWrapper)node.Tag);

@@ -5,17 +5,22 @@ namespace FTPServer
 {
     public class Program
     {
-        public static void Main(string[] args) =>
-            CreateHostBuilder().Run();
+        public static string RootPath { get; private set; }
 
-        public static IWebHost CreateHostBuilder()
+        public static void Main(string[] args) =>
+            CreateHostBuilder(args).Run();
+
+        public static IWebHost CreateHostBuilder(string[] args)
         {
-            return new WebHostBuilder()
-                .UseKestrel()
-                .UseUrls("http://localhost:5000", "http://192.168.100.72:5000")
+            if (args.Length != 3)
+                throw new System.ArgumentException(
+                    "Incorrect argument count passed.");
+            var host = new WebHostBuilder().UseKestrel()
+                .UseUrls($"http://{args[0]}:{args[1]}")
                 .UseIISIntegration()
-                .UseStartup<Startup>()
-                .Build();
+                .UseContentRoot(args[2]);
+            RootPath = args[2];
+            return host.UseStartup<Startup>().Build();
         }
     }
 }
