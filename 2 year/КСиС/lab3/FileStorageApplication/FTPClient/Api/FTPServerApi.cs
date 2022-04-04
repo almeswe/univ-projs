@@ -2,8 +2,8 @@
 using Newtonsoft.Json.Linq;
 
 using RestSharp;
-using System.Collections.Generic;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 
 namespace FTPClient.ServerApi
 {
@@ -25,7 +25,8 @@ namespace FTPClient.ServerApi
         private static string _apiBaseUrl;
         private static RestClient _client;
 
-        public static async Task<FTPServerApiResponse> GetFile(string path)
+        public static async Task<FTPServerApiResponse> GetFile(
+            string path)
         {
             var request = new RestRequest($"/get?path={path}", Method.Get);
             var response = await _client.ExecuteAsync(request);
@@ -37,7 +38,8 @@ namespace FTPClient.ServerApi
             return apiResponse;
         }
 
-        public static async Task<FTPServerApiResponse> GetDirectory(string path)
+        public static async Task<FTPServerApiResponse> GetDirectory(
+            string path)
         {
             var request = new RestRequest(path == null ? 
                 $"/get" : $"/get?path={path}", Method.Get);
@@ -67,7 +69,8 @@ namespace FTPClient.ServerApi
         public static async Task<FTPServerApiResponse> GetRootDirectory() =>
             await GetDirectory(null);
 
-        public static async Task<FTPServerApiResponse> AppendTextToFile(string path, string text)
+        public static async Task<FTPServerApiResponse> AppendTextToFile(
+            string path, string text)
         {
             var request = new RestRequest($"/post", Method.Post);
             request.AddBody(new Dictionary<string, object>() {
@@ -78,13 +81,46 @@ namespace FTPClient.ServerApi
             return new FTPServerApiResponse(response);
         }
 
-        public static async Task<FTPServerApiResponse> PutTextToFile(string path, string text)
+        public static async Task<FTPServerApiResponse> PutTextToFile(
+            string path, string text)
         {
             var request = new RestRequest($"/put", Method.Put);
             request.AddBody(new Dictionary<string, object>() {
                 { "absolutePath", path },
                 { "text", text }
             });
+            var response = await _client.ExecuteAsync(request);
+            return new FTPServerApiResponse(response);
+        }
+    
+        public static async Task<FTPServerApiResponse> CopyFileTo(
+            string sourcePath, string destinationPath)
+        {
+            var request = new RestRequest($"/copy", Method.Copy);
+            request.AddBody(new Dictionary<string, object>() {
+                { "sourcePath", sourcePath },
+                { "destinationPath", destinationPath }
+            });
+            var response = await _client.ExecuteAsync(request);
+            return new FTPServerApiResponse(response);
+        }
+
+        public static async Task<FTPServerApiResponse> MoveFileTo(
+            string sourcePath, string destinationPath)
+        {
+            var request = new RestRequest($"/move", Method.Merge);
+            request.AddBody(new Dictionary<string, object>() {
+                { "sourcePath", sourcePath },
+                { "destinationPath", destinationPath }
+            });
+            var response = await _client.ExecuteAsync(request);
+            return new FTPServerApiResponse(response);
+        }
+
+        public static async Task<FTPServerApiResponse> DeleteFile(
+            string path)
+        {
+            var request = new RestRequest($"/delete?path={path}", Method.Delete);
             var response = await _client.ExecuteAsync(request);
             return new FTPServerApiResponse(response);
         }

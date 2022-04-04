@@ -5,16 +5,17 @@ namespace FTPServer
 {
     public class Program
     {
-        public static void Main(string[] args)
-        {
-            CreateHostBuilder(args).Build().Run();
-        }
+        public static void Main(string[] args) =>
+            CreateHostBuilder().Run();
 
-        public static IHostBuilder CreateHostBuilder(string[] args) =>
-            Host.CreateDefaultBuilder(args)
-                .ConfigureWebHostDefaults(webBuilder =>
-                {
-                    webBuilder.UseStartup<Startup>();
-                });
+        public static IWebHost CreateHostBuilder()
+        {
+            return new WebHostBuilder()
+                .UseKestrel()
+                .UseUrls("http://localhost:5000", "http://192.168.100.72:5000")
+                .UseIISIntegration()
+                .UseStartup<Startup>()
+                .Build();
+        }
     }
 }

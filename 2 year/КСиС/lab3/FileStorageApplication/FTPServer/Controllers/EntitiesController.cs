@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 
 using FTPLayer;
-using FTPLayer.Entity;
 using FTPServer.Models;
 
 namespace FTPServer.Controllers
@@ -38,9 +37,10 @@ namespace FTPServer.Controllers
                 if (System.IO.File.Exists(path))
                     return this.HttpResponseSimple("contents", 
                         this._layer.GetFile(path));
-
-                return this.HttpResponseSimple("entities", 
-                    this._layer.GetDirectory(path));
+                if (System.IO.Directory.Exists(path))
+                    return this.HttpResponseSimple("entities", 
+                        this._layer.GetDirectory(path));
+                return this.HttpResponseError("Cannot find any entity for specified path.");
             }
             catch (Exception e)
             {
@@ -74,6 +74,59 @@ namespace FTPServer.Controllers
                     return this.HttpResponseError("No path specified.");
                 this._layer.PutToFile(model.Text,
                     model.AbsolutePath);
+                return this.HttpResponseSuccess();
+            }
+            catch (Exception e)
+            {
+                return this.HttpResponseError(e.Message);
+            }
+        }
+        
+        [AcceptVerbs("COPY")]
+        [Route("{copy}")]
+        public Dictionary<string, object> Copy([FromBody] TwoWayPathModel model)
+        {
+            try
+            {
+                if (model.SourcePath == null || model.DestinationPath == null)
+                    return this.HttpResponseError("No source or destination path specified.");
+                this._layer.CopyFile(model.SourcePath,
+                    model.DestinationPath);
+                return this.HttpResponseSuccess();
+            }
+            catch (Exception e)
+            {
+                return this.HttpResponseError(e.Message);
+            }
+        }
+
+        [AcceptVerbs("MERGE")]
+        [Route("{move}")]
+        public Dictionary<string, object> Move([FromBody] TwoWayPathModel model)
+        {
+            try
+            {
+                if (model.SourcePath == null || model.DestinationPath == null)
+                    return this.HttpResponseError("No source or destination path specified.");
+                this._layer.MoveFile(model.SourcePath,
+                    model.DestinationPath);
+                return this.HttpResponseSuccess();
+            }
+            catch (Exception e)
+            {
+                return this.HttpResponseError(e.Message);
+            }
+        }
+
+        [AcceptVerbs("DELETE")]
+        [Route("{delete}")]
+        public Dictionary<string, object> Delete(string path)
+        {
+            try
+            {
+                if (path == null || path == string.Empty)
+                    return this.HttpResponseError("Path is empty.");
+                this._layer.DeleteFile(path);
                 return this.HttpResponseSuccess();
             }
             catch (Exception e)

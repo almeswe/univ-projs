@@ -82,6 +82,7 @@
   <ItemGroup>
     <Compile Include="Api\FTPServerApi.cs" />
     <Compile Include="Api\FTPServerApiResponse.cs" />
+    <Compile Include="BufferActionKind.cs" />
     <Compile Include="FTPClient.cs">
       <SubType>Form</SubType>
     </Compile>

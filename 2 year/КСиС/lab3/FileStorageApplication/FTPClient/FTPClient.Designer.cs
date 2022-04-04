@@ -39,14 +39,25 @@ namespace FTPClient
             this.ReloadNodeButton = new System.Windows.Forms.Button();
             this.SplitContainer = new System.Windows.Forms.SplitContainer();
             this.DomainPanel = new System.Windows.Forms.Panel();
+            this.PasteButton = new System.Windows.Forms.Button();
+            this.DeleteButton = new System.Windows.Forms.Button();
+            this.MoveButton = new System.Windows.Forms.Button();
+            this.CopyButton = new System.Windows.Forms.Button();
             this.PutToFileButton = new System.Windows.Forms.Button();
             this.AppendToFileButton = new System.Windows.Forms.Button();
             this.OpenFileButton = new System.Windows.Forms.Button();
+            this.OpenMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.ReloadMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.PutMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.AppendMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.ContextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.SplitContainer)).BeginInit();
             this.SplitContainer.Panel1.SuspendLayout();
             this.SplitContainer.Panel2.SuspendLayout();
             this.SplitContainer.SuspendLayout();
             this.DomainPanel.SuspendLayout();
+            this.ContextMenuStrip.SuspendLayout();
             this.SuspendLayout();
             // 
             // TreeView
@@ -64,7 +75,7 @@ namespace FTPClient
             this.TreeView.ShowPlusMinus = false;
             this.TreeView.Size = new System.Drawing.Size(482, 557);
             this.TreeView.TabIndex = 0;
-            this.TreeView.NodeMouseDoubleClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.TreeViewNodeMouseDoubleClick);
+            this.TreeView.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.TreeViewNodeMouseClick);
             // 
             // ImageList
             // 
@@ -104,7 +115,7 @@ namespace FTPClient
             this.ReloadButton.Name = "ReloadButton";
             this.ReloadButton.Size = new System.Drawing.Size(251, 21);
             this.ReloadButton.TabIndex = 3;
-            this.ReloadButton.Text = "reload root";
+            this.ReloadButton.Text = "connect";
             this.ReloadButton.UseVisualStyleBackColor = true;
             this.ReloadButton.Click += new System.EventHandler(this.ReloadButtonClick);
             // 
@@ -143,6 +154,10 @@ namespace FTPClient
             // 
             // DomainPanel
             // 
+            this.DomainPanel.Controls.Add(this.PasteButton);
+            this.DomainPanel.Controls.Add(this.DeleteButton);
+            this.DomainPanel.Controls.Add(this.MoveButton);
+            this.DomainPanel.Controls.Add(this.CopyButton);
             this.DomainPanel.Controls.Add(this.PutToFileButton);
             this.DomainPanel.Controls.Add(this.AppendToFileButton);
             this.DomainPanel.Controls.Add(this.OpenFileButton);
@@ -156,9 +171,62 @@ namespace FTPClient
             this.DomainPanel.Size = new System.Drawing.Size(250, 557);
             this.DomainPanel.TabIndex = 5;
             // 
+            // PasteButton
+            // 
+            this.PasteButton.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.PasteButton.Location = new System.Drawing.Point(0, 194);
+            this.PasteButton.Margin = new System.Windows.Forms.Padding(2);
+            this.PasteButton.Name = "PasteButton";
+            this.PasteButton.Size = new System.Drawing.Size(251, 21);
+            this.PasteButton.TabIndex = 11;
+            this.PasteButton.Text = "paste";
+            this.PasteButton.UseVisualStyleBackColor = true;
+            this.PasteButton.Click += new System.EventHandler(this.PasteButtonClick);
+            // 
+            // DeleteButton
+            // 
+            this.DeleteButton.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.DeleteButton.Location = new System.Drawing.Point(0, 214);
+            this.DeleteButton.Margin = new System.Windows.Forms.Padding(2);
+            this.DeleteButton.Name = "DeleteButton";
+            this.DeleteButton.Size = new System.Drawing.Size(251, 21);
+            this.DeleteButton.TabIndex = 10;
+            this.DeleteButton.Text = "delete";
+            this.DeleteButton.UseVisualStyleBackColor = true;
+            this.DeleteButton.Click += new System.EventHandler(this.DeleteButtonClick);
+            // 
+            // MoveButton
+            // 
+            this.MoveButton.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.MoveButton.Location = new System.Drawing.Point(0, 154);
+            this.MoveButton.Margin = new System.Windows.Forms.Padding(2);
+            this.MoveButton.Name = "MoveButton";
+            this.MoveButton.Size = new System.Drawing.Size(251, 21);
+            this.MoveButton.TabIndex = 9;
+            this.MoveButton.Text = "cut";
+            this.MoveButton.UseVisualStyleBackColor = true;
+            this.MoveButton.Click += new System.EventHandler(this.MoveButtonClick);
+            // 
+            // CopyButton
+            // 
+            this.CopyButton.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.CopyButton.Location = new System.Drawing.Point(0, 174);
+            this.CopyButton.Margin = new System.Windows.Forms.Padding(2);
+            this.CopyButton.Name = "CopyButton";
+            this.CopyButton.Size = new System.Drawing.Size(251, 21);
+            this.CopyButton.TabIndex = 8;
+            this.CopyButton.Text = "copy";
+            this.CopyButton.UseVisualStyleBackColor = true;
+            this.CopyButton.Click += new System.EventHandler(this.CopyButtonClick);
+            // 
             // PutToFileButton
             // 
-            this.PutToFileButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.PutToFileButton.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.PutToFileButton.Location = new System.Drawing.Point(-1, 78);
             this.PutToFileButton.Margin = new System.Windows.Forms.Padding(2);
             this.PutToFileButton.Name = "PutToFileButton";
@@ -170,7 +238,8 @@ namespace FTPClient
             // 
             // AppendToFileButton
             // 
-            this.AppendToFileButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.AppendToFileButton.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.AppendToFileButton.Location = new System.Drawing.Point(-1, 118);
             this.AppendToFileButton.Margin = new System.Windows.Forms.Padding(2);
             this.AppendToFileButton.Name = "AppendToFileButton";
@@ -193,6 +262,47 @@ namespace FTPClient
             this.OpenFileButton.UseVisualStyleBackColor = true;
             this.OpenFileButton.Click += new System.EventHandler(this.OpenFileButtonClick);
             // 
+            // OpenMenuItem
+            // 
+            this.OpenMenuItem.Name = "OpenMenuItem";
+            this.OpenMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.OpenMenuItem.Text = "Open";
+            // 
+            // ReloadMenuItem
+            // 
+            this.ReloadMenuItem.Name = "ReloadMenuItem";
+            this.ReloadMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.ReloadMenuItem.Text = "Reload";
+            // 
+            // PutMenuItem
+            // 
+            this.PutMenuItem.Name = "PutMenuItem";
+            this.PutMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.PutMenuItem.Text = "Put Text";
+            // 
+            // AppendMenuItem
+            // 
+            this.AppendMenuItem.Name = "AppendMenuItem";
+            this.AppendMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.AppendMenuItem.Text = "Append Text";
+            // 
+            // toolStripMenuItem1
+            // 
+            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(180, 22);
+            this.toolStripMenuItem1.Text = "toolStripMenuItem1";
+            // 
+            // ContextMenuStrip
+            // 
+            this.ContextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.OpenMenuItem,
+            this.ReloadMenuItem,
+            this.PutMenuItem,
+            this.AppendMenuItem,
+            this.toolStripMenuItem1});
+            this.ContextMenuStrip.Name = "ContextMenuStrip";
+            this.ContextMenuStrip.Size = new System.Drawing.Size(181, 114);
+            // 
             // FTPClientForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -209,6 +319,7 @@ namespace FTPClient
             this.SplitContainer.ResumeLayout(false);
             this.DomainPanel.ResumeLayout(false);
             this.DomainPanel.PerformLayout();
+            this.ContextMenuStrip.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -226,6 +337,15 @@ namespace FTPClient
         private System.Windows.Forms.Button OpenFileButton;
         private System.Windows.Forms.Button AppendToFileButton;
         private System.Windows.Forms.Button PutToFileButton;
+        private System.Windows.Forms.Button CopyButton;
+        private System.Windows.Forms.Button MoveButton;
+        private System.Windows.Forms.Button DeleteButton;
+        private System.Windows.Forms.ToolStripMenuItem OpenMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem ReloadMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem PutMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem AppendMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;
+        private System.Windows.Forms.Button PasteButton;
     }
 }
 
