@@ -16,6 +16,9 @@
 struct dir_size {
     uint64_t disk_size;
     uint64_t logical_size;
+
+    uint64_t local_disk_size;
+    uint64_t local_logical_size;
 };
 
 struct file_size {
@@ -59,7 +62,7 @@ struct file_size* get_file_size(const char* file) {
 struct dir_size* get_dir_size(char* dir_path) {
     DIR* dir = opendir(dir_path);
     if (dir == NULL) {
-        char* error_str = (char*)xcalloc(1, strlen(dir_path) + 35); // 29 is size of error string + null terminator
+        char* error_str = (char*)xcalloc(1, strlen(dir_path) + 35);
         frmt(error_str, "Specified path is incorrect: %s", dir_path);
         return perror(error_str), free(error_str), NULL;
     }
@@ -68,7 +71,7 @@ struct dir_size* get_dir_size(char* dir_path) {
     struct dir_size* dir_size = (struct dir_size*)
         xcalloc(1, sizeof (struct dir_size));
     // add up dir's metadata size to disk space  
-    dir_size->disk_size = METADATA_SIZE;
+    dir_size->disk_size = dir_size->local_disk_size = METADATA_SIZE;
 
     char* new_path = NULL;
     struct dirent* entity;
@@ -93,8 +96,10 @@ struct dir_size* get_dir_size(char* dir_path) {
             case DT_SOCK:
                 fsize = get_file_size(new_path);
                 if (fsize) {
-                    dir_size->disk_size += fsize->logical_size;
+                    dir_size->disk_size += fsize->disk_size;
                     dir_size->logical_size += fsize->logical_size;
+                    dir_size->local_disk_size += fsize->disk_size;
+                    dir_size->local_logical_size += fsize->logical_size;
                     free(fsize);
                 }
                 break;
@@ -115,10 +120,10 @@ struct dir_size* get_dir_size(char* dir_path) {
     if (closedir(dir) < 0) {
         return perror("Cannot close read entity using closedir"), NULL;
     }
-    if (dir_size->disk_size != 0) {
-        printf("%s %lu %lu\n", dir_path, 
-            dir_size->disk_size, dir_size->logical_size);
-    }
+    printf("%s %lu %lu\n", dir_path, dir_size->local_disk_size,
+        dir_size->local_logical_size);
+    //printf("%s %lu %lu\n", dir_path, 
+    //    dir_size->disk_size, dir_size->logical_size);
     free(new_path);
     return dir_size;
 }
@@ -130,13 +135,14 @@ int main(int argc, char** argv) {
     struct dir_size* size;
     char* abs_path_ptr = realpath(argv[1], NULL);
     if (!abs_path_ptr) {
-        char* error_str = (char*)xcalloc(1, strlen(argv[1]) + 35); // 29 is size of error string + null terminator
+        char* error_str = (char*)xcalloc(1, strlen(argv[1]) + 35);
         frmt(error_str, "Specified path is incorrect: %s", argv[1]);
         return perror(error_str), free(error_str), 1;
     }
     else {
         if (size = get_dir_size(abs_path_ptr)) {
-            printf("%lu %lu %f%%\n\n", size->disk_size, size->logical_size, (((float)size->logical_size / size->disk_size) * 100));
+            printf("%lu %lu %f%%\n\n", size->disk_size, size->logical_size,
+                (((float)size->logical_size / size->disk_size) * 100));
             free(size);
         }
         free(abs_path_ptr);
