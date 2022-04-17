@@ -3,6 +3,7 @@ using System.IO;
 using System.Text;
 using System.Collections;
 using System.Windows.Forms;
+using System.Diagnostics;
 
 namespace ТИ_2
 {
@@ -35,8 +36,9 @@ namespace ТИ_2
         {
             try
             {
-                this.ViewText(File.ReadAllText(
-                    filePath));
+                Process.Start("notepad.exe", filePath);
+                //this.ViewText(File.ReadAllText(
+                 //   filePath));
             }
             catch (Exception exception)
             {
@@ -81,11 +83,45 @@ namespace ТИ_2
                 $"\\output.bin";
         }
 
-        private void ViewInputFileButton_Click(object sender, EventArgs e) =>
-            this.ViewFile(this.InputFileTextBox.Text);
+        private void ViewInputFileButton_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                var bytes = File.ReadAllBytes(this.InputFileTextBox.Text);
+                var result = new StringBuilder(string.Empty);
+                foreach (var @byte in bytes)
+                {
+                    var binary = Convert.ToString(@byte, 2);
+                    result.Append($"{new string('0', 8 - binary.Length)}{binary}");
+                }
+                this.ViewText(result.ToString());
+            }
+            catch (Exception exception)
+            {
+                MessageBox.Show(exception.Message, "Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+}
 
-        private void ViewOutputFileButtonClick(object sender, EventArgs e) =>
-            this.ViewFile(this.OutputFileTextBox.Text);
+        private void ViewOutputFileButtonClick(object sender, EventArgs e)
+        {
+            try
+            {
+                var bytes = File.ReadAllBytes(this.OutputFileTextBox.Text);
+                var result = new StringBuilder(string.Empty);
+                foreach (var @byte in bytes)
+                {
+                    var binary = Convert.ToString(@byte, 2);
+                    result.Append($"{new string('0', 8 - binary.Length)}{binary}");
+                }
+                this.ViewText(result.ToString());
+            }
+            catch (Exception exception)
+            {
+                MessageBox.Show(exception.Message, "Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
 
         private void ViewKeyButton_Click(object sender, EventArgs e) =>
             this.ViewText(this.KeyTextBox.Text);
@@ -105,7 +141,10 @@ namespace ТИ_2
                     this._seed = (this._seed << 1) | (digit == '1' ? 1 : 0);
                 this._stream = LFSR.Generate(this._seed, size);
                 this.KeyTextBox.Clear();
-                for (int i = 0; i < 3000 && i < this._stream.Length; i++)
+                for (int i = 0; i < Math.Min(5, (int)size); i++)
+                    for (int j = 0; j < 8; j++)
+                        this.KeyTextBox.Text += seedString[8*i+j];
+                for (int i = Math.Min(5, (int)size); i < Math.Min(this._stream.Length, 300); i++)
                 {
                     var binary = Convert.ToString(this._stream[i], 2);
                     this.KeyTextBox.Text += $"{new string('0', 8 - binary.Length)}{binary}";

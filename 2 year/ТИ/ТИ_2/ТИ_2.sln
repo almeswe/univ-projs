@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.31613.86
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ТИ_2", "ТИ_2.csproj", "{92A4BEB3-5786-46DA-BD29-44C103525008}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ТИ_2_backend", "..\ТИ_2_backend\ТИ_2_backend.vcxproj", "{C6562E6F-BEE5-4000-8EE6-1EA3A7883953}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ТИ_2_backend", "ТИ_2_backend\ТИ_2_backend.vcxproj", "{C6562E6F-BEE5-4000-8EE6-1EA3A7883953}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -1,4 +1,6 @@
-﻿namespace ТИ_2
+﻿using System;
+
+namespace ТИ_2
 {
     public static class LFSR
     {
@@ -6,7 +8,10 @@
         public static byte[] Generate(long seed, long size)
         {
             byte[] stream = new byte[size];
-            for (int @byte = 0; @byte < size; @byte++)
+            for (int i = 0; i < Math.Min(size, 5); i++)
+                stream[i] = (byte)(seed >> (32 - (i * 8)));
+
+            for (int @byte = 5; @byte < size; @byte++)
             {
                 for (int bit = 0; bit < 8; bit++)
                 {

@@ -6,7 +6,7 @@ namespace ТИ_2
     {
         public TextViewerForm(string text)
         {
-            InitializeComponent();
+            this.InitializeComponent();
             this.TextBox.Text = text;
         }
     }
