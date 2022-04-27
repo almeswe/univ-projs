@@ -1,0 +1,1 @@
+gcc xmemory.c main.c -o main -g
