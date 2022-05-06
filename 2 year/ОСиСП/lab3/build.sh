@@ -1,1 +1,1 @@
-gcc xmemory.c main.c -o main -g
+gcc xmemory.c sbuffer.c main.c -o main -g
