@@ -1,54 +1,85 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Numerics;
+using System.Collections.Generic;
 
 namespace ТИ_3.Elgamal
 {
     public static class Elgamal
     {
-        public static long Euler(long number)
+        public static ulong Euler(ulong number)
         {
-            int result = 1;
+            ulong result = 1;
             if (number < 1)
                 throw new ArgumentException("Number must be greater or equal to 1.");
-            for (int i = 2; i < number; i++)
+            for (ulong i = 2; i < number; i++)
                 if (GetCommonDivisor(i, number) == 1)
                     result++;
             return result;
         }
 
-        public static bool IsPrime(long number)
+        public static ulong FastExp(ulong x, ulong y, ulong p)
+        {
+            ulong res = 1;
+            x = x % p;
+            if (x == 0)
+                return 0;
+            while (y > 0)
+            {
+                if ((y & 1) != 0)
+                    res = (res * x) % p;
+                y = y >> 1;
+                x = (x * x) % p;
+            }
+            return res;
+        }
+
+        public static bool IsPrime(ulong number)
         {
             if (number == 2)
                 return true;
             if (number < 2 || number % 2 == 0)
                 return false;
-            for (int i = 3; i <= Math.Sqrt(number); i += 2)
+            for (ulong i = 3; i <= Math.Sqrt(number); i += 2)
                 if (number % i == 0)
                     return false;
             return true;
         }
 
-        public static List<long> GetPrimeRoots(long p)
+        public static List<ulong> GetPrimeRoots(ulong p)
         {
-            if (p < 2 || !IsPrime(p))
-                throw new ArgumentException("P is invalid.");
-            var roots = new List<long>();
-            var divisors = GetPrimeDivisors(p - 1)
-                .Where(d => d != 1 && d != (p - 1));
-            for (int g = 2; g < p; g++)
+            var roots = new List<ulong>();
+            for (ulong g = 1; g <= p-1; g++)
             {
-                bool skip = false;
-                foreach (var divisor in divisors)
-                    if (skip = (Math.Pow(g, (p - 1) / divisor) % p == 1))
-                        break;
-                if (!skip)
-                    roots.Add(g);
+                var isNotRoot = true;
+                if (FastExp(g, p-1, p) == 1)
+                {
+                    for (ulong l = 1; l <= p-2; l++)
+                    {
+                        if (isNotRoot = (FastExp(g, l, p) == 1))
+                            break;
+                    }
+                    if (!isNotRoot)
+                        roots.Add(g);
+                }
             }
-            return roots.ToList();
+            return roots;
             #region Garbage
+            //if (p < 2 || !IsPrime(p))
+            //    throw new ArgumentException("P is invalid.");
+            //var roots = new List<ulong>();
+            //var divisors = GetPrimeDivisors(p - 1)
+            //    .Where(d => d != 1 && d != (p - 1));
+            //for (int g = 2; g < p; g++)
+            //{
+            //    bool skip = false;
+            //    foreach (var divisor in divisors)
+            //        if (skip = (Math.Pow(g, (p - 1) / divisor) % p == 1))
+            //            break;
+            //    if (!skip)
+            //        roots.Add(g);
+            //}
+            //return roots.ToList();
             //if (p < 2 || !IsPrime(p))
             //    throw new ArgumentException("P is invalid.");
             //var count = Euler(Euler(p));
@@ -100,12 +131,12 @@ namespace ТИ_3.Elgamal
             #endregion
         }
 
-        public static List<long> GetDivisors(long number)
+        public static List<ulong> GetDivisors(ulong number)
         {
-            var factors = new List<long>();
-            var max = (long)Math.Sqrt(number);
+            var factors = new List<ulong>();
+            var max = (ulong)Math.Sqrt(number);
 
-            for (int factor = 1; factor <= max; ++factor)
+            for (ulong factor = 1; factor <= max; ++factor)
             {
                 if (number % factor == 0)
                 {
@@ -117,31 +148,37 @@ namespace ТИ_3.Elgamal
             return factors;
         }
 
-        public static long GetCommonDivisor(long a, long b) =>
+        public static ulong GetCommonDivisor(ulong a, ulong b) =>
             a == 0 ? b : GetCommonDivisor(b % a, a);
 
-        public static List<long> GetPrimeDivisors(long number) =>
+        public static List<ulong> GetPrimeDivisors(ulong number) =>
             GetDivisors(number).Where(d => IsPrime(d)).ToList();
     
-        public static List<long> GeneratePublicKey(long p, long g, long x) =>
-            new List<long>() { p, g, (long)Math.Pow(g, x) % p };
+        public static List<ulong> GeneratePublicKey(ulong p, ulong g, ulong x) =>
+            new List<ulong>() { p, g, FastExp(g, x, p) };
 
-        public static long[] Encrypt(byte[] plainText, long p, long g, long k, long y)
+        public static ulong[] Encrypt(byte[] plainText, ulong p, ulong g, ulong k, ulong y)
         {
-            var cipherText = new long[plainText.Length*2];
+            var cipherText = new ulong[plainText.Length*2];
+            var a = FastExp(g, k, p);
             for (int i = 0; i < cipherText.Length; i+=2)
             {
-                cipherText[i] = (long)Math.Pow(g, k) % p;
-                cipherText[i+1] = ((long)Math.Pow(y, k) * plainText[i/2]) % p;
+                cipherText[i] = a;
+                cipherText[i+1] = (ulong)(BigInteger.Pow(y, (int)k) * plainText[i/2] % p);
             }
             return cipherText;
         }
 
-        public static byte[] Decrypt(long[] cipherText, long p, long x)
+        public static byte[] Decrypt(ulong[] cipherText, ulong p, ulong x)
         {
             var plainText = new byte[cipherText.Length / 2];
             for (int i = 0; i < cipherText.Length; i += 2)
-                plainText[i/2] = (byte)(cipherText[i+1] * Math.Pow(Math.Pow(cipherText[i], x), p-2) % p);
+            {
+                BigInteger a = (BigInteger.Pow(
+                    cipherText[i], (int)(x * (p - 2))) * cipherText[i + 1] % p);
+                plainText[i / 2] = (byte)a;
+                //int a = 2;
+            }
             return plainText;
         }
     }

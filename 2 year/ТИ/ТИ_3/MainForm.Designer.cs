@@ -38,9 +38,20 @@ namespace ТИ_3
             this.GComboBox = new System.Windows.Forms.ComboBox();
             this.GLabel = new System.Windows.Forms.Label();
             this.PublicKeyLabel = new System.Windows.Forms.Label();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.PublicKeyTextBox = new System.Windows.Forms.TextBox();
             this.GenPublicKeyButton = new System.Windows.Forms.Button();
-            this.button1 = new System.Windows.Forms.Button();
+            this.EncryptButton = new System.Windows.Forms.Button();
+            this.PrimeRootsCountLabel = new System.Windows.Forms.Label();
+            this.GeneratePButton = new System.Windows.Forms.Button();
+            this.PrivateKeyTextBox = new System.Windows.Forms.TextBox();
+            this.PrivateKeyLabel = new System.Windows.Forms.Label();
+            this.SetSourceFileButton = new System.Windows.Forms.Button();
+            this.SourceFileTextBox = new System.Windows.Forms.TextBox();
+            this.OpenFileDialog = new System.Windows.Forms.OpenFileDialog();
+            this.OutputFileTextBox = new System.Windows.Forms.TextBox();
+            this.SetOutputFileButton = new System.Windows.Forms.Button();
+            this.DecryptButton = new System.Windows.Forms.Button();
+            this.OpenOutputFileButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // PTextBox
@@ -48,9 +59,8 @@ namespace ТИ_3
             this.PTextBox.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.PTextBox.Location = new System.Drawing.Point(77, 8);
             this.PTextBox.Name = "PTextBox";
-            this.PTextBox.Size = new System.Drawing.Size(218, 20);
+            this.PTextBox.Size = new System.Drawing.Size(184, 20);
             this.PTextBox.TabIndex = 0;
-            this.PTextBox.TextChanged += new System.EventHandler(this.PTextBoxTextChanged);
             // 
             // XTextBox
             // 
@@ -123,26 +133,26 @@ namespace ТИ_3
             // 
             this.PublicKeyLabel.AutoSize = true;
             this.PublicKeyLabel.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.PublicKeyLabel.Location = new System.Drawing.Point(20, 127);
+            this.PublicKeyLabel.Location = new System.Drawing.Point(26, 218);
             this.PublicKeyLabel.Name = "PublicKeyLabel";
             this.PublicKeyLabel.Size = new System.Drawing.Size(28, 14);
             this.PublicKeyLabel.TabIndex = 10;
             this.PublicKeyLabel.Text = "Ko:";
             // 
-            // textBox1
+            // PublicKeyTextBox
             // 
-            this.textBox1.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.textBox1.Location = new System.Drawing.Point(77, 125);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.ReadOnly = true;
-            this.textBox1.Size = new System.Drawing.Size(155, 20);
-            this.textBox1.TabIndex = 11;
-            this.textBox1.Text = "(...,...,...)";
-            this.textBox1.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.PublicKeyTextBox.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.PublicKeyTextBox.Location = new System.Drawing.Point(60, 216);
+            this.PublicKeyTextBox.Name = "PublicKeyTextBox";
+            this.PublicKeyTextBox.ReadOnly = true;
+            this.PublicKeyTextBox.Size = new System.Drawing.Size(155, 20);
+            this.PublicKeyTextBox.TabIndex = 11;
+            this.PublicKeyTextBox.Text = "(...,...,...)";
+            this.PublicKeyTextBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // GenPublicKeyButton
             // 
-            this.GenPublicKeyButton.Location = new System.Drawing.Point(232, 124);
+            this.GenPublicKeyButton.Location = new System.Drawing.Point(215, 215);
             this.GenPublicKeyButton.Name = "GenPublicKeyButton";
             this.GenPublicKeyButton.Size = new System.Drawing.Size(63, 22);
             this.GenPublicKeyButton.TabIndex = 13;
@@ -150,24 +160,134 @@ namespace ТИ_3
             this.GenPublicKeyButton.UseVisualStyleBackColor = true;
             this.GenPublicKeyButton.Click += new System.EventHandler(this.GenPublicKeyButtonClick);
             // 
-            // button1
+            // EncryptButton
             // 
-            this.button1.Location = new System.Drawing.Point(209, 194);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(63, 22);
-            this.button1.TabIndex = 14;
-            this.button1.Text = "enc";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.EncryptButton.Location = new System.Drawing.Point(215, 238);
+            this.EncryptButton.Name = "EncryptButton";
+            this.EncryptButton.Size = new System.Drawing.Size(63, 22);
+            this.EncryptButton.TabIndex = 14;
+            this.EncryptButton.Text = "enc";
+            this.EncryptButton.UseVisualStyleBackColor = true;
+            this.EncryptButton.Click += new System.EventHandler(this.EncryptButtonClick);
+            // 
+            // PrimeRootsCountLabel
+            // 
+            this.PrimeRootsCountLabel.AutoSize = true;
+            this.PrimeRootsCountLabel.Location = new System.Drawing.Point(269, 110);
+            this.PrimeRootsCountLabel.Name = "PrimeRootsCountLabel";
+            this.PrimeRootsCountLabel.Size = new System.Drawing.Size(16, 13);
+            this.PrimeRootsCountLabel.TabIndex = 15;
+            this.PrimeRootsCountLabel.Text = "...";
+            // 
+            // GeneratePButton
+            // 
+            this.GeneratePButton.Location = new System.Drawing.Point(261, 7);
+            this.GeneratePButton.Name = "GeneratePButton";
+            this.GeneratePButton.Size = new System.Drawing.Size(34, 22);
+            this.GeneratePButton.TabIndex = 16;
+            this.GeneratePButton.Text = "go";
+            this.GeneratePButton.UseVisualStyleBackColor = true;
+            this.GeneratePButton.Click += new System.EventHandler(this.GeneratePButtonClick);
+            // 
+            // PrivateKeyTextBox
+            // 
+            this.PrivateKeyTextBox.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.PrivateKeyTextBox.Location = new System.Drawing.Point(60, 239);
+            this.PrivateKeyTextBox.Name = "PrivateKeyTextBox";
+            this.PrivateKeyTextBox.ReadOnly = true;
+            this.PrivateKeyTextBox.Size = new System.Drawing.Size(93, 20);
+            this.PrivateKeyTextBox.TabIndex = 17;
+            this.PrivateKeyTextBox.Text = "(...)";
+            this.PrivateKeyTextBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
+            // PrivateKeyLabel
+            // 
+            this.PrivateKeyLabel.AutoSize = true;
+            this.PrivateKeyLabel.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.PrivateKeyLabel.Location = new System.Drawing.Point(26, 241);
+            this.PrivateKeyLabel.Name = "PrivateKeyLabel";
+            this.PrivateKeyLabel.Size = new System.Drawing.Size(28, 14);
+            this.PrivateKeyLabel.TabIndex = 18;
+            this.PrivateKeyLabel.Text = "Kз:";
+            // 
+            // SetSourceFileButton
+            // 
+            this.SetSourceFileButton.Location = new System.Drawing.Point(231, 130);
+            this.SetSourceFileButton.Name = "SetSourceFileButton";
+            this.SetSourceFileButton.Size = new System.Drawing.Size(63, 22);
+            this.SetSourceFileButton.TabIndex = 19;
+            this.SetSourceFileButton.Text = "...";
+            this.SetSourceFileButton.UseVisualStyleBackColor = true;
+            this.SetSourceFileButton.Click += new System.EventHandler(this.SetSourceFileButtonClick);
+            // 
+            // SourceFileTextBox
+            // 
+            this.SourceFileTextBox.Location = new System.Drawing.Point(10, 131);
+            this.SourceFileTextBox.Name = "SourceFileTextBox";
+            this.SourceFileTextBox.ReadOnly = true;
+            this.SourceFileTextBox.Size = new System.Drawing.Size(221, 20);
+            this.SourceFileTextBox.TabIndex = 20;
+            // 
+            // OpenFileDialog
+            // 
+            this.OpenFileDialog.FileName = "openFileDialog1";
+            // 
+            // OutputFileTextBox
+            // 
+            this.OutputFileTextBox.Location = new System.Drawing.Point(10, 154);
+            this.OutputFileTextBox.Name = "OutputFileTextBox";
+            this.OutputFileTextBox.ReadOnly = true;
+            this.OutputFileTextBox.Size = new System.Drawing.Size(221, 20);
+            this.OutputFileTextBox.TabIndex = 22;
+            // 
+            // SetOutputFileButton
+            // 
+            this.SetOutputFileButton.Location = new System.Drawing.Point(231, 153);
+            this.SetOutputFileButton.Name = "SetOutputFileButton";
+            this.SetOutputFileButton.Size = new System.Drawing.Size(63, 22);
+            this.SetOutputFileButton.TabIndex = 21;
+            this.SetOutputFileButton.Text = "...";
+            this.SetOutputFileButton.UseVisualStyleBackColor = true;
+            this.SetOutputFileButton.Click += new System.EventHandler(this.SetOutputFileButtonClick);
+            // 
+            // DecryptButton
+            // 
+            this.DecryptButton.Location = new System.Drawing.Point(153, 238);
+            this.DecryptButton.Name = "DecryptButton";
+            this.DecryptButton.Size = new System.Drawing.Size(63, 22);
+            this.DecryptButton.TabIndex = 23;
+            this.DecryptButton.Text = "dec";
+            this.DecryptButton.UseVisualStyleBackColor = true;
+            this.DecryptButton.Click += new System.EventHandler(this.DecryptButtonClick);
+            // 
+            // OpenOutputFileButton
+            // 
+            this.OpenOutputFileButton.Location = new System.Drawing.Point(10, 176);
+            this.OpenOutputFileButton.Name = "OpenOutputFileButton";
+            this.OpenOutputFileButton.Size = new System.Drawing.Size(284, 23);
+            this.OpenOutputFileButton.TabIndex = 24;
+            this.OpenOutputFileButton.Text = "open in decimal";
+            this.OpenOutputFileButton.UseVisualStyleBackColor = true;
+            this.OpenOutputFileButton.Click += new System.EventHandler(this.OpenOutputFileButtonClick);
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(307, 275);
-            this.Controls.Add(this.button1);
+            this.Controls.Add(this.OpenOutputFileButton);
+            this.Controls.Add(this.DecryptButton);
+            this.Controls.Add(this.OutputFileTextBox);
+            this.Controls.Add(this.SetOutputFileButton);
+            this.Controls.Add(this.SourceFileTextBox);
+            this.Controls.Add(this.SetSourceFileButton);
+            this.Controls.Add(this.PrivateKeyLabel);
+            this.Controls.Add(this.PrivateKeyTextBox);
+            this.Controls.Add(this.GeneratePButton);
+            this.Controls.Add(this.PrimeRootsCountLabel);
+            this.Controls.Add(this.EncryptButton);
             this.Controls.Add(this.GenPublicKeyButton);
-            this.Controls.Add(this.textBox1);
+            this.Controls.Add(this.PublicKeyTextBox);
             this.Controls.Add(this.PublicKeyLabel);
             this.Controls.Add(this.GLabel);
             this.Controls.Add(this.GComboBox);
@@ -197,9 +317,20 @@ namespace ТИ_3
         private System.Windows.Forms.ComboBox GComboBox;
         private System.Windows.Forms.Label GLabel;
         private System.Windows.Forms.Label PublicKeyLabel;
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TextBox PublicKeyTextBox;
         private System.Windows.Forms.Button GenPublicKeyButton;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button EncryptButton;
+        private System.Windows.Forms.Label PrimeRootsCountLabel;
+        private System.Windows.Forms.Button GeneratePButton;
+        private System.Windows.Forms.TextBox PrivateKeyTextBox;
+        private System.Windows.Forms.Label PrivateKeyLabel;
+        private System.Windows.Forms.Button SetSourceFileButton;
+        private System.Windows.Forms.TextBox SourceFileTextBox;
+        private System.Windows.Forms.OpenFileDialog OpenFileDialog;
+        private System.Windows.Forms.TextBox OutputFileTextBox;
+        private System.Windows.Forms.Button SetOutputFileButton;
+        private System.Windows.Forms.Button DecryptButton;
+        private System.Windows.Forms.Button OpenOutputFileButton;
     }
 }
 
