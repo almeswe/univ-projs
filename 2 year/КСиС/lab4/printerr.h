@@ -1,5 +1,9 @@
-#ifndef _PRINTERR_h
-#define _PRINTERR_h
+#ifndef _PRINTERR_H
+#define _PRINTERR_H
+
+/*
+    Macro under fprintf with error check, to print error to stderr.
+*/
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -8,4 +12,4 @@
     if (fprintf(stderr, format, __VA_ARGS__) < 0) \
         perror("printerr"), exit(1)
 
-#endif
+#endif // _PRINTERR_H
