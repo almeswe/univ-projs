@@ -1,0 +1,69 @@
+<body>
+    <div class="contents-rect">
+        <div class="contents-recently-played">
+            <h2 class="contents-recently-played-text">Recently played</h2>
+            <ul type="none" class="contents-recently-played-list">
+                {% for i in 0..5 %}
+                    <li class="contents-music-box">
+                        <div class="contents-music-box-image-container">
+                            <img class="contents-music-box-image" src=" {{ boxes[i] }}">
+                        </div>
+                        <div class="contents-music-box-text-container">
+                            <a class="contents-music-link-to-track" href="">
+                                <span class="contents-music-box-text">Track {{ i+1 }}</span>
+                            </a>
+                            <a class="contents-music-link-to-artist" href="">
+                                <span class="contents-music-box-artist">Artist {{ i+1 }}</span>
+                            </a>
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="contents-container-separator"></div>
+        <div class="contents-more-what-you-like">
+            <h2 class="contents-more-what-you-like-text">More what you like</h2>
+            <h3 class="contents-more-what-you-like-subtext">Suggestions based on what you've liked or played</h3>
+            <ul type="none" class="contents-what-you-like-list">
+                {% for i in 0..5 %}
+                    <li class="contents-music-box">
+                        <div class="contents-music-box-image-container">
+                            <img class="contents-music-box-image" src=" {{ boxes[i+6] }}">
+                        </div>
+                        <div class="contents-music-box-text-container">
+                            <a class="contents-music-link-to-track" href="">
+                                <span class="contents-music-box-text">Track {{ i+1 }}</span>
+                            </a>
+                            <a class="contents-music-link-to-artist" href="">
+                                <span class="contents-music-box-artist">Artist {{ i+1 }}</span>
+                            </a>
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="contents-container-separator"></div>
+        <div class="contents-artists-you-should-know">
+            <h2 class="contents-artists-you-should-know-text">Artists You Should Know</h2>
+            <h3 class="contents-artists-you-should-know-subtext">Top tracks from artists similar to your plays</h3>
+            <ul type="none" class="contents-artists-you-should-know-list">
+                {% for i in 0..5 %}
+                    <li class="contents-music-box">
+                        <div class="contents-music-box-image-container">
+                            <img class="contents-music-box-image" src="{{ boxes[i+12] }}">
+                        </div>
+                        <div class="contents-music-box-text-container">
+                            <a class="contents-music-link-to-track" href="">
+                                <span class="contents-music-box-text">Artist {{ i+1 }}</span>
+                            </a>
+                            <a class="contents-music-link-to-artist" href="">
+                                <span class="contents-music-box-artist">Top tracks</span>
+                            </a>
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="contents-container-separator"></div>
+    </div>
+</body>

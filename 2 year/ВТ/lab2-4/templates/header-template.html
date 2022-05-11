@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="css/{{ page | lower }}/style-{{ page | lower }}.css">
+    <title>{{ page }}</title>
+</head>
+<header>
+    <div class="header-rect">        
+        <div class="header-contents">
+            <div class="header-sign-in-form">
+                <a class="header-sign-in-form-link" href="sign-in.php">
+                    <span>Sign In</span>
+                </a>
+            </div>
+            <div class="header-entertainment-data">
+                <a href="index.php" id="header-tab">
+                    <div class="header-icon-tab" id="header-tab-container">
+                        <img class="icon-image" src="imgs/icon.png">
+                    </div>
+                </a>
+                <a href="index.php" id="header-tab" {% if page|lower == "home" %} class="header-tab-selected" {% endif %}>
+                    <div class="header-home-tab" id="header-tab-container">
+                        <span id="header-tab-contents">Home</span>
+                    </div>
+                </a>
+                <a href="stream.php" id="header-tab" {% if page|lower == "stream" %} class="header-tab-selected" {% endif %}>
+                    <div class="header-stream-tab" id="header-tab-container">
+                        <span id="header-tab-contents">Stream</span>
+                    </div>
+                </a>
+                <a href="library.php" id="header-tab" {% if page|lower == "library" %} class="header-tab-selected" {% endif %}>
+                    <div class="header-library-tab" id="header-tab-edge-container">
+                        <span id="header-tab-contents">Library</span>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>       
+</header>
