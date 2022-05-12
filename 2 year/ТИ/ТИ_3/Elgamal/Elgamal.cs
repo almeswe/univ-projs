@@ -174,10 +174,8 @@ namespace ТИ_3.Elgamal
             var plainText = new byte[cipherText.Length / 2];
             for (int i = 0; i < cipherText.Length; i += 2)
             {
-                BigInteger a = (BigInteger.Pow(
+                plainText[i / 2] = (byte)(BigInteger.Pow(
                     cipherText[i], (int)(x * (p - 2))) * cipherText[i + 1] % p);
-                plainText[i / 2] = (byte)a;
-                //int a = 2;
             }
             return plainText;
         }
