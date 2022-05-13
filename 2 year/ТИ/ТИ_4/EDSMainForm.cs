@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Numerics;
+using System.Text;
 using System.Windows.Forms;
 
 namespace ТИ_4
@@ -52,15 +53,18 @@ namespace ТИ_4
             this._eds = BigInteger.ModPow(_hash, this._d, this._r);
         }
 
-        private void SaveEds(string path) =>
-            File.WriteAllText(path, $"{this._eds}");
+        private void SaveEdsWithMessage(string path, string pathToMessageFile) =>
+            File.WriteAllText(path, $"{this._eds} {File.ReadAllText(pathToMessageFile)}");
 
-        private bool ValidateEdsAndHash(string targetPath, string sourcePath)
+        private bool ValidateEdsAndHash(string pathToEdsFile)
         {
-            var readData = File.ReadAllText(sourcePath);
-            var eds = BigInteger.Parse(readData);
-            var hash = StudentHashFunction.Hash(
-                File.ReadAllBytes(targetPath), this._r);
+            var readData = File.ReadAllText(pathToEdsFile);
+            var edsString = new StringBuilder(string.Empty);
+            for (int i = 0; i < readData.Length && readData[i] != ' '; i++)
+                edsString.Append(readData[i]);
+            var eds = BigInteger.Parse(edsString.ToString());
+            var hash = StudentHashFunction.Hash(Encoding.ASCII.GetBytes(
+                readData.Substring(edsString.Length+1, readData.Length- edsString.Length-1)), this._r);
             var decryptedHash = BigInteger.ModPow(eds, this._e, this._r);
             this.ValidationListBox.Items.Clear();
             this.ValidationListBox.Items.Add($"Read EDS from file: {eds}");
@@ -105,8 +109,7 @@ namespace ТИ_4
         {
             try
             {
-                this.ValidateEdsAndHash(this.ValidationFileTextBox.Text,
-                    this.ValidationEdsFileTextBox.Text);
+                this.ValidateEdsAndHash(this.ValidationFileTextBox.Text);
             }
             catch (Exception ex)
             {
@@ -137,12 +140,6 @@ namespace ТИ_4
                 this.ValidationFileTextBox.Text = this.OpenFileDialog.FileName;
         }
 
-        private void ValidationEdsFileSearchButtonClick(object sender, EventArgs e)
-        {
-            if (this.OpenFileDialog.ShowDialog() == DialogResult.OK)
-                this.ValidationEdsFileTextBox.Text = this.OpenFileDialog.FileName;
-        }
-
         private void SaveButtonClick(object sender, EventArgs e)
         {
             if (this.SaveFileDialog.ShowDialog() == DialogResult.OK)
@@ -150,7 +147,7 @@ namespace ТИ_4
                 try
                 {
                     var path = this.SaveFileDialog.FileName;
-                    this.SaveEds(path);
+                    this.SaveEdsWithMessage(path, this.InputTextBox.Text);
                 }
                 catch (Exception ex)
                 {

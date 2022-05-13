@@ -39,11 +39,10 @@ namespace ТИ_4
             this.DLabel = new System.Windows.Forms.Label();
             this.ApplyButton = new System.Windows.Forms.Button();
             this.GroupBox = new System.Windows.Forms.GroupBox();
+            this.ValidationListBox = new System.Windows.Forms.ListBox();
             this.ELabel = new System.Windows.Forms.Label();
             this.ValidateEdsButton = new System.Windows.Forms.Button();
             this.ETextBox = new System.Windows.Forms.TextBox();
-            this.ValidationEdsFileSearchButton = new System.Windows.Forms.Button();
-            this.ValidationEdsFileTextBox = new System.Windows.Forms.TextBox();
             this.ValidationFileSearchButton = new System.Windows.Forms.Button();
             this.ValidationFileTextBox = new System.Windows.Forms.TextBox();
             this.SaveButton = new System.Windows.Forms.Button();
@@ -57,7 +56,6 @@ namespace ТИ_4
             this.PhiTextBox = new System.Windows.Forms.TextBox();
             this.OpenFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.SaveFileDialog = new System.Windows.Forms.SaveFileDialog();
-            this.ValidationListBox = new System.Windows.Forms.ListBox();
             this.GroupBox.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -163,8 +161,6 @@ namespace ТИ_4
             this.GroupBox.Controls.Add(this.ELabel);
             this.GroupBox.Controls.Add(this.ValidateEdsButton);
             this.GroupBox.Controls.Add(this.ETextBox);
-            this.GroupBox.Controls.Add(this.ValidationEdsFileSearchButton);
-            this.GroupBox.Controls.Add(this.ValidationEdsFileTextBox);
             this.GroupBox.Controls.Add(this.ValidationFileSearchButton);
             this.GroupBox.Controls.Add(this.ValidationFileTextBox);
             this.GroupBox.Controls.Add(this.SaveButton);
@@ -180,6 +176,19 @@ namespace ТИ_4
             this.GroupBox.Size = new System.Drawing.Size(245, 391);
             this.GroupBox.TabIndex = 9;
             this.GroupBox.TabStop = false;
+            // 
+            // ValidationListBox
+            // 
+            this.ValidationListBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.ValidationListBox.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.ValidationListBox.FormattingEnabled = true;
+            this.ValidationListBox.ItemHeight = 15;
+            this.ValidationListBox.Location = new System.Drawing.Point(5, 194);
+            this.ValidationListBox.Name = "ValidationListBox";
+            this.ValidationListBox.Size = new System.Drawing.Size(234, 169);
+            this.ValidationListBox.TabIndex = 21;
             // 
             // ELabel
             // 
@@ -213,26 +222,6 @@ namespace ТИ_4
             this.ETextBox.Size = new System.Drawing.Size(187, 20);
             this.ETextBox.TabIndex = 10;
             this.ETextBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            // 
-            // ValidationEdsFileSearchButton
-            // 
-            this.ValidationEdsFileSearchButton.Location = new System.Drawing.Point(5, 197);
-            this.ValidationEdsFileSearchButton.Name = "ValidationEdsFileSearchButton";
-            this.ValidationEdsFileSearchButton.Size = new System.Drawing.Size(47, 22);
-            this.ValidationEdsFileSearchButton.TabIndex = 18;
-            this.ValidationEdsFileSearchButton.Text = "...";
-            this.ValidationEdsFileSearchButton.UseVisualStyleBackColor = true;
-            this.ValidationEdsFileSearchButton.Click += new System.EventHandler(this.ValidationEdsFileSearchButtonClick);
-            // 
-            // ValidationEdsFileTextBox
-            // 
-            this.ValidationEdsFileTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.ValidationEdsFileTextBox.Location = new System.Drawing.Point(52, 198);
-            this.ValidationEdsFileTextBox.Name = "ValidationEdsFileTextBox";
-            this.ValidationEdsFileTextBox.ReadOnly = true;
-            this.ValidationEdsFileTextBox.Size = new System.Drawing.Size(187, 20);
-            this.ValidationEdsFileTextBox.TabIndex = 19;
             // 
             // ValidationFileSearchButton
             // 
@@ -353,19 +342,6 @@ namespace ТИ_4
             // 
             this.OpenFileDialog.FileName = "OpenFileDialog";
             // 
-            // ValidationListBox
-            // 
-            this.ValidationListBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.ValidationListBox.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.ValidationListBox.FormattingEnabled = true;
-            this.ValidationListBox.ItemHeight = 15;
-            this.ValidationListBox.Location = new System.Drawing.Point(5, 224);
-            this.ValidationListBox.Name = "ValidationListBox";
-            this.ValidationListBox.Size = new System.Drawing.Size(234, 139);
-            this.ValidationListBox.TabIndex = 21;
-            // 
             // EdsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -413,8 +389,6 @@ namespace ТИ_4
         private System.Windows.Forms.TextBox HashTextBox;
         private System.Windows.Forms.Label HashLabel;
         private System.Windows.Forms.Button ValidateEdsButton;
-        private System.Windows.Forms.Button ValidationEdsFileSearchButton;
-        private System.Windows.Forms.TextBox ValidationEdsFileTextBox;
         private System.Windows.Forms.Button ValidationFileSearchButton;
         private System.Windows.Forms.TextBox ValidationFileTextBox;
         private System.Windows.Forms.Label ELabel;
