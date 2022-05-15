@@ -1,0 +1,173 @@
+*,*:before,*:after {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+}
+
+.page {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
+
+form {
+    width: 300px;
+
+}
+
+.form__group {
+    margin-bottom: 15px;
+}
+
+.input {
+    width: 100%;
+    height: 30px;
+    padding: 0 10px;
+    border: 1px solid #ccc;
+    outline: 0;
+}
+
+.input.error {
+    border-color: red;
+}
+
+.input::placeholder {
+    color: #ccc;
+}
+
+.checkbox__label {
+    user-select: none;
+}
+
+.checkbox__input.error + .checkbox__label {
+    color: red;
+}
+
+.btn {
+    height: 30px;
+    padding: 0 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #1e335e;
+    border: 0;
+    width: 100%;
+    outline: 0;
+    cursor: pointer;
+    color: #fff;
+}
+
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgb(0,0,0);
+  background-color: rgba(0,0,0,0.4);
+}
+
+.modal-content {
+  background-color: #fefefe;
+  margin: 15% auto; /* 15% сверху и по центру */
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%; /* Может быть больше или меньше, в зависимости от размера экрана */
+}
+
+/* Кнопка закрытия */
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+* {box-sizing: border-box}
+
+.container {
+  padding: 16px;
+}
+
+.regulirovat_container
+{
+  width: 400px;
+  height: 400px;
+  margin: 10% 38%;
+  background-color: white;
+}
+
+*,*:before,*:after {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+}
+
+.page {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
+
+form {
+    width: 300px;
+
+}
+
+.form__group {
+    margin-bottom: 15px;
+}
+
+.input {
+    width: 100%;
+    height: 30px;
+    padding: 0 10px;
+    border: 1px solid #ccc;
+    outline: 0;
+}
+
+.input.error {
+    border-color: red;
+}
+
+.input::placeholder {
+    color: #ccc;
+}
+
+.checkbox__label {
+    user-select: none;
+}
+
+.checkbox__input.error + .checkbox__label {
+    color: red;
+}
+
+.btn {
+    height: 30px;
+    padding: 0 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #1e335e;
+    border: 0;
+    width: 100%;
+    outline: 0;
+    cursor: pointer;
+    color: #fff;
+}
