@@ -1,0 +1,15 @@
+C:\Users\HP\source\repos\univ-projs\2 year\ООТПиСП\Lab3\Interface\bin\Debug\Inferface.exe.config
+C:\Users\HP\source\repos\univ-projs\2 year\ООТПиСП\Lab3\Interface\bin\Debug\Inferface.exe
+C:\Users\HP\source\repos\univ-projs\2 year\ООТПиСП\Lab3\Interface\bin\Debug\Inferface.pdb
+C:\Users\HP\source\repos\univ-projs\2 year\ООТПиСП\Lab3\Interface\bin\Debug\Classes.dll
+C:\Users\HP\source\repos\univ-projs\2 year\ООТПиСП\Lab3\Interface\bin\Debug\Serialization.dll
+C:\Users\HP\source\repos\univ-projs\2 year\ООТПиСП\Lab3\Interface\bin\Debug\Classes.pdb
+C:\Users\HP\source\repos\univ-projs\2 year\ООТПиСП\Lab3\Interface\bin\Debug\Serialization.pdb
+C:\Users\HP\source\repos\univ-projs\2 year\ООТПиСП\Lab3\Interface\obj\Debug\Interface.csproj.AssemblyReference.cache
+C:\Users\HP\source\repos\univ-projs\2 year\ООТПиСП\Lab3\Interface\obj\Debug\Inferface.InterfaceForm.resources
+C:\Users\HP\source\repos\univ-projs\2 year\ООТПиСП\Lab3\Interface\obj\Debug\Inferface.Properties.Resources.resources
+C:\Users\HP\source\repos\univ-projs\2 year\ООТПиСП\Lab3\Interface\obj\Debug\Interface.csproj.GenerateResource.cache
+C:\Users\HP\source\repos\univ-projs\2 year\ООТПиСП\Lab3\Interface\obj\Debug\Interface.csproj.CoreCompileInputs.cache
+C:\Users\HP\source\repos\univ-projs\2 year\ООТПиСП\Lab3\Interface\obj\Debug\Interface.csproj.CopyComplete
+C:\Users\HP\source\repos\univ-projs\2 year\ООТПиСП\Lab3\Interface\obj\Debug\Inferface.exe
+C:\Users\HP\source\repos\univ-projs\2 year\ООТПиСП\Lab3\Interface\obj\Debug\Inferface.pdb

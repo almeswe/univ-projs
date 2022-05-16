@@ -1,0 +1,9 @@
+<?xml version="1.1" encoding="UTF-8"?>
+<Bus BaseClass="GroundTransport">
+    <Engine> 
+        <Volume>"22"</Volume>
+        <Weight>"111"</Weight>
+    </Engine>
+    <Velocity>"100"</Velocity>
+    <Capacity>"10"</Capacity>
+</Bus>

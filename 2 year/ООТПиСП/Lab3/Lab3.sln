@@ -1,0 +1,37 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31613.86
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XML", "Serialization\XML.csproj", "{8DC2464A-C017-4B8D-99C1-632F8D18AAD6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Classes", "Classes\Classes.csproj", "{FFCEC669-5375-47A1-9D40-3CF8EE7AB10B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Interface", "Interface\Interface.csproj", "{B81BD305-34C4-4AB8-8060-6ECD8FBF4770}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8DC2464A-C017-4B8D-99C1-632F8D18AAD6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8DC2464A-C017-4B8D-99C1-632F8D18AAD6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8DC2464A-C017-4B8D-99C1-632F8D18AAD6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8DC2464A-C017-4B8D-99C1-632F8D18AAD6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FFCEC669-5375-47A1-9D40-3CF8EE7AB10B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FFCEC669-5375-47A1-9D40-3CF8EE7AB10B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FFCEC669-5375-47A1-9D40-3CF8EE7AB10B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FFCEC669-5375-47A1-9D40-3CF8EE7AB10B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B81BD305-34C4-4AB8-8060-6ECD8FBF4770}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B81BD305-34C4-4AB8-8060-6ECD8FBF4770}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B81BD305-34C4-4AB8-8060-6ECD8FBF4770}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B81BD305-34C4-4AB8-8060-6ECD8FBF4770}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {E2A5FD4E-A0A3-4DD1-AACD-E11C54270DF4}
+	EndGlobalSection
+EndGlobal

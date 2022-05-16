@@ -1,0 +1,13 @@
+C:\Users\HP\source\repos\univ-projs\2 year\ООТПиСП\Lab3\Serialization\bin\Debug\Serialization.dll
+C:\Users\HP\source\repos\univ-projs\2 year\ООТПиСП\Lab3\Serialization\bin\Debug\Serialization.pdb
+C:\Users\HP\source\repos\univ-projs\2 year\ООТПиСП\Lab3\Serialization\bin\Debug\System.Text.Json.dll
+C:\Users\HP\source\repos\univ-projs\2 year\ООТПиСП\Lab3\Serialization\bin\Debug\System.Memory.dll
+C:\Users\HP\source\repos\univ-projs\2 year\ООТПиСП\Lab3\Serialization\bin\Debug\System.Text.Encodings.Web.dll
+C:\Users\HP\source\repos\univ-projs\2 year\ООТПиСП\Lab3\Serialization\bin\Debug\System.Numerics.Vectors.dll
+C:\Users\HP\source\repos\univ-projs\2 year\ООТПиСП\Lab3\Serialization\bin\Debug\System.Threading.Tasks.Extensions.dll
+C:\Users\HP\source\repos\univ-projs\2 year\ООТПиСП\Lab3\Serialization\bin\Debug\Microsoft.Bcl.AsyncInterfaces.dll
+C:\Users\HP\source\repos\univ-projs\2 year\ООТПиСП\Lab3\Serialization\bin\Debug\System.Buffers.dll
+C:\Users\HP\source\repos\univ-projs\2 year\ООТПиСП\Lab3\Serialization\obj\Debug\XML.csproj.CoreCompileInputs.cache
+C:\Users\HP\source\repos\univ-projs\2 year\ООТПиСП\Lab3\Serialization\obj\Debug\XML.csproj.CopyComplete
+C:\Users\HP\source\repos\univ-projs\2 year\ООТПиСП\Lab3\Serialization\obj\Debug\Serialization.dll
+C:\Users\HP\source\repos\univ-projs\2 year\ООТПиСП\Lab3\Serialization\obj\Debug\Serialization.pdb
