@@ -2,6 +2,7 @@ var timer = 0;
 var offset = 0;
 const delay = 6000;
 const keyName = "__lab2_slider_offset";
+var slider = document.getElementById('polosa');
 
 function sliderInitStorage() {
 	let data = localStorage.getItem(keyName);
@@ -20,13 +21,12 @@ function sliderUpdateStorage(data) {
 
 function sliderMove() {
 	timer = setTimeout(function() {
-		var polosa = document.getElementById('polosa');
 		offset = offset - 1280;
 		if (offset < -2560) {
 			offset = 0;
 			clearTimeout(timer);
 		}
-		polosa.style.offset = offset + 'px';
+		slider.style.left = offset + 'px';
 		sliderUpdateStorage(offset);
 		sliderMove();
 	}, delay);
@@ -34,8 +34,7 @@ function sliderMove() {
 
 function sliderStart() {
 	sliderInitStorage();
-	var polosa = document.getElementById('polosa');
-	polosa.style.offset = offset + 'px';
+	slider.style.left = offset + 'px';
 	sliderMove();
 }
 
