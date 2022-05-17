@@ -1,0 +1,6 @@
+D:\university-projects\univ-projs\2 year\ООТПиСП\Lab4\DIContainer\bin\Debug\DIContainer.dll
+D:\university-projects\univ-projs\2 year\ООТПиСП\Lab4\DIContainer\bin\Debug\DIContainer.pdb
+D:\university-projects\univ-projs\2 year\ООТПиСП\Lab4\DIContainer\obj\Debug\DIContainer.csproj.AssemblyReference.cache
+D:\university-projects\univ-projs\2 year\ООТПиСП\Lab4\DIContainer\obj\Debug\DIContainer.csproj.CoreCompileInputs.cache
+D:\university-projects\univ-projs\2 year\ООТПиСП\Lab4\DIContainer\obj\Debug\DIContainer.dll
+D:\university-projects\univ-projs\2 year\ООТПиСП\Lab4\DIContainer\obj\Debug\DIContainer.pdb

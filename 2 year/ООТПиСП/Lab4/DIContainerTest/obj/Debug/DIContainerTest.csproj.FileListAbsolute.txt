@@ -1,0 +1,10 @@
+D:\university-projects\univ-projs\2 year\ООТПиСП\Lab4\DIContainerTest\bin\Debug\DIContainerTest.exe.config
+D:\university-projects\univ-projs\2 year\ООТПиСП\Lab4\DIContainerTest\bin\Debug\DIContainerTest.exe
+D:\university-projects\univ-projs\2 year\ООТПиСП\Lab4\DIContainerTest\bin\Debug\DIContainerTest.pdb
+D:\university-projects\univ-projs\2 year\ООТПиСП\Lab4\DIContainerTest\bin\Debug\DIContainer.dll
+D:\university-projects\univ-projs\2 year\ООТПиСП\Lab4\DIContainerTest\bin\Debug\DIContainer.pdb
+D:\university-projects\univ-projs\2 year\ООТПиСП\Lab4\DIContainerTest\obj\Debug\DIContainerTest.csproj.AssemblyReference.cache
+D:\university-projects\univ-projs\2 year\ООТПиСП\Lab4\DIContainerTest\obj\Debug\DIContainerTest.csproj.CoreCompileInputs.cache
+D:\university-projects\univ-projs\2 year\ООТПиСП\Lab4\DIContainerTest\obj\Debug\DIContainerTest.csproj.CopyComplete
+D:\university-projects\univ-projs\2 year\ООТПиСП\Lab4\DIContainerTest\obj\Debug\DIContainerTest.exe
+D:\university-projects\univ-projs\2 year\ООТПиСП\Lab4\DIContainerTest\obj\Debug\DIContainerTest.pdb
