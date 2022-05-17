@@ -43,8 +43,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Font\Arial.cs" />
+    <Compile Include="Text\BoldText.cs" />
+    <Compile Include="Font\Consolas.cs" />
+    <Compile Include="Font\IFont.cs" />
+    <Compile Include="Pen\IPen.cs" />
+    <Compile Include="Text\ItalicText.cs" />
+    <Compile Include="Text\IText.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Pen\SolidPen.cs" />
+    <Compile Include="Pen\TickPen.cs" />
+    <Compile Include="Writer.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

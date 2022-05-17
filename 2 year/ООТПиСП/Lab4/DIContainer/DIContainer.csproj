@@ -41,12 +41,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Service.cs" />
-    <Compile Include="ServiceContainer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ServiceException.cs" />
-    <Compile Include="ServiceLifetime.cs" />
-    <Compile Include="ServiceTypeInfo.cs" />
+    <Compile Include="ServiceGraph\ServiceGraph.cs" />
+    <Compile Include="ServiceGraph\ServiceGraphNet.cs" />
+    <Compile Include="ServiceGraph\ServiceGraphNetException.cs" />
+    <Compile Include="Service\Service.cs" />
+    <Compile Include="Service\ServiceContainer.cs" />
+    <Compile Include="Service\ServiceException.cs" />
+    <Compile Include="Service\ServiceInstanceInfo.cs" />
+    <Compile Include="Service\ServiceLifetime.cs" />
+    <Compile Include="Service\ServiceTypeInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

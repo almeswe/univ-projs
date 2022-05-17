@@ -24,8 +24,8 @@ namespace DIContainer
                 return false;
             if (ReferenceEquals(b, null))
                 return false;
-            return a.Interface == b.Interface && 
-                a.Implementation == a.Implementation;
+            return a.Interface.FullName == b.Interface.FullName && 
+                a.Implementation.FullName == a.Implementation.FullName;
         }
 
         public static bool operator !=(ServiceTypeInfo a, ServiceTypeInfo b)
@@ -36,8 +36,8 @@ namespace DIContainer
                 return true;
             if (ReferenceEquals(b, null))
                 return true;
-            return a.Interface != b.Interface ||
-                a.Implementation != b.Implementation;
+            return a.Interface.FullName != b.Interface.FullName ||
+                a.Implementation.FullName != b.Implementation.FullName;
         }
     }
 }
