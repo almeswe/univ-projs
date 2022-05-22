@@ -1,0 +1,9 @@
+C:\Users\HP\source\repos\univ-projs\2 year\ООТПиСП\Lab3\Classes\bin\Debug\Classes.dll
+C:\Users\HP\source\repos\univ-projs\2 year\ООТПиСП\Lab3\Classes\bin\Debug\Classes.pdb
+C:\Users\HP\source\repos\univ-projs\2 year\ООТПиСП\Lab3\Classes\bin\Debug\Serialization.dll
+C:\Users\HP\source\repos\univ-projs\2 year\ООТПиСП\Lab3\Classes\bin\Debug\Serialization.pdb
+C:\Users\HP\source\repos\univ-projs\2 year\ООТПиСП\Lab3\Classes\obj\Debug\Classes.csproj.AssemblyReference.cache
+C:\Users\HP\source\repos\univ-projs\2 year\ООТПиСП\Lab3\Classes\obj\Debug\Classes.csproj.CoreCompileInputs.cache
+C:\Users\HP\source\repos\univ-projs\2 year\ООТПиСП\Lab3\Classes\obj\Debug\Classes.csproj.CopyComplete
+C:\Users\HP\source\repos\univ-projs\2 year\ООТПиСП\Lab3\Classes\obj\Debug\Classes.dll
+C:\Users\HP\source\repos\univ-projs\2 year\ООТПиСП\Lab3\Classes\obj\Debug\Classes.pdb

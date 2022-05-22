@@ -1,0 +1,25 @@
+call | welcome | my account | my whistlist | login
+шрифт Lato-Bold
+
+
+home | gallery | categories | pages
+шрифт PlayfairDisplay-Italic
+
+
+shopia
+шрифт Хуй знает какой шрифт (KrinkesDecorPERSONALUSE)
+
+
+rupiah
+шрифт Lato-Bold
+
+
+mid-season | sale | up to | 50% off | shop now | free shipping | 30-days returns | 24/7 support | in order min $200 | money back guarantee | lifestyme support
+шрифт Lato-Bold
+
+
+handPicked
+шрифт PlayfairDisplay-BoldItalic
+
+
+НЕ ВСЕ ЕЩЕ ДОБАВЛЕНЫ ШРИФТЫ

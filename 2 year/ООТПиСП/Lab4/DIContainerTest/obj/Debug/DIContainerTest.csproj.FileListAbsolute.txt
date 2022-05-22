@@ -1,0 +1,10 @@
+C:\Users\HP\source\repos\univ-projs\2 year\ООТПиСП\Lab4\DIContainerTest\bin\Debug\DIContainerTest.exe.config
+C:\Users\HP\source\repos\univ-projs\2 year\ООТПиСП\Lab4\DIContainerTest\bin\Debug\DIContainerTest.exe
+C:\Users\HP\source\repos\univ-projs\2 year\ООТПиСП\Lab4\DIContainerTest\bin\Debug\DIContainerTest.pdb
+C:\Users\HP\source\repos\univ-projs\2 year\ООТПиСП\Lab4\DIContainerTest\bin\Debug\DIContainer.dll
+C:\Users\HP\source\repos\univ-projs\2 year\ООТПиСП\Lab4\DIContainerTest\bin\Debug\DIContainer.pdb
+C:\Users\HP\source\repos\univ-projs\2 year\ООТПиСП\Lab4\DIContainerTest\obj\Debug\DIContainerTest.csproj.AssemblyReference.cache
+C:\Users\HP\source\repos\univ-projs\2 year\ООТПиСП\Lab4\DIContainerTest\obj\Debug\DIContainerTest.csproj.CoreCompileInputs.cache
+C:\Users\HP\source\repos\univ-projs\2 year\ООТПиСП\Lab4\DIContainerTest\obj\Debug\DIContainerTest.csproj.CopyComplete
+C:\Users\HP\source\repos\univ-projs\2 year\ООТПиСП\Lab4\DIContainerTest\obj\Debug\DIContainerTest.exe
+C:\Users\HP\source\repos\univ-projs\2 year\ООТПиСП\Lab4\DIContainerTest\obj\Debug\DIContainerTest.pdb
