@@ -7,11 +7,6 @@
 <header>
     <div class="header-rect">        
         <div class="header-contents">
-            <div class="header-sign-in-form">
-                <a class="header-sign-in-form-link" href="sign-in.php">
-                    <span>Sign In</span>
-                </a>
-            </div>
             <div class="header-entertainment-data">
                 <a href="index.php" id="header-tab">
                     <div class="header-icon-tab" id="header-tab-container">
@@ -31,6 +26,19 @@
                 <a href="library.php" id="header-tab" {% if page|lower == "library" %} class="header-tab-selected" {% endif %}>
                     <div class="header-library-tab" id="header-tab-edge-container">
                         <span id="header-tab-contents">Library</span>
+                    </div>
+                </a>
+
+            </div>
+            <div class="header-authentication-data">
+                <a href="sign-in.php" id="header-tab">
+                    <div id="header-tab-container">
+                        <span id="header-tab-contents">sign in</span>
+                    </div>
+                </a>
+                <a href="register.php" id="header-tab">
+                    <div id="header-tab-edge-container">
+                        <span id="header-tab-contents">register</span>
                     </div>
                 </a>
             </div>

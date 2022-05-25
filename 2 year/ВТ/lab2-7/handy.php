@@ -1,23 +1,23 @@
 <?php
     require_once 'db.php';
     require_once 'vendor/autoload.php';
+    require_once 'validation.php';
 
     Twig_Autoloader::register();
 
     $root = new Twig_Loader_Filesystem('.');
     $twig = new Twig_Environment($root);
 
-    function render_header_for($twig, $page) {
-        $header_template = $twig->loadTemplate(
-            'templates/header-template.html');
-        echo $header_template->render(array(
-            "page" => $page
-        ));
+    $auth_res = restrict_unauthorized_access();
+    function render_header_for($twig, $page, $res) {
+        $page_name = $page;
+        $auth_res = $res;
+        require_once 'header.php';
     }
 
-    function render_home_page($twig) {
+    function render_home_page($twig, $auth_res) {
         $emulator = new Emulator();
-        render_header_for($twig, "Home");
+        render_header_for($twig, "Home", $auth_res);
         $body_template = $twig->loadTemplate(
             'templates/home-template.html');
         $boxes = array();
@@ -35,9 +35,9 @@
         ));
     }
 
-    function render_stream_page($twig) {
+    function render_stream_page($twig, $auth_res) {
         $emulator = new Emulator();
-        render_header_for($twig, "Stream");
+        render_header_for($twig, "Stream", $auth_res);
         $body_template = $twig->loadTemplate(
             'templates/stream-template.html');
         $boxes = array();
@@ -52,9 +52,9 @@
         ));
     }
 
-    function render_library_page($twig) {
+    function render_library_page($twig, $auth_res) {
         $emulator = new Emulator();
-        render_header_for($twig, "Library");
+        render_header_for($twig, "Library", $auth_res);
         $body_template = $twig->loadTemplate(
             'templates/library-template.html');
         $boxes = array();
