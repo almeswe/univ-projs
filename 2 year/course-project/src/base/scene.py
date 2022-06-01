@@ -12,10 +12,13 @@ from typing import Callable
 
 from abc import ABC
 
+from src.base.ui.control import *
+
 class Scene(ABC):
     def __init__(self, name: str, surface: Surface) -> None:
         self.name: str = name
         self.surface: Surface = surface
+        self.controls: List[UiControl] = []
         self.__init_context()
         self.__init_base_events()
 
@@ -37,12 +40,17 @@ class Scene(ABC):
         self.current = False
 
     def render(self, event: Event) -> None:
-        pass
+        for control in self.controls:
+            self.surface.blit(control.surface(), control.position)
 
     def notify(self, event: Event) -> None: 
         if event.type in self.callbacks.keys():
             for callback in self.callbacks[event.type]:
                 callback.__call__(event)
+
+    def notify_controls(self, event: Event) -> None:
+        for control in self.controls:
+            control.notify(event)
 
     def subscribe(self, event: int, callback: Callable) -> None:
         if event in self.callbacks.keys():
@@ -54,12 +62,16 @@ class Scene(ABC):
         if event in self.callbacks.keys():
             self.callbacks[event].remove(callback)
 
+    def register_control(self, control: UiControl) -> None:
+        self.controls.append(control)
+
     def __run_event_loop(self) -> None:
         while self.current:
             for event in pygame.event.get():
                 self.notify(event)
                 if not self.current:
                     break
+                self.notify_controls(event)
                 self.render(event)
                 pygame.display.update()
 
