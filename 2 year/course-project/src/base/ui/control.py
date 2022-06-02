@@ -1,4 +1,9 @@
 import pygame
+import pygame.font
+import pygame.draw
+import pygame.event
+import pygame.image
+import pygame.transform
 
 from pygame import Surface
 from pygame.event import Event
@@ -22,21 +27,22 @@ class UiControl(ABC):
         self.rect: pygame.Rect = pygame.Rect(*self.position, *self.size)
 
     def __init_context(self) -> None:
-        self.canvas: Surface = Surface(self.size)
+        self.surface: Surface = Surface(self.size)
         self.mapper: Dict[int, List[Callable]] = {}
         self.layers: List[Tuple[Surface, Tuple[int, int]]] = []
 
     def add_surface(self, surface: Surface, position: Tuple[int, int]) -> Surface:
         self.layers.append((surface, position))
 
-    def surface(self) -> Surface:
+    def render(self) -> Surface:
+        self.surface.fill((0, 0, 0))
         for layer in self.layers:
-            self.canvas.blit(*layer)
-        return self.canvas
+            self.surface.blit(*layer)
+        return self.surface
 
     @abstractmethod
     def notify(event: Event) -> None:
-        pass
+        raise NotImplemented
 
     def map(self, event: int, handler: List[Callable]) -> None:
         self.mapper[event] = handler

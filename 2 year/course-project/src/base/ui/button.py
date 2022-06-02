@@ -15,5 +15,5 @@ class Button(UiControl):
             if self.rect.collidepoint(event.pos):
                 self.notify_handlers(event, self.mapper[event.type])
 
-if __name__ == '_main__':
+if __name__ == '__main__':
     pass

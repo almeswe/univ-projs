@@ -4,14 +4,13 @@ import pygame.event
 import pygame.display
 
 from pygame import Surface
-from pygame.event import Event
 
 from typing import List
 from typing import Tuple
 
 from abc import ABC
-from src.base.scene import *
 
+from src.base.scene import *
 from src.base.ui.button import *
 from src.base.ui.control import *
 

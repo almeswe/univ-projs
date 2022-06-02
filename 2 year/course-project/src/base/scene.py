@@ -4,13 +4,10 @@ import pygame.event
 import pygame.display
 
 from pygame import Surface
-from pygame.event import Event
 
 from typing import Dict
 from typing import List
 from typing import Callable
-
-from abc import ABC
 
 from src.base.ui.control import *
 
@@ -30,7 +27,7 @@ class Scene(ABC):
         def __quit(event: Event) -> None:
             self.current = False
             pygame.quit()
-        self.subscribe(pygame.QUIT, callback=__quit)
+        self.subscribe(pygame.QUIT, __quit)
 
     def start(self) -> None:
         self.current = True
@@ -40,8 +37,9 @@ class Scene(ABC):
         self.current = False
 
     def render(self, event: Event) -> None:
-        for control in self.controls:
-            self.surface.blit(control.surface(), control.position)
+        if event.type != pygame.QUIT and pygame.get_init():
+            for control in self.controls:
+                self.surface.blit(control.render(), control.position)
 
     def notify(self, event: Event) -> None: 
         if event.type in self.callbacks.keys():
@@ -69,11 +67,10 @@ class Scene(ABC):
         while self.current:
             for event in pygame.event.get():
                 self.notify(event)
-                if not self.current:
-                    break
                 self.notify_controls(event)
                 self.render(event)
-                pygame.display.update()
+                if pygame.get_init():
+                    pygame.display.update()
 
 if __name__ == '__main__':
     pass
