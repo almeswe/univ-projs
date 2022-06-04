@@ -16,4 +16,4 @@ class Button(UiControl):
                 self.notify_handlers(event, self.mapper[event.type])
 
 if __name__ == '__main__':
-    pass
+    print('Try to run main.py')

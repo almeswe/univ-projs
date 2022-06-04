@@ -50,4 +50,4 @@ class App(ABC):
         self.scenes.append(scene)
 
 if __name__ == '__main__':
-    pass
+    print('Try to run main.py')

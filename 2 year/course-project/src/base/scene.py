@@ -1,5 +1,6 @@
 import pygame
 import pygame.key 
+import pygame.time
 import pygame.event
 import pygame.display
 
@@ -25,19 +26,23 @@ class Scene(ABC):
 
     def __init_base_events(self) -> None:
         def __quit(event: Event) -> None:
-            self.current = False
+            self.stop()
+            self.release()
             pygame.quit()
         self.subscribe(pygame.QUIT, __quit)
+
+    def stop(self) -> None:
+        self.current = False
 
     def start(self) -> None:
         self.current = True
         self.__run_event_loop()
 
-    def stop(self) -> None:
-        self.current = False
+    def release(self) -> None:
+        pass
 
-    def render(self, event: Event) -> None:
-        if event.type != pygame.QUIT and pygame.get_init():
+    def render(self) -> None:
+        if pygame.get_init():
             for control in self.controls:
                 self.surface.blit(control.render(), control.position)
 
@@ -45,6 +50,7 @@ class Scene(ABC):
         if event.type in self.callbacks.keys():
             for callback in self.callbacks[event.type]:
                 callback.__call__(event)
+        self.notify_controls(event)
 
     def notify_controls(self, event: Event) -> None:
         for control in self.controls:
@@ -64,13 +70,14 @@ class Scene(ABC):
         self.controls.append(control)
 
     def __run_event_loop(self) -> None:
+        self.clocks: pygame.time.Clock = pygame.time.Clock()
         while self.current:
+            self.frame_dt: int = self.clocks.tick(60)
             for event in pygame.event.get():
                 self.notify(event)
-                self.notify_controls(event)
-                self.render(event)
-                if pygame.get_init():
-                    pygame.display.update()
+            self.render()
+            if pygame.get_init():
+                pygame.display.update()
 
 if __name__ == '__main__':
-    pass
+    print('Try to run main.py')

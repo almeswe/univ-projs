@@ -34,10 +34,6 @@ class MenuScene(Scene):
         self.register_control(self.connect_button)
         self.register_control(self.quit_button)
     
-    def __free(self) -> None:
-        self.updater_is_active = False
-        self.updater_thread.join()
-
     def __render_background_image(self) -> None:
         while self.updater_is_active:
             if self.current:
@@ -46,19 +42,22 @@ class MenuScene(Scene):
                 current_image_path: str = self.__background_images[self.__background_image_index]
                 self.__image: Surface = pygame.image.load(current_image_path)
                 self.__image = pygame.transform.scale(self.__image, self.surface.get_size())
-                pygame.event.post(pygame.event.Event(pygame.SHOWN, {}))
                 if self.updater_is_active:
                     time.sleep(self.__image_update_delay)
+            time.sleep(0.2)
 
     def stop(self) -> None:
-        self.__free()
         super().stop()
 
-    def render(self, event: Event) -> None:
+    def release(self) -> None:
+        self.updater_is_active = False
+        self.updater_thread.join()
+
+    def render(self) -> None:
         if self.__image and not self.__image.get_locked():
             if self.updater_is_active and pygame.get_init():
                 self.surface.blit(self.__image, (0, 0))
-        super().render(event)
+        super().render()
 
 if __name__ == '__main__':
     print('Try to run main.py')

@@ -1,4 +1,5 @@
 from src.game.game_main import Game
+from src.game.table import Table, Player
 
 def test(): 
     import pygame
@@ -9,17 +10,12 @@ def test():
 
     pygame.init()
 
-    window = pygame.display.set_mode((200, 200))
-    font = pygame.font.SysFont('consolas', 24)
-    
-    text = font.render('TEXT', True, (255, 0, 0))
-    rect = text.get_rect()
-    parent_rect = pygame.Rect(20, 20, 100, 50)
-    centered_rect = text.get_rect(center=window.get_rect().center)
+    p = Player((255, 123, 31))
 
-    pygame.draw.rect(window, (0, 0, 255), parent_rect)
-    pygame.draw.rect(window, (0, 255, 0), centered_rect)
-    window.blit(text, centered_rect.topleft)
+    window = pygame.display.set_mode((600, 600))
+    font = pygame.font.SysFont('consolas', 24)
+
+    window.blit(p.render(), (0, 200))    
     pygame.display.update()
 
     while True:

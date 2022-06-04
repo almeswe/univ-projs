@@ -55,10 +55,7 @@ class MenuButton(Button):
 
     def render(self) -> Surface:
         self.surface.set_colorkey((0, 0, 0))
-        if not self.layers:
-            self.layers = self.__idle_layers
         super().render()
-        self.layers = None
         return self.surface
     
 if __name__ == '__main__':
