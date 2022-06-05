@@ -2,8 +2,8 @@ from src.base.collideable import *
 
 class Ball(Collideable):
     def __init__(self) -> None:
-        self.dv_x: int = 8
-        self.dv_y: int = 6
+        self.dv_x: int = 10
+        self.dv_y: int = 5
         super().__init__((20, 20))
 
     def reverse_x_velocity(self) -> None:
@@ -17,6 +17,7 @@ class Ball(Collideable):
         self.y += self.dv_y
 
     def render(self) -> pygame.Surface:
+        self.surface.fill((32, 32, 32))
         rect: pygame.Rect = self.surface.get_rect()
         pygame.draw.circle(self.surface, (255, 255, 255),
             rect.center, rect.width//2-1)

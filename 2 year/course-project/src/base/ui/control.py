@@ -1,8 +1,11 @@
 import pygame
+import pygame.key
 import pygame.font
+import pygame.time
 import pygame.draw
 import pygame.event
 import pygame.image
+import pygame.display
 import pygame.transform
 
 from pygame import Surface
@@ -15,6 +18,7 @@ from typing import Dict
 from typing import List
 from typing import Tuple
 from typing import Callable
+from typing import Sequence
 
 class UiControl(ABC):
     def __init__(self, size: Tuple[int, int], position: Tuple[int, int]) -> None:

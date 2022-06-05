@@ -1,7 +1,7 @@
 from src.base.scene import *
-from src.game.ui.buttons import *
 
-from src.game.table import Table
+from src.game.table import *
+from src.game.ui.buttons import *
 
 class GameScene(Scene):
     def __init__(self, surface: Surface) -> None:
@@ -14,11 +14,12 @@ class GameScene(Scene):
 
     def __init_game_objects(self) -> None:
         self.game_table: Table = Table(self)
-        self.back_to_menu_button: Button = MenuButton('GO BACK', (150, 50), (0,0))
+        self.back_to_menu_button: Button = MenuButton('DISCONNECT', (250, 50),
+            (10, self.surface.get_height()-self.game_table.bottom_board_height+10))
         self.register_control(self.back_to_menu_button)
 
     def render(self) -> None:
-        self.surface.fill((0, 0, 0))
+        self.surface.fill((32, 32, 32))
         super().render()
         self.game_table.render()
 

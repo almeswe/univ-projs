@@ -6,7 +6,7 @@ class Player(Collideable):
         self.upper_bound: float = float('inf')
         self.bottom_bound: float = float('-inf')
         self.color: Tuple[int, int, int] = color
-        super().__init__((20, 100))
+        super().__init__((10, 100))
 
     def move_up(self) -> None:
         if self.y > self.upper_bound:

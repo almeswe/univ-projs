@@ -1,15 +1,3 @@
-import pygame
-import pygame.key 
-import pygame.time
-import pygame.event
-import pygame.display
-
-from pygame import Surface
-
-from typing import Dict, Sequence
-from typing import List
-from typing import Callable
-
 from src.base.ui.control import *
 
 class Scene(ABC):
