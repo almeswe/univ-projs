@@ -14,6 +14,8 @@ class GameScene(Scene):
 
     def __init_game_objects(self) -> None:
         self.game_table: Table = Table(self)
+        self.back_to_menu_button: Button = MenuButton('GO BACK', (150, 50), (0,0))
+        self.register_control(self.back_to_menu_button)
 
     def render(self) -> None:
         self.surface.fill((0, 0, 0))

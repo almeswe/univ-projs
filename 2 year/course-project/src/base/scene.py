@@ -6,7 +6,7 @@ import pygame.display
 
 from pygame import Surface
 
-from typing import Dict
+from typing import Dict, Sequence
 from typing import List
 from typing import Callable
 
@@ -70,13 +70,22 @@ class Scene(ABC):
         self.controls.append(control)
 
     def __run_event_loop(self) -> None:
+        additional_pending_events: List[Event] = []
         self.clocks: pygame.time.Clock = pygame.time.Clock()
         while self.current:
+            for pending_event in additional_pending_events:
+                pygame.event.post(pending_event)
+            additional_pending_events.clear()
             self.frame_dt: int = self.clocks.tick(60)
             for event in pygame.event.get():
                 self.notify(event)
             self.render()
             if pygame.get_init():
+                pressed: Sequence[bool] = pygame.key.get_pressed()
+                for i in range(len(pressed)):
+                    if pressed[i]:
+                        additional_pending_events.append(
+                            Event(pygame.KEYDOWN, {'key': i}))                    
                 pygame.display.update()
 
 if __name__ == '__main__':

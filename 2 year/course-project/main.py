@@ -1,5 +1,5 @@
 from src.game.game_main import Game
-from src.game.table import Table, Player
+from src.game.table import *
 
 def test(): 
     import pygame

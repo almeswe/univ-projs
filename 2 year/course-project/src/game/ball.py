@@ -1,17 +1,10 @@
-import math
-import pygame
+from src.base.collideable import *
 
-from pygame import Surface
-from typing import Tuple
-
-class Ball(object):
-    def __init__(self, position: Tuple[int, int]) -> None:
-        self.dv_x: int = 20
-        self.dv_y: int = 18
-        self.x: int = position[0]
-        self.y: int = position[1]
-        self.surface: Surface = Surface((20, 20))
-        self.rect: pygame.Rect = self.surface.get_rect()
+class Ball(Collideable):
+    def __init__(self) -> None:
+        self.dv_x: int = 8
+        self.dv_y: int = 6
+        super().__init__((20, 20))
 
     def reverse_x_velocity(self) -> None:
         self.dv_x *= -1
@@ -19,9 +12,14 @@ class Ball(object):
     def reverse_y_velocity(self) -> None:
         self.dv_y *= -1
 
-    def render(self) -> Surface:
+    def move(self) -> None:
+        self.x += self.dv_x
+        self.y += self.dv_y
+
+    def render(self) -> pygame.Surface:
+        rect: pygame.Rect = self.surface.get_rect()
         pygame.draw.circle(self.surface, (255, 255, 255),
-            self.rect.center, self.rect.width//2-1)
+            rect.center, rect.width//2-1)
         return self.surface
 
 if __name__ == '__main__':
