@@ -1,6 +1,5 @@
+from ctypes.wintypes import LPHANDLE
 import enum
-import socket
-import threading
 
 from src.base.scene import *
 
@@ -9,6 +8,8 @@ from src.game.player import *
 
 from datetime import datetime
 from datetime import timedelta
+
+from src.network.client import *
 
 class Orientation(enum.Enum):
     LEFT   = 0
@@ -88,12 +89,13 @@ class Table(object):
             self.rplayer: 0
         }
 
-    def __request_game_finish(self) -> None:
-        pygame.event.post(Event(pygame.USEREVENT, {
-            'pong_finish_game_request': 1,
-        }))
+    def request_game_finish(self) -> None:
+        self.update_delay(1000)
+        while not self.update_delay_finished():
+            pygame.time.delay(200)
+        self.game.app.switch('menu')
 
-    def __update_ball(self):
+    def update_ball(self):
         self.ball.move()
         if (self.ball.collide(self.lplayer.get_rect())) or (
             self.ball.collide(self.rplayer.get_rect())):
@@ -106,16 +108,16 @@ class Table(object):
             if (self.ball.collide(self.borders[orientation])):
                 self.scores[inverse_orientation_player] += 1
                 if self.scores[inverse_orientation_player] >= self.__max_score:
-                    self.__request_game_finish()
+                    self.request_game_finish()
                 self.ball.reverse_x_velocity()
                 self.update_delay(1000)
                 self.reset()
                 break
 
-    def __update_myself(self) -> None:
+    def update_myself(self) -> None:
         pass
 
-    def __update_opponent(self) -> None:
+    def update_opponent(self) -> None:
         opponent: Player = self.players[Orientation(self.orientation.value^1)]
         if (self.orientation == Orientation.LEFT and self.ball.dv_x > 0) or (
             self.orientation == Orientation.RIGHT and self.ball.dv_x < 0):
@@ -125,9 +127,9 @@ class Table(object):
                 opponent.move_up()
 
     def update(self) -> None:
-        self.__update_ball()
-        self.__update_myself()
-        self.__update_opponent()
+        self.update_ball()
+        self.update_myself()
+        self.update_opponent()
 
     def __render_game_objects(self) -> None:
         self.surface.blit(self.ball.render(), self.ball.get_position())
@@ -164,14 +166,75 @@ class Table(object):
                 under_control.move_down()
 
 class NetworkTable(Table):
-    def __init__(self, dest_host: Tuple[str, int], orientation: Orientation) -> None:
-        super().__init__()
-        self.orientation: Orientation = orientation
-        self.dest_host: Tuple[str, int] = dest_host
+    def __init__(self, game: Scene) -> None:
+        super().__init__(game)
 
-    def __init_socket(self) -> None:
-        self.sockfd: int = socket.socket(
-            socket.AF_INET, socket.SOCK_STREAM)
+    def init_client(self) -> None:
+        self.client: PongClient = None
+        try:
+            self.client = PongClient()
+            self.client.connect()
+            self.client.verify_peer_node()
+            self.client.set_recv_callback(self.__recv_handler)
+            self.client.start_receiving()
+            self.orientation = Orientation(self.client.orientation)
+        except PongServerException as pse:
+            print(f'Server error: {pse}')
+            self.client = None
+            self.request_game_finish()
+
+    def __recv_handler(self, response: str) -> None:
+        try:
+            data: Dict[str, str] = json.loads(response)
+            if int(data['pong_client_game_status']) == 0:
+                print(f'__recv_handler: {data["pong_client_game_status_message"]}')
+                self.client.disconnect()
+            if int(data['pong_client_game_status']) == 1:
+                if 'lplayer' in data['pong_client_sync_data'].keys():
+                    self.lplayer.y = int(data['pong_client_sync_data']['lplayer'])
+                if 'rplayer' in data['pong_client_sync_data'].keys():
+                    self.rplayer.y = int(data['pong_client_sync_data']['rplayer'])
+                if 'ball' in data['pong_client_sync_data'].keys():
+                    position_str: List[str] = data['pong_client_sync_data']['ball'].split(',')
+                    self.ball.set_position((int(position_str[0]), int(position_str[1])))
+                if 'scores' in data['pong_client_sync_data'].keys():
+                    scores_str: List[str] = data['pong_client_sync_data']['scores'].split(',')
+                    self.scores[self.lplayer] = int(scores_str[0])
+                    self.scores[self.rplayer] = int(scores_str[1])
+        except Exception as e:
+            print(f'__recv_handler: {e}')
+
+    def request_game_finish(self) -> None:
+        if self.client != None:
+            self.client.disconnect()
+        self.game.app.switch('menu')
+
+    def update_opponent(self) -> None:
+        pass
+
+    def update_ball(self) -> None:
+        if self.orientation == Orientation.LEFT:
+            super().update_ball()
+            try:
+                self.client.send(self.client.make_sync_response(
+                    scores=[value for value in self.scores.values()]))
+                self.client.send(self.client.make_sync_response(
+                    ball=self.ball.get_position()))
+            except Exception as e:
+                print(f'update_ball: {e}')
+                self.request_game_finish()
+
+    def update_myself(self) -> None:
+        try:
+            if self.orientation == Orientation.LEFT:
+                self.client.send(self.client.make_sync_response(
+                    lplayer=self.lplayer.y))
+            else:
+                self.client.send(self.client.make_sync_response(
+                    rplayer=self.rplayer.y))
+        except Exception as e:
+            print(f'update_myself: {e}')
+            self.request_game_finish()
 
 if __name__ == '__main__':
     print('Try to run main.py')

@@ -1,0 +1,2 @@
+class PongProtocol(object):
+    pass

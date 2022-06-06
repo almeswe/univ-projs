@@ -1,8 +1,10 @@
+import threading
 from src.base.ui.control import *
 
 class Scene(ABC):
-    def __init__(self, name: str, surface: Surface) -> None:
+    def __init__(self, name: str, surface: Surface, app: object) -> None:
         self.name: str = name
+        self.app: object = app
         self.surface: Surface = surface
         self.controls: List[UiControl] = []
         self.__init_context()
@@ -57,24 +59,27 @@ class Scene(ABC):
     def register_control(self, control: UiControl) -> None:
         self.controls.append(control)
 
+    def update(self) -> None:
+        for pending_event in self.additional_pending_events:
+            pygame.event.post(pending_event)
+        self.additional_pending_events.clear()
+        self.frame_dt: int = self.clocks.tick(60)
+        for event in pygame.event.get():
+            self.notify(event)
+        self.render()
+        if pygame.get_init():
+            pressed: Sequence[bool] = pygame.key.get_pressed()
+            for i in range(len(pressed)):
+                if pressed[i]:
+                    self.additional_pending_events.append(
+                        Event(pygame.KEYDOWN, {'key': i}))                    
+            pygame.display.update()
+
     def __run_event_loop(self) -> None:
-        additional_pending_events: List[Event] = []
+        self.additional_pending_events: List[Event] = []
         self.clocks: pygame.time.Clock = pygame.time.Clock()
         while self.current:
-            for pending_event in additional_pending_events:
-                pygame.event.post(pending_event)
-            additional_pending_events.clear()
-            self.frame_dt: int = self.clocks.tick(60)
-            for event in pygame.event.get():
-                self.notify(event)
-            self.render()
-            if pygame.get_init():
-                pressed: Sequence[bool] = pygame.key.get_pressed()
-                for i in range(len(pressed)):
-                    if pressed[i]:
-                        additional_pending_events.append(
-                            Event(pygame.KEYDOWN, {'key': i}))                    
-                pygame.display.update()
+            self.update()
 
 if __name__ == '__main__':
     print('Try to run main.py')
