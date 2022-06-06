@@ -1,4 +1,3 @@
-from constants import *
 from src.base.scene import *
 from src.game.ui.buttons import *
 
@@ -41,10 +40,9 @@ class MenuScene(Scene):
         super().stop()
 
     def render(self) -> None:
-        self.surface.fill(BG_THEME_COLOR)
-        self.surface.blit(self.__font.render(
-            f'ping pong {VERSION}', True, (144,144,144)), (400, 650))
         super().render()
+        self.surface.blit(self.__font.render(f'ping pong {VERSION}', True,
+            VERSION_THEME_COLOR), (400, 650))
 
 if __name__ == '__main__':
     print('Try to run main.py')

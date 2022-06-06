@@ -1,24 +1,13 @@
+import sys
 import time
 import json
 import socket
+import threading
 
 from typing import List
 from typing import Dict
 from typing import Tuple
 from datetime import datetime, timedelta
-import threading
-
-def sender() -> None:
-    sockfd: socket.socket = socket.socket(
-        socket.AF_INET, socket.SOCK_DGRAM)
-    while True:
-        sockfd.sendto(input('enter a message: ').encode(), ('localhost', 5555))
-
-def main() -> None:
-    s = PongServer(('localhost', 5555))
-    #t = threading.Thread(target=sender)
-    #t.start()
-    s.start()
 
 class PongPendingPlayer(object):
     def __init__(self, addr: Tuple[str, int]) -> None:
@@ -88,4 +77,10 @@ class PongServer(object):
                 else:
                     self.pending_players.append(PongPendingPlayer(data[1]))
                     print(f'Received FIND method, appending to pending queue... ({data[1]})')
-main()
+
+if __name__ == '__main__':
+    if len(sys.argv) == 3:
+        server: PongServer = PongServer(
+            (sys.argv[1], int(sys.argv[2])))
+        server.start()
+    print('Cannot host server.')

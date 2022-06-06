@@ -12,7 +12,7 @@ class MenuButton(Button):
         self.__font_size: int = 36
         self.__font_path: str = 'fonts/CollegiateheavyoutlineMedium-B0yx.ttf'
         self.__font: pygame.font.Font = pygame.font.Font(self.__font_path, self.__font_size)
-        self.__text_color: Tuple[int, int, int] = (255, 255, 255)
+        self.__text_color: Tuple[int, int, int] = WHITE_COLOR
         self.__button_default_image_path: str = 'imgs/menu_button_default2.png'
         self.__button_pressed_image_path: str = 'imgs/menu_button_pressed2.png'
 
@@ -54,7 +54,7 @@ class MenuButton(Button):
         self.layers = self.__key_down_layers
 
     def render(self) -> Surface:
-        self.surface.set_colorkey((0, 0, 0))
+        self.surface.set_colorkey(BLACK_COLOR)
         super().render()
         return self.surface
     

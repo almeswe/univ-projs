@@ -168,7 +168,7 @@ class PongClient(object):
         self.on_recv = callback
 
     def start_receiving(self) -> None:
-        self.sockfd.settimeout(3.0)
+        self.sockfd.settimeout(2.0)
         self.__polling = True
         self.__receiver.start()
 

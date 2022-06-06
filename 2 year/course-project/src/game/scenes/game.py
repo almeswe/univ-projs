@@ -37,7 +37,6 @@ class GameScene(Scene):
         return super().start()
 
     def render(self) -> None:
-        self.surface.fill((32, 32, 32))
         super().render()
         self.game_table.render()
 

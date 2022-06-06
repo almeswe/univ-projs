@@ -1,1 +1,1 @@
-python src/network/server.py
+python src/network/server.py 192.168.100.86 5555

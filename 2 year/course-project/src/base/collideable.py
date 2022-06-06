@@ -3,6 +3,8 @@ import pygame
 from abc import ABC
 from typing import Tuple
 
+from constants import *
+
 class Collideable(ABC):
     def __init__(self, size: Tuple[int, int]) -> None:
         self.x: int = 0

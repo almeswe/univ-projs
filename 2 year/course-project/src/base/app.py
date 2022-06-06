@@ -5,10 +5,16 @@ class AppException(Exception):
         super().__init__(*args)
 
 class App(ABC):
-    def __init__(self, name: str, size: Tuple[int, int]) -> None:
+    def __init__(self, name: str, size: Tuple[int, int], icon: str = None) -> None:
         pygame.init()
+        self.__init_icon(icon)
         self.__init_scenes()
         self.__init_surface(name, size)
+
+    def __init_icon(self, icon: str) -> None:
+        if icon != None:
+            pygame.display.set_icon(pygame.transform.scale(
+                pygame.image.load(icon), (32, 32)))
 
     def __init_surface(self, name: str, size: Tuple[int, int]) -> None:
         pygame.display.set_caption(name)

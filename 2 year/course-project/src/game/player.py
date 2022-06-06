@@ -1,8 +1,8 @@
 from src.base.collideable import *
 
 class Player(Collideable):
-    def __init__(self, color: Tuple[int, int, int], speed: int = 5) -> None:
-        self.dv: int = speed
+    def __init__(self, color: Tuple[int, int, int]) -> None:
+        self.dv: int = PLAYER_Y_AXIS_SPEED
         self.upper_bound: float = float('inf')
         self.bottom_bound: float = float('-inf')
         self.color: Tuple[int, int, int] = color

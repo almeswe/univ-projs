@@ -1,4 +1,4 @@
-import threading
+from constants import *
 from src.base.ui.control import *
 
 class Scene(ABC):
@@ -33,6 +33,7 @@ class Scene(ABC):
 
     def render(self) -> None:
         if pygame.get_init():
+            self.surface.fill(BG_THEME_COLOR)
             for control in self.controls:
                 self.surface.blit(control.render(), control.position)
 
@@ -63,7 +64,7 @@ class Scene(ABC):
         for pending_event in self.additional_pending_events:
             pygame.event.post(pending_event)
         self.additional_pending_events.clear()
-        self.frame_dt: int = self.clocks.tick(60)
+        self.frame_dt: int = self.clocks.tick(FRAMES_PER_SECOND)
         for event in pygame.event.get():
             self.notify(event)
         self.render()

@@ -1,0 +1,2 @@
+- add final result print (win, loose, disconnect ...)
+- remove errors when app is closed

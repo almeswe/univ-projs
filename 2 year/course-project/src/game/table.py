@@ -1,4 +1,3 @@
-from ctypes.wintypes import LPHANDLE
 import enum
 
 from src.base.scene import *
@@ -37,7 +36,6 @@ class Table(object):
         self.__font: pygame.font.Font = pygame.font.Font(self.__font_path, self.__font_size)
         self.scores_rect: pygame.Rect = pygame.Rect(0, 0, self.rect.width, self.upper_board_height)
         self.scores: Dict[Player, int] = {}
-        self.reset_scores()
 
     def __init_board(self) -> None:
         self.orientation: Orientation = Orientation.LEFT
@@ -54,8 +52,8 @@ class Table(object):
 
     def __init_game_objects(self) -> None:
         self.ball: Ball = Ball()
-        self.lplayer: Player = Player((205, 62, 64))
-        self.rplayer: Player = Player((81, 154, 186))
+        self.lplayer: Player = Player(LP_THEME_COLOR)
+        self.rplayer: Player = Player(RP_THEME_COLOR)
         self.players: Dict[int, Player] = {
             Orientation.LEFT : self.lplayer,
             Orientation.RIGHT: self.rplayer,
@@ -68,7 +66,6 @@ class Table(object):
             Orientation.RIGHT  : pygame.Rect(self.board.width-1, self.upper_board_height, 1, self.board.height),
             Orientation.BOTTOM : pygame.Rect(0, self.rect.height-self.bottom_board_height, self.board.width, 1)
         }
-        self.reset()
 
     def update_delay(self, ms: int) -> None:
         self.__update_ts = datetime.now()+timedelta(milliseconds=ms)
@@ -138,15 +135,15 @@ class Table(object):
 
     def __render_borders(self) -> None:
         for border in self.borders.values():
-            pygame.draw.rect(self.surface, (255, 255, 255), border)
+            pygame.draw.rect(self.surface, WHITE_COLOR, border)
         center_line_pos1: Tuple[int, int] = (self.board.centerx, self.upper_board_height)
         center_line_pos2: Tuple[int, int] = (self.board.centerx, self.rect.height-self.bottom_board_height)
-        pygame.draw.line(self.surface, (255, 255, 255), center_line_pos1, center_line_pos2)
+        pygame.draw.line(self.surface, WHITE_COLOR, center_line_pos1, center_line_pos2)
 
     def __render_scores(self) -> None:
         lpscore: str = str(self.scores[self.lplayer]).zfill(2)
         rpscore: str = str(self.scores[self.rplayer]).zfill(2)
-        score_text: Surface = self.__font.render(f'{lpscore} : {rpscore}', True, (185, 122, 87))
+        score_text: Surface = self.__font.render(f'{lpscore} : {rpscore}', True, SCORE_THEME_COLOR)
         score_centered_rect: pygame.Rect = score_text.get_rect(center=self.scores_rect.center)
         self.surface.blit(score_text, score_centered_rect)
 
@@ -207,7 +204,7 @@ class NetworkTable(Table):
     def request_game_finish(self) -> None:
         if self.client != None:
             self.client.disconnect()
-        self.game.app.switch('menu')
+        super().request_game_finish()
 
     def update_opponent(self) -> None:
         pass
@@ -235,6 +232,10 @@ class NetworkTable(Table):
         except Exception as e:
             print(f'update_myself: {e}')
             self.request_game_finish()
+
+    def reset(self) -> None:
+        super().reset()
+        self.update_myself()
 
 if __name__ == '__main__':
     print('Try to run main.py')

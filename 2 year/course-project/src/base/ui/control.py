@@ -20,6 +20,8 @@ from typing import Tuple
 from typing import Callable
 from typing import Sequence
 
+from constants import *
+
 class UiControl(ABC):
     def __init__(self, size: Tuple[int, int], position: Tuple[int, int]) -> None:
         self.__init_scales(size, position)

@@ -1,27 +1,20 @@
-from src.game.game_main import Game
-from src.game.table import *
+from src.base.app import *
+from src.game.scenes.menu import *
+from src.game.scenes.game import *
+from src.game.scenes.game_net import *
 
-def test(): 
-    import pygame
-    import pygame.font
-    import pygame.draw
-    import pygame.event
-    import pygame.display
+class Game(App):
+    def __init__(self) -> None:
+        super().__init__(APP_TITLE, (700, 700), 'icon.png')
+        self.__register_scenes()
 
-    pygame.init()
-
-    p = Player((255, 123, 31))
-
-    window = pygame.display.set_mode((600, 600))
-    font = pygame.font.SysFont('consolas', 24)
-
-    window.blit(p.render(), (0, 200))    
-    pygame.display.update()
-
-    while True:
-        for event in pygame.event.get():
-            pass
+    def __register_scenes(self) -> None:
+        self.menu: MenuScene = MenuScene(self.window, self)
+        self.game: GameScene = GameScene(self.window, self)
+        self.game_net: GameNetScene = GameNetScene(self.window, self)
+        self.register(self.menu)
+        self.register(self.game)
+        self.register(self.game_net)
 
 if __name__ == '__main__':
-    #test()
     Game().run()
