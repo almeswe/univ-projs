@@ -31,11 +31,26 @@ class Scene(ABC):
     def release(self) -> None:
         pass
 
-    def render(self) -> None:
+    def render_controls(self) -> None:
         if pygame.get_init():
             self.surface.fill(BG_THEME_COLOR)
             for control in self.controls:
                 self.surface.blit(control.render(), control.position)
+
+    def render_frame(self) -> None:
+        for pending_event in self.additional_pending_events:
+            pygame.event.post(pending_event)
+        self.additional_pending_events.clear()
+        for event in pygame.event.get():
+            self.notify(event)
+        self.render_controls()
+        if pygame.get_init():
+            pressed: Sequence[bool] = pygame.key.get_pressed()
+            for i in range(len(pressed)):
+                if pressed[i]:
+                    self.additional_pending_events.append(
+                        Event(pygame.KEYDOWN, {'key': i}))                    
+            pygame.display.update()
 
     def notify(self, event: Event) -> None: 
         if event.type in self.callbacks.keys():
@@ -60,27 +75,12 @@ class Scene(ABC):
     def register_control(self, control: UiControl) -> None:
         self.controls.append(control)
 
-    def update(self) -> None:
-        for pending_event in self.additional_pending_events:
-            pygame.event.post(pending_event)
-        self.additional_pending_events.clear()
-        self.frame_dt: int = self.clocks.tick(FRAMES_PER_SECOND)
-        for event in pygame.event.get():
-            self.notify(event)
-        self.render()
-        if pygame.get_init():
-            pressed: Sequence[bool] = pygame.key.get_pressed()
-            for i in range(len(pressed)):
-                if pressed[i]:
-                    self.additional_pending_events.append(
-                        Event(pygame.KEYDOWN, {'key': i}))                    
-            pygame.display.update()
-
     def __run_event_loop(self) -> None:
         self.additional_pending_events: List[Event] = []
         self.clocks: pygame.time.Clock = pygame.time.Clock()
         while self.current:
-            self.update()
+            self.frame_dt: int = self.clocks.tick(FRAMES_PER_SECOND)
+            self.render_frame()
 
 if __name__ == '__main__':
     print('Try to run main.py')

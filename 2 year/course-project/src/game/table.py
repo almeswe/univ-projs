@@ -155,7 +155,7 @@ class Table(object):
         self.__render_scores()
 
     def key_press_event_provider(self, event: Event) -> None:
-        if event.type in [pygame.KEYDOWN]:
+        if event.type == pygame.KEYDOWN:
             under_control: Player = self.players[self.orientation] 
             if event.key == pygame.K_w:
                 under_control.move_up()

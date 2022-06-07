@@ -39,8 +39,8 @@ class MenuScene(Scene):
     def stop(self) -> None:
         super().stop()
 
-    def render(self) -> None:
-        super().render()
+    def render_controls(self) -> None:
+        super().render_controls()
         self.surface.blit(self.__font.render(f'ping pong {VERSION}', True,
             VERSION_THEME_COLOR), (400, 650))
 

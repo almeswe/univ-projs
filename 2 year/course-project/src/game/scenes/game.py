@@ -36,8 +36,8 @@ class GameScene(Scene):
         self.game_table.update_delay(1000)
         return super().start()
 
-    def render(self) -> None:
-        super().render()
+    def render_controls(self) -> None:
+        super().render_controls()
         self.game_table.render()
 
 if __name__ == '__main__':
