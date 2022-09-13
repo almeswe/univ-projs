@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="YamlDotNet" Version="12.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Tracer.Core">
+      <HintPath>..\Tracer.Serialization.Abstractions\bin\Debug\net5.0\Tracer.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Tracer.Serialization.Abstractions">
+      <HintPath>..\Tracer.Serialization.Abstractions\bin\Debug\net5.0\Tracer.Serialization.Abstractions.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>
