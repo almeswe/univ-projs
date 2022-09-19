@@ -1,0 +1,50 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v5.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v5.0": {
+      "Faker.Example/1.0.0": {
+        "dependencies": {
+          "Faker": "1.0.0",
+          "Faker.Analyzer": "1.0.0"
+        },
+        "runtime": {
+          "Faker.Example.dll": {}
+        }
+      },
+      "Faker/1.0.0": {
+        "dependencies": {
+          "Faker.Analyzer": "1.0.0"
+        },
+        "runtime": {
+          "Faker.dll": {}
+        }
+      },
+      "Faker.Analyzer/1.0.0": {
+        "runtime": {
+          "Faker.Analyzer.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "Faker.Example/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Faker/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Faker.Analyzer/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}

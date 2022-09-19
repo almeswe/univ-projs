@@ -1,0 +1,12 @@
+C:\Users\HP\source\repos\univ-projs\3 year\СПП\Lab2\Lab2\Faker.StaticAnalyzer\bin\Debug\net5.0\Faker.Analyzer.deps.json
+C:\Users\HP\source\repos\univ-projs\3 year\СПП\Lab2\Lab2\Faker.StaticAnalyzer\bin\Debug\net5.0\Faker.Analyzer.dll
+C:\Users\HP\source\repos\univ-projs\3 year\СПП\Lab2\Lab2\Faker.StaticAnalyzer\bin\Debug\net5.0\ref\Faker.Analyzer.dll
+C:\Users\HP\source\repos\univ-projs\3 year\СПП\Lab2\Lab2\Faker.StaticAnalyzer\bin\Debug\net5.0\Faker.Analyzer.pdb
+C:\Users\HP\source\repos\univ-projs\3 year\СПП\Lab2\Lab2\Faker.StaticAnalyzer\obj\Debug\net5.0\Faker.Analyzer.csproj.AssemblyReference.cache
+C:\Users\HP\source\repos\univ-projs\3 year\СПП\Lab2\Lab2\Faker.StaticAnalyzer\obj\Debug\net5.0\Faker.Analyzer.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\HP\source\repos\univ-projs\3 year\СПП\Lab2\Lab2\Faker.StaticAnalyzer\obj\Debug\net5.0\Faker.Analyzer.AssemblyInfoInputs.cache
+C:\Users\HP\source\repos\univ-projs\3 year\СПП\Lab2\Lab2\Faker.StaticAnalyzer\obj\Debug\net5.0\Faker.Analyzer.AssemblyInfo.cs
+C:\Users\HP\source\repos\univ-projs\3 year\СПП\Lab2\Lab2\Faker.StaticAnalyzer\obj\Debug\net5.0\Faker.Analyzer.csproj.CoreCompileInputs.cache
+C:\Users\HP\source\repos\univ-projs\3 year\СПП\Lab2\Lab2\Faker.StaticAnalyzer\obj\Debug\net5.0\Faker.Analyzer.dll
+C:\Users\HP\source\repos\univ-projs\3 year\СПП\Lab2\Lab2\Faker.StaticAnalyzer\obj\Debug\net5.0\ref\Faker.Analyzer.dll
+C:\Users\HP\source\repos\univ-projs\3 year\СПП\Lab2\Lab2\Faker.StaticAnalyzer\obj\Debug\net5.0\Faker.Analyzer.pdb

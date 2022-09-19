@@ -1,0 +1,14 @@
+C:\Users\HP\source\repos\univ-projs\3 year\СПП\Lab2\Lab2\Faker\obj\Debug\net5.0\Faker.Core.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\HP\source\repos\univ-projs\3 year\СПП\Lab2\Lab2\Faker\obj\Debug\net5.0\Faker.Core.AssemblyInfoInputs.cache
+C:\Users\HP\source\repos\univ-projs\3 year\СПП\Lab2\Lab2\Faker\obj\Debug\net5.0\Faker.Core.AssemblyInfo.cs
+C:\Users\HP\source\repos\univ-projs\3 year\СПП\Lab2\Lab2\Faker\obj\Debug\net5.0\Faker.Core.csproj.CoreCompileInputs.cache
+C:\Users\HP\source\repos\univ-projs\3 year\СПП\Lab2\Lab2\Faker\bin\Debug\net5.0\Faker.Core.deps.json
+C:\Users\HP\source\repos\univ-projs\3 year\СПП\Lab2\Lab2\Faker\bin\Debug\net5.0\Faker.Core.dll
+C:\Users\HP\source\repos\univ-projs\3 year\СПП\Lab2\Lab2\Faker\bin\Debug\net5.0\ref\Faker.Core.dll
+C:\Users\HP\source\repos\univ-projs\3 year\СПП\Lab2\Lab2\Faker\bin\Debug\net5.0\Faker.Core.pdb
+C:\Users\HP\source\repos\univ-projs\3 year\СПП\Lab2\Lab2\Faker\bin\Debug\net5.0\Generator.dll
+C:\Users\HP\source\repos\univ-projs\3 year\СПП\Lab2\Lab2\Faker\bin\Debug\net5.0\Generator.pdb
+C:\Users\HP\source\repos\univ-projs\3 year\СПП\Lab2\Lab2\Faker\obj\Debug\net5.0\Faker.Core.csproj.CopyComplete
+C:\Users\HP\source\repos\univ-projs\3 year\СПП\Lab2\Lab2\Faker\obj\Debug\net5.0\Faker.Core.dll
+C:\Users\HP\source\repos\univ-projs\3 year\СПП\Lab2\Lab2\Faker\obj\Debug\net5.0\ref\Faker.Core.dll
+C:\Users\HP\source\repos\univ-projs\3 year\СПП\Lab2\Lab2\Faker\obj\Debug\net5.0\Faker.Core.pdb

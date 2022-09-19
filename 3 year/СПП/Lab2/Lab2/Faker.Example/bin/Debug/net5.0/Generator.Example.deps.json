@@ -1,0 +1,50 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v5.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v5.0": {
+      "Generator.Example/1.0.0": {
+        "dependencies": {
+          "Faker": "1.0.0",
+          "Generator": "1.0.0"
+        },
+        "runtime": {
+          "Generator.Example.dll": {}
+        }
+      },
+      "Faker/1.0.0": {
+        "runtime": {
+          "Faker.dll": {}
+        }
+      },
+      "Generator/1.0.0": {
+        "dependencies": {
+          "Faker": "1.0.0"
+        },
+        "runtime": {
+          "Generator.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "Generator.Example/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Faker/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Generator/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}
