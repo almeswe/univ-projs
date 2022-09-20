@@ -41,7 +41,7 @@ namespace Faker
         {
             this._rules = rules ?? new FakerRules();
             this._context = new GeneratorContext(this, this._rules);
-            var generator = rules.GetGenerator(type);
+            var generator = this._rules.GetGenerator(type);
             if (generator != null)
                 return generator.Generate(type, this._context);
             return this.CreateWithoutRule(type);

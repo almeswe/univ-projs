@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Collections.Generic;
+using System.Reflection;
 
 namespace Faker.Analyzer
 {
@@ -43,14 +44,11 @@ namespace Faker.Analyzer
         private Type[] GetTypes(Type type)
         {
             var types = new List<Type>();
-            if (DefaultTypes.Contains(type))
-                return types.ToArray();
-            types.AddRange(type.GetProperties()
-                .Where(p => p.CanWrite)
-                .Select(p => p.PropertyType));
-            types.AddRange(type.GetFields()
-                .Where(f => f.IsPublic)
-                .Select(f => f.FieldType));
+            if (!DefaultTypes.Contains(type))
+            {
+                var attrs = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
+                types.AddRange(type.GetFields(attrs).Select(f => f.FieldType));
+            }
             return types.ToArray();
         }
     }
