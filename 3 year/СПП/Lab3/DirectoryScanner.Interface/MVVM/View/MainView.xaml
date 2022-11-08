@@ -1,0 +1,31 @@
+﻿<Window x:Class="DirectoryScanner.Interface.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:DirectoryScanner.Interface"
+        xmlns:vm="clr-namespace:DirectoryScanner.Interface.MVVM.ViewModel"
+        mc:Ignorable="d"
+        Height="450" Width="800"
+        Title="{Binding ScannerStatus}">
+    <Window.DataContext>
+        <vm:MainViewModel/>
+    </Window.DataContext>
+    <DockPanel LastChildFill="True">
+        <Button DockPanel.Dock="Left"
+                Name="ExploreButton"
+                Command="{Binding Path=ExploreButtonClick}">
+            EXPLORE
+        </Button>
+        <Button DockPanel.Dock="Right"
+                Name="StopButton"
+                Command="{Binding Path=StopButtonClick}">
+            STOP
+        </Button>
+        <TreeView Name="MainTreeView"
+                  ItemsSource="{Binding Items}"
+                  TreeViewItem.Expanded="MainTreeViewExpanded"
+                  FontSize="16">
+        </TreeView>
+    </DockPanel>
+</Window>
