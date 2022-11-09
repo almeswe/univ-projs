@@ -1,0 +1,41 @@
+<ApplianceWrapper>
+  <appliances>
+    <appliances className="com.poit.entity.Kettle">
+      <price>15.99</price>
+      <manufacturer>Bork</manufacturer>
+      <color>White</color>
+      <powerConsumption>45.0</powerConsumption>
+      <volume>5.0</volume>
+    </appliances>
+    <appliances className="com.poit.entity.Kettle">
+      <price>20.99</price>
+      <manufacturer>Xiaomi</manufacturer>
+      <color>White</color>
+      <powerConsumption>55.0</powerConsumption>
+      <volume>7.0</volume>
+    </appliances>
+    <appliances className="com.poit.entity.Kettle">
+      <price>7.99</price>
+      <manufacturer>Linea</manufacturer>
+      <color>Gray</color>
+      <powerConsumption>32.0</powerConsumption>
+      <volume>4.0</volume>
+    </appliances>
+    <appliances className="com.poit.entity.Fridge">
+      <price>49.99</price>
+      <manufacturer>Bosch</manufacturer>
+      <color>White</color>
+      <powerConsumption>70.0</powerConsumption>
+      <heightInMeters>2.4</heightInMeters>
+      <widthInMeters>0.6</widthInMeters>
+    </appliances>
+    <appliances className="com.poit.entity.Laptop">
+      <price>99.99</price>
+      <manufacturer>Asus</manufacturer>
+      <color>Black</color>
+      <operatingSystem>Windows</operatingSystem>
+      <batteryCapacity>250.0</batteryCapacity>
+      <ramMemoryCapacity>16</ramMemoryCapacity>
+    </appliances>
+  </appliances>
+</ApplianceWrapper>
