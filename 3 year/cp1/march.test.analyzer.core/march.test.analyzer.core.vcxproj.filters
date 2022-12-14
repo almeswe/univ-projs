@@ -14,4 +14,26 @@
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="analyzer.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ram_bit_cell.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ram_bit_cells.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="ram_bit_cell.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ram_bit_cells.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="analyzer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
 </Project>
