@@ -17,7 +17,7 @@ static HWND hBitCb = NULL;
 
 static RECT thisRect = { 0 };
 static RamBitCell** traverseData = NULL;
-static RamBitCell** traverseTable[TRAVERSE_DEPTH_SIZE] = { 0 };
+static RamBitCell** traverseTable[TRAVERSE_MAX_DEPTH] = { 0 };
 
 VOID ErrorPrintWin32() {
 	CHAR buf[256] = { 0 };
@@ -41,30 +41,32 @@ VOID ErrorShow(const PCHAR message) {
 }
 
 VOID TraverseNode(const RamBitCell* node, int64_t depth) {
-	SSIZE_T size = RamBitCellsSize(traverseData);
-	for (SSIZE_T i = 0; i < size; i++) {
-		if (node == traverseData[i]) {
-			return;
+	if (depth < TRAVERSE_MAX_DEPTH) {
+		SSIZE_T size = RamBitCellsSize(traverseData);
+		for (SSIZE_T i = 0; i < size; i++) {
+			if (node == traverseData[i]) {
+				return;
+			}
 		}
-	}
-	RamBitCellsAdd(&(traverseData), node);
-	RamBitCellsAdd(&(traverseTable[depth]), node);
-	size = RamBitCellsSize(node->victims);
-	for (SSIZE_T i = 0; i < size; i++) {
-		TraverseNode(node->victims[i], depth + 1);
+		RamBitCellsAdd(&(traverseData), node);
+		RamBitCellsAdd(&(traverseTable[depth]), node);
+		size = RamBitCellsSize(node->victims);
+		for (SSIZE_T i = 0; i < size; i++) {
+			TraverseNode(node->victims[i], depth + 1);
+		}
 	}
 }
 
 SSIZE_T TraverseDataDepth() {
 	SSIZE_T size = 0;
-	for (SSIZE_T i = 0; i < TRAVERSE_DEPTH_SIZE; i++) {
+	for (SSIZE_T i = 0; i < TRAVERSE_MAX_DEPTH; i++) {
 		size += (traverseTable[i] != NULL);
 	}
 	return size;
 }
 
 VOID TraverseDataFree() {
-	for (SSIZE_T i = 0; i < TRAVERSE_DEPTH_SIZE; i++) {
+	for (SSIZE_T i = 0; i < TRAVERSE_MAX_DEPTH; i++) {
 		RamBitCellsFree(traverseTable[i]);
 		traverseTable[i] = NULL;
 	}
@@ -117,34 +119,40 @@ VOID DrawTree(HWND hWnd, HDC hdc, SSIZE_T rootIndex) {
 	const RamBitCell* cell = 
 		MarchTestGetAnalyzedCell(rootIndex);
 	if (cell == NULL) {
-		ErrorShow("Cannot open the analyze result for this bit!");
+		ErrorShow("Cannot open the analyze result for this cell!");
 	}
 	else {
 		TraverseDataFree();
 		TraverseNode(cell, 0);
 		RECT rowRect = { 0 };
 		SSIZE_T depth = TraverseDataDepth();
-		SSIZE_T rowHeight = thisRect.bottom / depth;
-		for (SSIZE_T row = 0; row < depth; row++) {
-			rowRect.top = (LONG)(row * rowHeight);
-			rowRect.bottom = (LONG)(rowRect.top + rowHeight);
-			SSIZE_T nodes = RamBitCellsSize(traverseTable[row]);
-			SSIZE_T rowWidth = thisRect.right;
-			if (nodes != 0) {
-				rowWidth /= nodes;
-			}
-			for (SSIZE_T node = 0; node < nodes; node++) {
-				CHAR strbuf[BUF_SIZE] = { 0 };
-				rowRect.left = (LONG)(node * rowWidth);
-				rowRect.right = (LONG)(rowRect.left + rowWidth);
-				RECT nodeRect = {
-					.top    = (LONG)(rowRect.top + rowHeight / 2 - NODE_RECT_SIZE_HALF),
-					.bottom = (LONG)(rowRect.top + rowHeight / 2 + NODE_RECT_SIZE_HALF),
-					.left   = (LONG)(rowRect.left + rowWidth / 2 - NODE_RECT_SIZE_HALF),
-					.right  = (LONG)(rowRect.left + rowWidth / 2 + NODE_RECT_SIZE_HALF)
-				};
-				DrawDependencyArrow(hdc, node, &nodeRect, row);
-				DrawNode(hdc, traverseTable[row][node], &nodeRect);
+		if (depth >= TRAVERSE_MAX_DEPTH) {
+			TraverseDataFree();
+			ErrorShow("Cannot show dependencies, due to traverse depth overflow!");
+		}
+		else {
+			SSIZE_T rowHeight = thisRect.bottom / depth;
+			for (SSIZE_T row = 0; row < depth; row++) {
+				rowRect.top = (LONG)(row * rowHeight);
+				rowRect.bottom = (LONG)(rowRect.top + rowHeight);
+				SSIZE_T nodes = RamBitCellsSize(traverseTable[row]);
+				SSIZE_T rowWidth = thisRect.right;
+				if (nodes != 0) {
+					rowWidth /= nodes;
+				}
+				for (SSIZE_T node = 0; node < nodes; node++) {
+					CHAR strbuf[BUF_SIZE] = { 0 };
+					rowRect.left = (LONG)(node * rowWidth);
+					rowRect.right = (LONG)(rowRect.left + rowWidth);
+					RECT nodeRect = {
+						.top = (LONG)(rowRect.top + rowHeight / 2 - NODE_RECT_SIZE_HALF),
+						.bottom = (LONG)(rowRect.top + rowHeight / 2 + NODE_RECT_SIZE_HALF),
+						.left = (LONG)(rowRect.left + rowWidth / 2 - NODE_RECT_SIZE_HALF),
+						.right = (LONG)(rowRect.left + rowWidth / 2 + NODE_RECT_SIZE_HALF)
+					};
+					DrawDependencyArrow(hdc, node, &nodeRect, row);
+					DrawNode(hdc, traverseTable[row][node], &nodeRect);
+				}
 			}
 		}
 	}
@@ -185,8 +193,7 @@ LRESULT CALLBACK WinProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) 
 		case WM_COMMAND:
 			return WinCbProc(hWnd, message, wParam, lParam);
 		case WM_DESTROY:
-			PostQuitMessage(0);
-			return (LRESULT)0;
+			return PostQuitMessage(0), (LRESULT)0;
 		case WM_SIZE:
 			WinResize(hWnd, message, wParam, lParam);
 		case WM_CREATE:
@@ -203,8 +210,10 @@ HWND CreateBitComboBox(HWND hWnd) {
 	for (SSIZE_T i = 0; i < RAM_SIZE; i += 1) {
 		CHAR strbuf[BUF_SIZE] = { 0 };
 		const RamBitCell* cell = MarchTestGetAnalyzedCell(i);
-		sprintf_s(strbuf, BUF_SIZE, "%lld (%lld)", i, RamBitCellsSize(cell->victims));
-		SendMessageA(cbhWnd, (UINT)CB_ADDSTRING, (WPARAM)0, (LPARAM)strbuf);
+		if (cell != NULL) {
+			sprintf_s(strbuf, BUF_SIZE, "%d (%lld)", cell->address, RamBitCellsSize(cell->victims));
+			SendMessageA(cbhWnd, (UINT)CB_ADDSTRING, (WPARAM)0, (LPARAM)strbuf);
+		}
 	}
 	SendMessageA(cbhWnd, CB_SETMINVISIBLE, (WPARAM)15, (LPARAM)0);
 	SendMessageA(cbhWnd, CB_SETCURSEL, (WPARAM)0, (LPARAM)0);
