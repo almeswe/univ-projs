@@ -1,29 +1,30 @@
 #include "analyzer.h"
 
 static int64_t ramsize = 0;
+static ram_bit_cell shared = { 0 };
 static ram_bit_cell ram[RAM_SIZE] = { 0 };
 
-static ram_bit_cell** print_cells = NULL;
-
-static void print_bit_cell(ram_bit_cell* cell, int indent) {
-	if (indent == 0) {
-		ram_bit_cells_free(print_cells), print_cells = NULL;
-	}
-	for (int i = 0; i < indent; i++) {
-		printf("  ");
-	}
-	printf("%ld\n", cell->address);
-	for (int i = 0; i < ram_bit_cells_size(print_cells); i++) {
-		if (cell == print_cells[i]) {
-			return;
-		}
-	}
-	ram_bit_cells_add(&print_cells, cell);
-	int64_t size = ram_bit_cells_size(cell->victims);
-	for (int64_t i = 0; i < size; i++) {
-		print_bit_cell(cell->victims[i], indent + 1);
-	}
-}
+//static ram_bit_cell** print_cells = NULL;
+//
+//static void print_bit_cell(ram_bit_cell* cell, int indent) {
+//	if (indent == 0) {
+//		ram_bit_cells_free(print_cells), print_cells = NULL;
+//	}
+//	for (int i = 0; i < indent; i++) {
+//		printf("  ");
+//	}
+//	printf("%ld\n", cell->address);
+//	for (int i = 0; i < ram_bit_cells_size(print_cells); i++) {
+//		if (cell == print_cells[i]) {
+//			return;
+//		}
+//	}
+//	ram_bit_cells_add(&print_cells, cell);
+//	int64_t size = ram_bit_cells_size(cell->victims);
+//	for (int64_t i = 0; i < size; i++) {
+//		print_bit_cell(cell->victims[i], indent + 1);
+//	}
+//}
 
 void march_test_finalize() {
 	for (int64_t i = 0; i < ramsize; i++) {
@@ -34,7 +35,8 @@ void march_test_finalize() {
 }
 
 bool march_test_analyze(const char* filename) {
-	FILE* file = fopen(filename, "r");
+	FILE* file = NULL;
+	fopen_s(&file, filename, "r");
 	if (file == NULL) {
 		return false;
 	}
@@ -58,11 +60,12 @@ bool march_test_analyze(const char* filename) {
 	return true;
 }
 
-const ram_bit_cell* march_test_get_analyzed_cell(int index) {
+const ram_bit_cell* march_test_get_analyzed_cell(int64_t index) {
 	if (index < 0 || index >= ramsize) {
 		return NULL;
 	}
-	return &ram[index];
+	shared = ram[index];
+	return &shared;
 }
 //
 //int main(int argc, char** argv) {

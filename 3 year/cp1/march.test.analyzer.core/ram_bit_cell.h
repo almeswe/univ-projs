@@ -1,8 +1,6 @@
 #ifndef _RAM_BIT_CELL_H
 #define _RAM_BIT_CELL_H
 
-#define _CRT_SECURE_NO_WARNINGS
-
 #include <stdio.h>
 #include <stdint.h>
 #include <stdlib.h>

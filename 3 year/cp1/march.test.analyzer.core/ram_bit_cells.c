@@ -15,7 +15,7 @@ static ram_bit_cells* ram_bit_cells_resize(ram_bit_cells* cells) {
 	int64_t capacity = cells->capacity * 2;
 	int64_t size = capacity * sizeof(*cells->data) +
 		offsetof(ram_bit_cells, data);
-	cells = (ram_bit_cell*)realloc(cells, size);
+	cells = (ram_bit_cells*)realloc(cells, size);
 	return cells;
 }
 
@@ -37,14 +37,14 @@ int64_t ram_bit_cells_size(ram_bit_cell** cells) {
 	return header->length;
 }
 
-void ram_bit_cells_add(ram_bit_cell*** cells, ram_bit_cell* cell) {
+void ram_bit_cells_add(ram_bit_cell*** cells, const ram_bit_cell* cell) {
 	ram_bit_cells* header = NULL;
 	if (*cells != NULL) {
 		header = (ram_bit_cells*)cells_hdr(*cells);
 	}
 	header = ram_bit_cells_check(header);
-	header->data[header->length++] = cell;
-	*cells = &header->data;
+	header->data[header->length++] = &(*cell);
+	*cells = header->data;
 }
 
 void ram_bit_cells_free(ram_bit_cell** cells) {

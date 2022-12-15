@@ -18,10 +18,14 @@
 	typedef enum _ram_bit_cell_fault	RamBitCellFault;
 	typedef struct _ram_iterator		RamIterator;
 	typedef enum _ram_iterator_state	RamIteratorState;
+
+	#define RamBitCellsSize(cells)		ram_bit_cells_size(cells)
+	#define RamBitCellsFree(cells)		ram_bit_cells_free(cells);
+	#define RamBitCellsAdd(cells, cell) ram_bit_cells_add(cells, cell)
 #endif
 
 void march_test_finalize();
 bool march_test_analyze(const char* filename);
-const ram_bit_cell* march_test_get_analyzed_cell(int index);
+const ram_bit_cell* march_test_get_analyzed_cell(int64_t index);
 
 #endif
