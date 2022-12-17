@@ -132,10 +132,10 @@ VOID DrawTree(HWND hWnd, HDC hdc, SSIZE_T rootIndex) {
 		}
 		else {
 			SSIZE_T rowHeight = thisRect.bottom / depth;
-			for (SSIZE_T row = 0; row < depth; row++) {
-				rowRect.top = (LONG)(row * rowHeight);
+			for (SSIZE_T col = 0; col < depth; col++) {
+				rowRect.top = (LONG)(col * rowHeight);
 				rowRect.bottom = (LONG)(rowRect.top + rowHeight);
-				SSIZE_T nodes = RamBitCellsSize(traverseTable[row]);
+				SSIZE_T nodes = RamBitCellsSize(traverseTable[col]);
 				SSIZE_T rowWidth = thisRect.right;
 				if (nodes != 0) {
 					rowWidth /= nodes;
@@ -150,8 +150,8 @@ VOID DrawTree(HWND hWnd, HDC hdc, SSIZE_T rootIndex) {
 						.left = (LONG)(rowRect.left + rowWidth / 2 - NODE_RECT_SIZE_HALF),
 						.right = (LONG)(rowRect.left + rowWidth / 2 + NODE_RECT_SIZE_HALF)
 					};
-					DrawDependencyArrow(hdc, node, &nodeRect, row);
-					DrawNode(hdc, traverseTable[row][node], &nodeRect);
+					DrawDependencyArrow(hdc, node, &nodeRect, col);
+					DrawNode(hdc, traverseTable[col][node], &nodeRect);
 				}
 			}
 		}
@@ -173,6 +173,7 @@ LRESULT WinResize(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
 	GetClientRect(hWnd, &thisRect);
 	SetWindowPos(hBitCb, HWND_TOP, 0, 0, thisRect.right,
 		BIT_CB_HEIGHT, SWP_SHOWWINDOW);
+	WinRedraw(hWnd);
 	return (LRESULT)0;
 }
 
@@ -195,7 +196,7 @@ LRESULT CALLBACK WinProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) 
 		case WM_DESTROY:
 			return PostQuitMessage(0), (LRESULT)0;
 		case WM_SIZE:
-			WinResize(hWnd, message, wParam, lParam);
+			return WinResize(hWnd, message, wParam, lParam);
 		case WM_CREATE:
 			return WinRedraw(hWnd);
 	}

@@ -29,7 +29,7 @@ bool march_test_analyze(const char* filename) {
 			int64_t agressor = ram[i].victim.agressor;
 			ram_bit_cells_add(&ram[agressor].victims, &ram[i]);
 		}
-	}
+	}	
 	fclose(file);
 	return true;
 }
