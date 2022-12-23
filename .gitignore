@@ -3,3 +3,9 @@
 *.pdb
 *.cache
 *._
+.idea
+x64
+.vs
+v16
+obj
+bin
