@@ -3,7 +3,7 @@ from fibonacci import FIBONACCI as F
 a = 0
 b = 8
 n = 16
-e = 0.2
+e = (b-a)/F[n+1]#0.2
 f = lambda x: round(x*x-11*x+5, 3)
 
 x1n = 0

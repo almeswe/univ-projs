@@ -27,8 +27,8 @@ f2arg = [x2(i) for i in range(1, n2+1)]
 f1res = [f(x) for x in f1arg]
 f2res = [f(x) for x in f2arg]
 
-[print(f'|{x:<12}', end='') for x in f1arg]; print()
-[print(f'|{y:<12}', end='') for y in f1res]; print()
+[print(f'|{x:<10}', end='') for x in f1arg]; print()
+[print(f'|{y:<10}', end='') for y in f1res]; print()
 f1min = min(f1res)
 index = f1res.index(f1min)
 print(f'min  : {f1min}, {index+1}')
@@ -37,8 +37,8 @@ print(f'x*   : {f1arg[index]}')
 print(f'f*   : {f1res[index]}')
 print()
 
-[print(f'|{x:<12}', end='') for x in f2arg]; print()
-[print(f'|{y:<12}', end='') for y in f2res]; print()
+[print(f'|{x:<10}', end='') for x in f2arg]; print()
+[print(f'|{y:<10}', end='') for y in f2res]; print()
 f2min = min(f2res)
 index = f2res.index(f2min)
 print(f'min  : {f2min}, {index+1}')

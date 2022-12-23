@@ -11,7 +11,7 @@ for i in range(5):
 exit(0)
 '''
 
-e = 1
+e = 0.1
 
 def f(q1, q2, q3, q4, q5):
     return 3500 /q1+7.50*q1+ \
@@ -70,4 +70,8 @@ def qrand(a, b):
         random.randint(a, b)
     ])
 
-print(f'min: {graddecent(qrand(1.0, 3.0))}')
+# print(f'min: {graddecent(qrand(1.0, 3.0))}')
+qmin = graddecent([20, 20, 20, 20, 20])
+fmin = f(*qmin)
+print(f'qres: {qmin}')
+print(f'fmin: {fmin}')
