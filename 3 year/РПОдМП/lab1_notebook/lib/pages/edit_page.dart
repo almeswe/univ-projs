@@ -1,15 +1,47 @@
 import "package:flutter/material.dart";
+import "package:lab1_notebook/db/notes_db.dart";
 import "package:lab1_notebook/models/note.dart";
 
-class NotebookEditPage extends StatelessWidget {
-  final Note note;
+class NotebookEditPage extends StatefulWidget {
+  late Note note;
+  NotebookEditPage(Note note, {super.key}) {
+    this.note = note;
+  }
 
-  const NotebookEditPage({super.key, required this.note});
+  @override
+  State<NotebookEditPage> createState() => _NotebookEditPageState(note);
+}
+
+class _NotebookEditPageState extends State<NotebookEditPage> {
+  late Note _note;
+  late TextEditingController _titleController;
+  late TextEditingController _contentsController;
+
+  _NotebookEditPageState(Note note) {
+    _note = note;
+    _titleController = TextEditingController(text: _note.title);
+    _contentsController = TextEditingController(text: _note.contents);
+  }
+
+  Future<void> noteSave() async {
+    _note.title = _titleController.text;
+    _note.contents = _contentsController.text;
+    print(_note.id);
+    await NotesDatabase.instance.updateNote(_note);
+  }
 
   @override
   Widget build(BuildContext context) {
     var theme = Theme.of(context);
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        foregroundColor: theme.floatingActionButtonTheme.foregroundColor,
+        backgroundColor: theme.floatingActionButtonTheme.backgroundColor,
+        onPressed: () async {
+          await noteSave();
+        },
+        child: const Icon(Icons.save),
+      ),
       backgroundColor: theme.colorScheme.secondary,
       body: Column(
         children: [
@@ -21,15 +53,14 @@ class NotebookEditPage extends StatelessWidget {
                 hoverColor: Colors.transparent,
                 iconSize: 15,
                 icon: const Icon(Icons.arrow_back_ios),
-                onPressed: () {
+                onPressed: () async {
+                  await noteSave();
                   Navigator.pop(context);
                 },
               ),
               Expanded(
                 child: TextField(
-                  controller: TextEditingController(
-                    text: note.title,
-                  ),
+                  controller: _titleController,
                   style: const TextStyle(
                     fontSize: 40,
                     fontFamily: "Montserrat",
@@ -39,7 +70,18 @@ class NotebookEditPage extends StatelessWidget {
                     hintText: 'Write a title',
                   ),
                 ),
-              )
+              ),
+              IconButton(
+                onPressed: () async {
+                  await NotesDatabase.instance.deleteNote(_note);
+                  Navigator.pop(context);
+                },
+                icon: Icon(Icons.delete),
+                splashColor: Colors.transparent,
+                highlightColor: Colors.transparent,
+                hoverColor: Colors.transparent,
+                iconSize: 20,
+              ),
             ],
           ),
           Expanded(
@@ -51,9 +93,7 @@ class NotebookEditPage extends StatelessWidget {
                   fontSize: 20,
                   fontFamily: "RobotoThin",
                 ),
-                controller: TextEditingController(
-                  text: note.contents,
-                ),
+                controller: _contentsController,
                 keyboardType: TextInputType.multiline,
                 decoration: const InputDecoration(
                   border: InputBorder.none,
