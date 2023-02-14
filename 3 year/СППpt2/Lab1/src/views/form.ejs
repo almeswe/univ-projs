@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="stylesheet" href="style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div>
+      <form action="/" method="post">
+        <fieldset>
+            <label for="bookname">Name:</label><br>
+            <input type="text" id="bookname" name="bookname"><br>
+            <label for="bookauthor">Author:</label><br>
+            <input type="text" id="bookauthor" name="bookauthor"><br>
+            <label for="booknumber">Serial Number:</label><br>
+            <input type="text" id="booknumber" name="booknumber">
+            <br><br>
+            <input type="submit" value="Submit">
+        </fieldset>
+      </form>
+    </div>
+    <div>
+      <table>
+        <tr>
+          <th>Id</th>
+          <th>Name</th>
+          <th>Author</th>
+          <th>Number</th>
+        </tr> 
+        <% for (var i = 0; i < data.length; i++) { %>
+          <tr>
+            <td><%= data[i].id %></td>
+            <td><%= data[i].name %></td>
+            <td><%= data[i].author %></td>
+            <td><%= data[i].number %></td>
+          </tr>    
+        <% } %>
+      </table>
+    </div>
+</body>
+</html>

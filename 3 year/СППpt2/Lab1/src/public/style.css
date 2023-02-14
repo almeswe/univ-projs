@@ -1,0 +1,8 @@
+td, th {
+    border: solid thin;
+}
+
+table {
+    width: 100%;
+    font-family: 'Courier New', Courier, monospace;
+}
