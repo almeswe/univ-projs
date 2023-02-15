@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:lab1_notebook/pages/home_page.dart';
 
 Future<void> main() async {
@@ -24,12 +23,12 @@ class NotebookApp extends StatelessWidget {
             onSecondary: Color.fromARGB(255, 11, 11, 11),
             onSurface: Color(0xFF212121),
             primary: Color(0xFF212121),
-            secondary: Color.fromARGB(255, 11, 11, 11),
+            secondary: Color.fromARGB(255, 22, 22, 22),
             surface: Color(0xFF212121),
           ),
           appBarTheme: const AppBarTheme(
             foregroundColor: Color.fromARGB(255, 205, 205, 205),
-            backgroundColor: Color.fromARGB(255, 11, 11, 11),
+            backgroundColor: Color.fromARGB(255, 22, 22, 22),
           ),
           floatingActionButtonTheme: const FloatingActionButtonThemeData(
             foregroundColor: Colors.white,

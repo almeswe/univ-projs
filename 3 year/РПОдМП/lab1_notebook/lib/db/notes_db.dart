@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:lab1_notebook/models/note.dart';
 
 import 'package:sqflite/sqflite.dart';

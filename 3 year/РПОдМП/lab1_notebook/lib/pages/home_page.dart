@@ -13,7 +13,6 @@ class NotebookHomePage extends StatefulWidget {
 
 class _NotebookHomePageState extends State<NotebookHomePage> {
   var notes = <Note>[];
-  var dummy = 0;
   var noteTitleStyle = const TextStyle(
     fontSize: 25,
     fontFamily: 'RobotoBold',
@@ -23,12 +22,7 @@ class _NotebookHomePageState extends State<NotebookHomePage> {
     fontFamily: 'RobotoThin',
     color: Color(0xFFD3D3D3),
   );
-  var _searchController = TextEditingController();
-
-  @override
-  void initState() {
-    super.initState();
-  }
+  final _searchController = TextEditingController();
 
   Widget noteBuilder(Note note) {
     var theme = Theme.of(context);
@@ -103,12 +97,21 @@ class _NotebookHomePageState extends State<NotebookHomePage> {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          SizedBox(height: 15),
+          const SizedBox(height: 15),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 15.0),
             child: TextField(
               controller: _searchController,
+              style: const TextStyle(
+                fontSize: 20,
+                fontFamily: "Montserrat",
+              ),
               decoration: InputDecoration(
+                hintText: "Search...",
+                hintStyle: const TextStyle(
+                  fontSize: 20,
+                  fontFamily: "Montserrat",
+                ),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(5),
                 ),

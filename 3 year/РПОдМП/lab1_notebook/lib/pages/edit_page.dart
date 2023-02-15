@@ -26,7 +26,6 @@ class _NotebookEditPageState extends State<NotebookEditPage> {
   Future<void> noteSave() async {
     _note.title = _titleController.text;
     _note.contents = _contentsController.text;
-    print(_note.id);
     await NotesDatabase.instance.updateNote(_note);
   }
 
