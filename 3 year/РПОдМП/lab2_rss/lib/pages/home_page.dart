@@ -39,6 +39,7 @@ class _RssReaderHomeState extends State {
           color: Color.fromRGBO(64, 75, 96, .9),
         ),
         child: ListTile(
+          onTap: () => _rssItemOpen(context, item),
           title: Text(
             item.title!,
             style: const TextStyle(
