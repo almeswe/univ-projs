@@ -1,0 +1,24 @@
+name: lab3_qr
+description: A new Flutter project.
+publish_to: 'none'
+version: 0.1.0
+
+environment:
+  sdk: '>=2.19.2 <3.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  mobile_scanner: ^3.0.0
+  qr_flutter: ^4.0.0
+  webview_flutter: ^4.0.5
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^2.0.0
+
+flutter:
+  assets:
+    - assets/images/qr.jpg
+  uses-material-design: true
