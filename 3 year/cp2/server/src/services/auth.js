@@ -4,6 +4,12 @@ const TokenService = require("../services/token");
 const ApiException = require("../exceptions/api");
 
 class AuthService {
+    static async renewTokens(id) {
+        const tokens = TokenService.generate({ id: id });
+        await UserService.updateToken(id, tokens.refreshToken);
+        return tokens;
+    }
+
     static async signup(creds) {
         const { email } = creds;
         if (await UserService.exists(email)) {
@@ -23,15 +29,26 @@ class AuthService {
         if (!user) {
             throw ApiException.Api400("You specified incorrect email.");
         }
-        if (!bcrypt.compare(password, user.password)) {
+        if (!await bcrypt.compare(password, user.password)) {
             throw ApiException.Api400("You specified incorrect password.");
         }
-        const tokens = TokenService.makeTokens({ id: user.id });
-        UserService.updateToken(user.id, tokens.refreshToken);
-        return {
-            ...tokens,
-            user: user
-        };
+        return AuthService.renewTokens(user.id);
+    }
+
+    static async refresh(creds) {
+        const { refreshToken } = creds;
+        if (!refreshToken) {
+            throw ApiException.Api401();
+        }
+        const verified = TokenService.verifyRefreshToken(refreshToken);
+        if (!verified) {
+            throw ApiException.Api401();
+        }
+        const user = await UserService.findByToken(refreshToken);
+        if (!user) {
+            throw ApiException.Api401();
+        }
+        return AuthService.renewTokens(user.id);
     }
 }
 

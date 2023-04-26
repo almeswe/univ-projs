@@ -5,8 +5,8 @@ class ApiException extends Error {
         this.status = status;
     }
 
-    static Api401(message) {
-        return new ApiException(401, message);
+    static Api401() {
+        return new ApiException(401, "Unauthorized access denied.");
     }
 
     static Api400(message) {

@@ -1,6 +1,9 @@
 const UserService = require("../services/auth");
 const ApiException = require("../exceptions/api");
 
+const JWT_EXPIRATION_15M = 15 * 60 * 1000;
+const JWT_EXPIRATION_15D = 15 * 24 * 3600 * 1000;
+
 class AuthController {
     async signup(req, res, next) {
         const body = req.body;
@@ -31,7 +34,27 @@ class AuthController {
                 password: body.password 
             });
             res.cookie('refreshToken', data.refreshToken, {
-                maxAge: 15*24*3600*1000,
+                maxAge: JWT_EXPIRATION_15D,
+                httpOnly: true
+            });
+            return res.status(200).json({
+                accessToken: data.accessToken,
+                refreshToken: data.refreshToken
+            });
+        }
+        catch (e) {
+            next(e);
+        }
+    }
+
+    async refresh(req, res, next) {
+        try {
+            const { refreshToken } = req.cookies;
+            const data = await UserService.refresh({
+                refreshToken: refreshToken 
+            });
+            res.cookie('refreshToken', data.refreshToken, {
+                maxAge: JWT_EXPIRATION_15D,
                 httpOnly: true
             });
             return res.status(200).json({

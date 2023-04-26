@@ -4,7 +4,7 @@ const jwt = require("jsonwebtoken");
 env.config();
 
 class TokenService {
-    static makeRefreshToken(payload) {
+    static generateRefreshToken(payload) {
         return jwt.sign(
             payload, 
             process.env.JWT_REFRESH_TOKEN,
@@ -12,7 +12,7 @@ class TokenService {
         );
     }
 
-    static makeAccessToken(payload) {
+    static generateAccessToken(payload) {
         return jwt.sign(
             payload, 
             process.env.JWT_ACCESS_TOKEN,
@@ -20,10 +20,10 @@ class TokenService {
         );
     }
 
-    static makeTokens(payload) {
+    static generate(payload) {
         return {
-            accessToken: TokenService.makeAccessToken(payload),
-            refreshToken: TokenService.makeRefreshToken(payload),
+            accessToken: TokenService.generateAccessToken(payload),
+            refreshToken: TokenService.generateRefreshToken(payload),
         };
     }
 

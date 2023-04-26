@@ -7,6 +7,7 @@ const router = Router();
 
 router.post("/signin", authController.signin);
 router.post("/signup", authController.signup);
+router.post("/refresh", authController.refresh);
 
 router.get("/home", authMiddleware, (req, res) => {
     res.status(200).json("authorized");

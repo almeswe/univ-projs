@@ -50,12 +50,15 @@ class UserService {
         return await UserService.findOne("u_email", `\'${email}\'`);
     }
 
+    static async findByToken(token) {
+        return await UserService.findOne("u_reftok", `\'${token}\'`);
+    }
+
     static async updateOne(id, attr, value) {
         const query = `
             UPDATE User SET ${attr}=${value} 
                 WHERE u_id=${id}; 
         `;
-        console.log(query);
         await db.execute(query);
     }
 
