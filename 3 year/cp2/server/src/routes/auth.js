@@ -7,5 +7,6 @@ const router = Router();
 router.post("/signin", authController.signin);
 router.post("/signup", authController.signup);
 router.post("/refresh", authController.refresh);
+router.post("/signout", authController.signout);
 
 module.exports = router;

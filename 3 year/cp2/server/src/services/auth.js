@@ -33,6 +33,7 @@ class AuthService {
       throw ApiException.Api400("You specified incorrect password.");
     }
     const tokens = await AuthService.renewTokens(user.id);
+    user.refreshToken = tokens.refreshToken;
     return {
       ...tokens,
       user: user
@@ -54,6 +55,14 @@ class AuthService {
       ...tokens,
       user: user
     };
+  }
+
+  static async signout(creds) {
+    const { refreshToken } = creds;
+    const user = await UserService.findByToken(refreshToken);
+    if (user) {
+      await UserService.updateToken(user.id, "");
+    }
   }
 }
 

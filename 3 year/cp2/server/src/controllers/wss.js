@@ -1,28 +1,43 @@
-const SshException = require("../exceptions/ssh");
 const SshService = require("../services/ssh");
+const TokenService = require("../services/token");
 const sshService = new SshService();
 
+const SshException = require("../exceptions/ssh");
+
 class WssController {
-  static sendException(ws, e) {
+  static protect(method, ws, req) {
+    if (!req.token) {
+      throw SshException.Ssh2("Token was not specified.");
+    }
+    const user = TokenService.verifyAccessToken(req.token);
+    if (!user) {
+      throw SshException.Ssh2("Access denied.");
+    }
+    //req.user = user;
+    req.id = user.id;
+    method(ws, req);
+  }
+
+  static exception(ws, e) {
     if (e instanceof SshException) {
       ws.send(JSON.stringify(e.toJson()));
     }
     else {
       ws.send(JSON.stringify({
         status: 3,
-        error: `Internal error occured: ${e}`
+        error: `Internal server error occured: ${e}`
       }));
     }
   }
 
-  static onConnection(ws) {
-    console.log("New connection");
+  static connection(ws) {
+    console.log("new connection.");
     ws.on("message", (data) => { 
-      WssController.onMessage(ws, data); 
+      WssController.message(ws, data); 
     });
   }
 
-  static onMessage(ws, data) {
+  static message(ws, data) {
     try {
       const req = JSON.parse(data);
       if (!req.event) {
@@ -32,39 +47,39 @@ class WssController {
       if (!event) {
         throw SshException.Ssh1(`Unknown event met: ${req.event}`);
       }
-      wsEventMap[req.event](ws, req);
+      WssController.protect(wsEventMap[req.event], ws, req);
     }
     catch (e) {
-      WssController.sendException(ws, e);
+      WssController.exception(ws, e);
     }
   }
 
-  static onWsConnect(ws, req) {
+  static connect(ws, req) {
     try {
       if (!req.host || !req.pass) {
         throw SshException.Ssh1("You must specify host and password.");
       }
-      sshService.connect(ws, 0, req.host, req.pass);
+      sshService.connect(ws, req.id, req.host, req.pass);
     }
     catch (e) {
-      WssController.sendException(ws, e);
+      WssController.exception(ws, e);
     }
   }
 
-  static onWsExecute(ws, req) {
+  static execute(ws, req) {
     try {
       if (!req.command) {
-        throw new SshException.Ssh("You must specify command to execute.");
+        throw SshException.Ssh1("You must specify command to execute.");
       }
-      sshService.execute(ws, 0, req.command);
+      sshService.execute(ws, req.id, req.command);
     }
     catch (e) {
-      WssController.sendException(ws, e);
+      WssController.exception(ws, e);
     }
   }
 
-  static onWsDisconnect(ws, req) {
-    sshService.disconnect(ws, 0);
+  static disconnect(ws, req) {
+    sshService.disconnect(ws, req.id);
     ws.send(JSON.stringify({
       status: 0,
     }));
@@ -72,9 +87,9 @@ class WssController {
 }
 
 const wsEventMap = {
-  "connect":    WssController.onWsConnect,
-  "execute":    WssController.onWsExecute,
-  "disconnect": WssController.onWsDisconnect,
+  "connect":    WssController.connect,
+  "execute":    WssController.execute,
+  "disconnect": WssController.disconnect,
 };
 
 module.exports = WssController;

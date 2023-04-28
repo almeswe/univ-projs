@@ -16,7 +16,7 @@ class AuthController {
         username: body.username,
         password: body.password 
       });
-      return res.status(200);
+      return res.status(200).json("");
     }
     catch (e) {
       next(e);
@@ -37,7 +37,6 @@ class AuthController {
         maxAge: JWT_EXPIRATION_15D, 
         httpOnly: true
       });
-      console.log(data);
       return res.status(200).json(data);
     }
     catch (e) {
@@ -59,6 +58,23 @@ class AuthController {
         httpOnly: true
       });
       return res.status(200).json(data);
+    }
+    catch (e) {
+      next(e);
+    }
+  }
+
+  async signout(req, res, next) {
+    try {
+      const { refreshToken } = req.cookies;
+      if (!refreshToken) {
+        throw ApiException.Api401();
+      }
+      const data = await UserService.signout({
+        refreshToken: refreshToken 
+      });
+      res.clearCookie('refreshToken');
+      return res.status(200).json("");
     }
     catch (e) {
       next(e);
