@@ -14,7 +14,7 @@ typedef struct _wav_fn_params {
     float x; 
     float p;
     float d;
-    int32_t f;
+    float f;
     int32_t n;
 } wav_fn_params;
 

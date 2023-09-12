@@ -15,7 +15,7 @@ float pulse_wave(wav_fn_params* params) {
         + params->p, 2 * M_PI
     ) / (2 * M_PI);
     return (value <= params->d) ?
-        params->a : -params->a;
+        params->a : 0;
 }
 
 float triangle_wave(wav_fn_params* params) {
@@ -88,6 +88,34 @@ void gen_wav(wav_gen_params params) {
         params.wav_fn_params.x = i;
         int y = cut((INT_MAX) * params.wav_fn(&params.wav_fn_params));
         write(fd, (char*)&y, sizeof(int));
+    }
+    close(fd);
+}
+
+void gen_mod_wav(wav_mod_params params) {
+    remove(params.out);
+    int fd = open(params.out, O_CREAT | O_RDWR, 0666);
+    if (fd == -1) {
+        perror("open");
+        exit(EXIT_FAILURE);
+    }
+    wav_hdr hdr = make_wav_hdr(
+        params.duration,
+        params.cparams.n
+    );
+    write(fd, (char*)&hdr, sizeof(wav_hdr));
+    float t_f = params.cparams.f;
+    for (int i = 0; i < hdr.sample_rate * params.duration; i++) {
+        params.cparams.x = params.mparams.x = i;
+        float my = params.modulation(&params.mparams);
+        switch (params.type) {
+            case MOD_PHASE:     params.cparams.p = my; break;
+            case MOD_AMPLITUDE: params.cparams.a = my; break;
+            case MOD_FREQUENCY: params.cparams.f = t_f + t_f * (float)fabs(my); break;
+        }
+        long temp = (INT_MAX) * params.carrier(&params.cparams);
+        int cy = cut(temp);
+        write(fd, (char*)&cy, sizeof(int));
     }
     close(fd);
 }

@@ -1,9 +1,10 @@
 #include "common.h"
 
 static void help(const char* name) {
-    fprintf(stderr, "usage: %s [out] [w] [a] [f] [n] [p] [d]\n", name);
+    fprintf(stderr, "usage: %s [out] [w] {pd} [a] [f] [n] [p] [d]\n", name);
     fprintf(stderr, "  out - out file path.\n"
-                    "  w   - wave function (vals: `sine`, `sawtooth`, `triangle`, `noise`).\n"
+                    "  w   - wave function (vals: `sine`, `sawtooth`, `triangle`, `noise`, `pulse`).\n"
+                    "  pd  - duty (in case when wave is pulse wave).\n"
                     "  a   - amplitude of wave function.\n"
                     "  f   - frequency of wave function (in Hz).\n"
                     "  n   - sample rate (in Hz).\n"
@@ -12,22 +13,15 @@ static void help(const char* name) {
     );
 }
 
-static wav_fn_params parse_params(char** argv) {
-    return (wav_fn_params){
-        .x = 0,
-        .a = strtod(argv[3], NULL),
-        .f = strtol(argv[4], NULL, 10),
-        .n = strtol(argv[5], NULL, 10),
-        .p = strtod(argv[6], NULL)
-    };
-}
-
 static wav_fn* parse_wave_fn(const char* arg) {
     if (strcmp(arg, NOISE_STR) == 0) {
         return noise;
     }    
     if (strcmp(arg, SINE_WAVE_STR) == 0) {
         return sine_wave;
+    }
+    if (strcmp(arg, PULSE_WAVE_STR) == 0) {
+        return pulse_wave;
     }
     if (strcmp(arg, SAWTOOTH_WAVE_STR) == 0) {
         return sawtooth_wave;
@@ -40,25 +34,30 @@ static wav_fn* parse_wave_fn(const char* arg) {
     return NULL;
 }
 
+static wav_gen_params parse_params(char** argv) {
+    int index = 1;
+    wav_gen_params params = {0};
+    params.out = argv[index++];
+    params.wav_fn = parse_wave_fn(argv[index++]);
+    if (params.wav_fn == pulse_wave) {
+        params.wav_fn_params.d = strtod(argv[index++], NULL);
+    }
+    params.wav_fn_params.a = strtod(argv[index++], NULL);
+    params.wav_fn_params.f = strtod(argv[index++], NULL);
+    params.wav_fn_params.n = strtod(argv[index++], NULL);
+    params.wav_fn_params.p = strtod(argv[index++], NULL);
+    params.duration = atoi(argv[index++]);
+    return params;
+}
+
 int main(int argc, char** argv) {
     errno = 0;
     srand(time(NULL));
-    if (argc != 8) {
+    if (argc != 8 &&
+        argc != 9) {
         help(argv[0]);
         exit(EXIT_FAILURE);
     }
-    wav_fn_params params = parse_params(argv);
-    const char* out = argv[1];
-    int duration = strtol(argv[7], NULL, 10);
-    if (errno != 0) {
-        perror("argv (strtol/d): ");
-        exit(EXIT_FAILURE);
-    }
-    gen_wav((wav_gen_params){
-        .out = out,
-        .duration = duration,
-        .wav_fn = parse_wave_fn(argv[2]),
-        .wav_fn_params = params
-    });
+    gen_wav(parse_params(argv));
     return EXIT_SUCCESS;
 }

@@ -5,8 +5,8 @@ SET(CMAKE_BUILD_TYPE Debug)
 SET(
     ENTRIES 
     "lab1-gen-waves" 
-    "lab1-gen-pulse"
     "lab1-merge"
+    "lab1-mod"
 )
 FOREACH(ENTRY IN LISTS ENTRIES)
     STRING(CONCAT ENTRY_SOURCE ${ENTRY} ".c")

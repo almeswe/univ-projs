@@ -8,15 +8,16 @@ static void help(const char* name) {
                     "  n   - sample rate (in Hz).\n"
                     "  p   - phase.\n"
                     "  d   - duration of .wav file to be generated.\n"
-                    "  w   - wave function (vals: `sine`, `sawtooth`, `triangle`, `noise`).\n"
+                    "  w   - wave function (vals: `sine`, `sawtooth`, `triangle`, `noise`, `pulse`).\n"
     );
 }
 
 static wav_fn_params parse_params(char** argv) {
     return (wav_fn_params){
         .x = 0,
+        .d = 0.5,
         .a = strtod(argv[2], NULL),
-        .f = strtol(argv[3], NULL, 10),
+        .f = strtod(argv[3], NULL),
         .n = strtol(argv[4], NULL, 10),
         .p = strtod(argv[5], NULL)
     };
@@ -28,6 +29,9 @@ static wav_fn* parse_wave_fn(const char* arg) {
     }    
     if (strcmp(arg, SINE_WAVE_STR) == 0) {
         return sine_wave;
+    }
+    if (strcmp(arg, PULSE_WAVE_STR) == 0) {
+        return pulse_wave;
     }
     if (strcmp(arg, SAWTOOTH_WAVE_STR) == 0) {
         return sawtooth_wave;

@@ -46,7 +46,24 @@ typedef struct _wav_merge_params {
     wav_fn_params wav_fn_params;
 } wav_merge_params;
 
+typedef enum _wav_mod_type {
+    MOD_AMPLITUDE,
+    MOD_FREQUENCY,
+    MOD_PHASE
+} wav_mod_type;
+
+typedef struct _wav_mod_params {
+    int duration;
+    const char* out;
+    wav_fn* carrier;
+    wav_fn* modulation;
+    wav_mod_type type;
+    wav_fn_params cparams;
+    wav_fn_params mparams;
+} wav_mod_params;
+
 void gen_wav(wav_gen_params params);
+void gen_mod_wav(wav_mod_params params);
 void merge_wavs(wav_merge_params params);
 
 #endif
