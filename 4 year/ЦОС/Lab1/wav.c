@@ -1,43 +1,124 @@
 #include "wav.h"
 
+typedef float (wav_fn2)(float, float);
+typedef float (wav_fn_phi_frq)(const wav_fn_params*, float);
+
+static float sine_wave2(float phi, float p) {
+    return sinf(phi + p);
+}
+
+static float sine_wave_phi(const wav_fn_params* params) {
+    return 2 * M_PI * params->f * params->x 
+                    / params->n;
+}
+
+static float sine_wave_phi_frq(const wav_fn_params* params, float y_m) {
+    return 2 * M_PI * params->f * (1 + y_m) * params->x 
+                    / params->n;
+}
+
 float sine_wave(wav_fn_params* params) {
-    return params->a * sinf(
-        2 * M_PI * params->f * params->x 
-                 / params->n 
-        + params->p
-    );
+    return params->a * sinf(sine_wave_phi(params) + params->p);
+}
+
+static float pulse_wave2(float phi, float d) {
+    return (phi <= d) ? 1 : 0;
+}
+
+static float pulse_wave_phi(const wav_fn_params* params) {
+    return fmodf(
+        2 * M_PI * params->f * params->x
+                 / params->n,
+        2 * M_PI
+    ) / (2 * M_PI);
+}
+
+static float pulse_wave_phi_frq(const wav_fn_params* params, float y_m) {
+    return fmodf(
+        2 * M_PI * params->f * (1 + y_m) * params->x
+                 / params->n,
+        2 * M_PI
+    ) / (2 * M_PI);
 }
 
 float pulse_wave(wav_fn_params* params) {
-    float value = fmodf(
-        2 * M_PI * params->f * params->x
-                 / params->n
-        + params->p, 2 * M_PI
-    ) / (2 * M_PI);
-    return (value <= params->d) ?
-        params->a : 0;
+    return (pulse_wave_phi(params) <= params->d) ? params->a : 0;
+}
+
+static float triangle_wave2(float phi, float p) {
+    return 2 / M_PI * asinf(sinf(phi + p));    
+}
+
+static float triangle_wave_phi(const wav_fn_params* params) {
+    return 2 * M_PI * params->f * params->x
+                    / params->n;
+}
+
+static float triangle_wave_phi_frq(const wav_fn_params* params, float y_m) {
+    return 2 * M_PI * params->f * (1 + y_m) * params->x
+                    / params->n;
 }
 
 float triangle_wave(wav_fn_params* params) {
     return params->a * 2 / M_PI * asinf(
-        sinf(
-            2 * M_PI * params->f * params->x
-                     / params->n
-            + params->p
-        )
+        sinf(triangle_wave_phi(params) + params->p)
     );
 }
 
+static float sawtooth_wave2(float phi, float p) {
+    return - 2 / M_PI * atanf(1 / tanf(phi + p));    
+}
+
+static float sawtooth_wave_phi(const wav_fn_params* params) {
+    return M_PI * params->f * params->x 
+                / params->n;
+}
+
+static float sawtooth_wave_phi_frq(const wav_fn_params* params, float y_m) {
+    return M_PI * params->f * (1 + y_m) * params->x 
+                / params->n;
+}
+
 float sawtooth_wave(wav_fn_params* params) {
-    return params->a * 2 * M_PI * atanf(
-        tanf(2 * M_PI * params->f * params->x 
-                      / params->n
-        )
+    return - params->a * 2 / M_PI * atanf(
+        1 / tanf(sawtooth_wave_phi(params) + params->p)
     );
 }
 
 float noise(wav_fn_params* params) {
-    return params->a * rand() / RAND_MAX;
+    return params->a * (2 * ((float)rand() / RAND_MAX) - 1);
+}
+
+static wav_fn2* get_wav_fn2(wav_fn* fn) {
+    if (fn == sine_wave) {
+        return sine_wave2;
+    }
+    if (fn == triangle_wave) {
+        return triangle_wave2;
+    }
+    if (fn == sawtooth_wave) {
+        return sawtooth_wave2;
+    }
+    if (fn == pulse_wave) {
+        return pulse_wave2;
+    }
+    return NULL;
+}
+
+static wav_fn_phi_frq* get_wav_phi_frq_fn(wav_fn* fn) {
+    if (fn == sine_wave) {
+        return sine_wave_phi_frq;
+    }
+    if (fn == triangle_wave) {
+        return triangle_wave_phi_frq;
+    }
+    if (fn == sawtooth_wave) {
+        return sawtooth_wave_phi_frq;
+    }
+    if (fn == pulse_wave) {
+        return pulse_wave_phi_frq;
+    }
+    return NULL;
 }
 
 static wav_hdr make_wav_hdr(int duration, int n) {
@@ -104,18 +185,31 @@ void gen_mod_wav(wav_mod_params params) {
         params.cparams.n
     );
     write(fd, (char*)&hdr, sizeof(wav_hdr));
-    float t_f = params.cparams.f;
+    float init_ca = params.cparams.a;
+    float c_phi = 0.0;
     for (int i = 0; i < hdr.sample_rate * params.duration; i++) {
+        float y_m = 0.0, y_cm = 0.0;
         params.cparams.x = params.mparams.x = i;
-        float my = params.modulation(&params.mparams);
         switch (params.type) {
-            case MOD_PHASE:     params.cparams.p = my; break;
-            case MOD_AMPLITUDE: params.cparams.a = my; break;
-            case MOD_FREQUENCY: params.cparams.f = t_f + t_f * (float)fabs(my); break;
+            case MOD_AMPLITUDE: {
+                y_m = params.modulation(&params.mparams);
+                params.cparams.a = init_ca * (1 + y_m);
+                y_cm = params.carrier(&params.cparams);
+                break;
+            }
+            case MOD_FREQUENCY: {
+                y_m = params.modulation(&params.mparams);
+                c_phi += get_wav_phi_frq_fn(params.carrier)(&params.cparams, y_m);
+                float temp_p_or_d = params.cparams.p;
+                if (params.carrier == pulse_wave) {
+                    temp_p_or_d = params.cparams.d;
+                }
+                y_cm = init_ca * get_wav_fn2(params.carrier)(c_phi, temp_p_or_d);
+                break;
+            }
         }
-        long temp = (INT_MAX) * params.carrier(&params.cparams);
-        int cy = cut(temp);
-        write(fd, (char*)&cy, sizeof(int));
+        int y = cut((INT_MAX) * y_cm);
+        write(fd, (char*)&y, sizeof(int));
     }
     close(fd);
 }

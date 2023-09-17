@@ -21,7 +21,7 @@ static void help(const char* name) {
 static wav_mod_type parse_mod_type(const char* arg) {
     if (strcmp(arg, AMP_MODULATION) == 0) {
         return MOD_AMPLITUDE;
-    }    
+    }
     if (strcmp(arg, FRQ_MODULATION) == 0) {
         return MOD_FREQUENCY;
     }
