@@ -13,7 +13,7 @@ static float sine_wave_phi(const wav_fn_params* params) {
 }
 
 static float sine_wave_phi_frq(const wav_fn_params* params, float y_m) {
-    return 2 * M_PI * params->f * (1 + y_m) * params->x 
+    return 2 * M_PI * params->f * (1 + y_m)
                     / params->n;
 }
 
@@ -35,7 +35,7 @@ static float pulse_wave_phi(const wav_fn_params* params) {
 
 static float pulse_wave_phi_frq(const wav_fn_params* params, float y_m) {
     return fmodf(
-        2 * M_PI * params->f * (1 + y_m) * params->x
+        2 * M_PI * params->f * (1 + y_m)
                  / params->n,
         2 * M_PI
     ) / (2 * M_PI);
@@ -55,7 +55,7 @@ static float triangle_wave_phi(const wav_fn_params* params) {
 }
 
 static float triangle_wave_phi_frq(const wav_fn_params* params, float y_m) {
-    return 2 * M_PI * params->f * (1 + y_m) * params->x
+    return 2 * M_PI * params->f * (1 + y_m)
                     / params->n;
 }
 
@@ -75,7 +75,7 @@ static float sawtooth_wave_phi(const wav_fn_params* params) {
 }
 
 static float sawtooth_wave_phi_frq(const wav_fn_params* params, float y_m) {
-    return M_PI * params->f * (1 + y_m) * params->x 
+    return M_PI * params->f * (1 + y_m)
                 / params->n;
 }
 

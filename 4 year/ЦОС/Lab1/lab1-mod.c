@@ -3,7 +3,7 @@
 static void help(const char* name) {
     fprintf(stderr, "usage: %s [out] [c] {cd} [m] {md} [t] [ca] [cf] [ma] [mf] [n] [p] [d]\n", name);
     fprintf(stderr, "  out - out file path.\n"
-                    "  c   - carrier wave (vals: `sine`, `sawtooth`, `triangle`, `pulse`, `noise`).\n"
+                    "  c   - carrier wave (vals: `sine`, `sawtooth`, `triangle`, `pulse`).\n"
                     "  cd  - duty (if carrier wave is pulse wave).\n"
                     "  m   - modulation wave (vals: same as carrier).\n"
                     "  md  - duty (if modulation wave is pulse wave).\n"
@@ -30,9 +30,6 @@ static wav_mod_type parse_mod_type(const char* arg) {
 }
 
 static wav_fn* parse_wave_fn(const char* arg) {
-    if (strcmp(arg, NOISE_STR) == 0) {
-        return noise;
-    }    
     if (strcmp(arg, SINE_WAVE_STR) == 0) {
         return sine_wave;
     }
