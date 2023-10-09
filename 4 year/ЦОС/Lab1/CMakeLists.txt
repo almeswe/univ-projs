@@ -1,0 +1,22 @@
+CMAKE_MINIMUM_REQUIRED(VERSION 3.22)
+PROJECT(Lab1)
+FILE(GLOB COMMON_FILES wav.c)
+SET(CMAKE_BUILD_TYPE Debug)
+SET(
+    ENTRIES 
+    "lab1-gen-waves" 
+    "lab1-merge"
+    "lab1-mod"
+)
+FOREACH(ENTRY IN LISTS ENTRIES)
+    STRING(CONCAT ENTRY_SOURCE ${ENTRY} ".c")
+    ADD_EXECUTABLE(
+        ${ENTRY}
+        ${COMMON_FILES}
+        ${ENTRY_SOURCE}
+    )
+    TARGET_LINK_LIBRARIES(
+        ${ENTRY}
+        m
+    )
+ENDFOREACH()
