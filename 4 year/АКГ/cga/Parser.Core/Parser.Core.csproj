@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+	<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Parser.Interface\Parser.Interface.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Using Include="System.Numerics" />
+  </ItemGroup>
+
+</Project>
