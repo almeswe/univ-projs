@@ -15,7 +15,7 @@ class BoxBlur(ImageWrapProc):
                 y + neighbours[1]
             )
             if pixel != None:
-                pixels.append(pixel)
+                pixels.append(pixel)    
         blur: ImagePixel = ImagePixel(0, 0, 0)
         for pixel in pixels:
             blur += pixel

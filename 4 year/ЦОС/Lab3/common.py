@@ -48,8 +48,8 @@ class ImagePixel(abc.ABC):
         assert around % 2 == 1
         dist: int = (around - 1) // 2
         map: List[Tuple[int]] = [
-            *[(x-dist, y-dist) for x in range(0, around)
-                for y in range(0, around)]
+            *[(x-dist, y-dist) for y in range(0, around)
+                for x in range(0, around)]
         ]
         return map
 
@@ -114,11 +114,14 @@ class ImageWrapProc(ImageWrap):
 
 def bootstrap(x: ImageWrapProc) -> None:
     import sys
+    import datetime
     if len(sys.argv) == 3:
         path: str = sys.argv[1]
         kernel: int = int(sys.argv[2])
+        start = datetime.datetime.now()
         y: ImageWrapProc = x(path, kernel)
         y.apply().save(f'{y.get_name()}_{path}')
+        print(f"elapsed: {datetime.datetime.now()-start}")
 
 if __name__ == '__main__':
     pass
