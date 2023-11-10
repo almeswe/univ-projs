@@ -16,7 +16,7 @@ namespace Renderer
 		{
 			Far = 50.0f;
 			Near = 1.0f;
-			Fov = MathF.PI / 8;
+			Fov = MathF.PI / 2;
 			Up = Vector3.UnitY;
 			Target = new Vector3(0.0f, 0.0f, 0.0f);
 			Eye = new Vector3(0.0f, 0.0f, 1.0f);

@@ -17,7 +17,7 @@ namespace Renderer
 			get => _h; 
 		}
 
-		public static float Aspect = 1 / 1;
+		public static float Aspect => _w / (float)_h;
 
 		public static void UpdateWidth(int w)
 		{
@@ -43,6 +43,7 @@ namespace Renderer
 		public static Matrix4x4 CreatePerspective()
 		{
 			return Matrix4x4.CreatePerspectiveFieldOfView(Camera.Fov, Aspect, Camera.Near, Camera.Far);
+			/*
 			return new Matrix4x4
 			(
 				1 / (Aspect * MathF.Tan(Camera.Fov/2)), 0.0f, 0.0f, 0.0f,
@@ -50,6 +51,7 @@ namespace Renderer
 				0.0f, 0.0f, Camera.Far / (Camera.Near - Camera.Far), (Camera.Near * Camera.Far) / (Camera.Near - Camera.Far),
 				0.0f, 0.0f, -1.0f, 1.0f
 			);
+			*/
 		}
 
 		public static Matrix4x4 CreateTranslation()

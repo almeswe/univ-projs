@@ -2,6 +2,10 @@ using Renderer;
 using Parser.Core;
 using Parser.Interface;
 using System.Numerics;
+using System.Runtime.CompilerServices;
+using System.Drawing.Imaging;
+using System.Drawing;
+using System.Runtime.InteropServices;
 
 namespace Visual
 {
@@ -14,12 +18,17 @@ namespace Visual
 		private Vector2 _objectRotation;
 		private List<Vector4> _objectFileVectors;
 
+		private Color _lineColor = Color.Gray;
 		private Color _sceneColor = Color.FromArgb(0, 49, 83);
 
 		private float _movingFactor = 0.01f;
 		private float _rotationFactor = 0.05f;
 		private float _scaleFactor = 0.05f;
 		private float _scaleFactorStep => 0.005f;
+
+		private int _bitmapBytesPerPixel = 0;
+		private BitmapData _bitmapData = null;
+		private Rectangle _bitmapRect => new Rectangle(0, 0, ViewPort.Width, ViewPort.Height);
 
 		public SceneForm(string path)
 		{
@@ -57,10 +66,24 @@ namespace Visual
 			return ViewPort.CreateTranslation();
 		}
 
-		private void DrawPixel(Bitmap bitmap, Point at)
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		private unsafe void DrawPixel(Point at)
 		{
-			if (at.X > 0 && at.Y > 0 && bitmap.Width > at.X && bitmap.Height > at.Y)
-				bitmap?.SetPixel(at.X, at.Y, Color.Gray);
+			if (at.X > 0 && 
+				at.Y > 0 && 
+				this._bitmapData.Width > at.X && 
+				this._bitmapData.Height > at.Y)
+			{
+				byte* pixel = (byte*)(
+					this._bitmapData.Scan0 +
+					(at.Y * this._bitmapData.Stride +
+					 at.X * this._bitmapBytesPerPixel)
+				);
+				pixel[0] = Color.Gray.R;
+				pixel[1] = Color.Gray.G;
+				pixel[2] = Color.Gray.B;
+				pixel[3] = Color.Gray.A;
+			}
 		}
 
 		private void DrawDDALine(Bitmap bitmap, Vector4 start, Vector4 end)
@@ -71,7 +94,7 @@ namespace Visual
 			{
 				at.X += (end.X - start.X) / l;
 				at.Y += (end.Y - start.Y) / l;
-				this.DrawPixel(bitmap, new Point(Convert.ToInt32(Math.Round(at.X)), Convert.ToInt32(Math.Round(at.Y))));
+				this.DrawPixel(new Point(Convert.ToInt32(Math.Round(at.X)), Convert.ToInt32(Math.Round(at.Y))));
 			}
 		}
 
@@ -80,6 +103,9 @@ namespace Visual
 			var start = DateTime.Now;
 			this.UpdateVectors();
 			var bitmap = new Bitmap(ViewPort.Width, ViewPort.Height);
+			this._bitmapData = bitmap.LockBits(this._bitmapRect, 
+				ImageLockMode.ReadWrite, bitmap.PixelFormat);
+			this._bitmapBytesPerPixel = Image.GetPixelFormatSize(this._bitmapData.PixelFormat) / 8;
 			foreach (var p in this._objectFile.Polygons)
 			{
 				var angles = p.Arguments.Count;
@@ -96,6 +122,7 @@ namespace Visual
 			{
 				this.Text = (1000 / ((int)(DateTime.Now - start).TotalMilliseconds + 1)).ToString();
 			}
+			bitmap.UnlockBits(this._bitmapData);
 			return bitmap;
 		}
 
