@@ -8,11 +8,14 @@ namespace Renderer
 		public static Vector3 YAxis { get; private set; }
 		public static Vector3 ZAxis { get; private set; }
 
+		public static FlatLightModel Light { get; private set; }
+
 		static World()
 		{
 			XAxis = Vector3.UnitX;
 			YAxis = Vector3.UnitY;
 			ZAxis = Vector3.UnitZ;
+			Light = new LambertModel(Camera.Eye, 1.0f);
 		}
 
 		public static Matrix4x4 CreateTranslation(Vector3 translation)

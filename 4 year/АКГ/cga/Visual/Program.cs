@@ -9,7 +9,7 @@ namespace Visual
 		public static void Main()
 		{
 			ApplicationConfiguration.Initialize();
-			Application.Run(new SceneForm(@"C:\Users\HP\Desktop\car.obj"));
+			Application.Run(new SceneForm(@"C:\Users\HP\Desktop\human.obj"));
 		}
 	}
-}
+}	

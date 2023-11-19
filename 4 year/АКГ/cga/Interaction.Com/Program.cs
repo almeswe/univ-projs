@@ -65,9 +65,9 @@ namespace Interaction.Com
 			{
 				var diff = value - outValue;
 				var events = int.Abs(diff / scale);
-				for (int i = 0; i < events; i++)
-					_scene.OnSceneKeyDown(null, new KeyEventArgs(
-						diff < 0 ? Keys.Left : Keys.Right));
+				for (int i = 0; i < events; i++);
+					//_scene.OnSceneKeyDown(null, new KeyEventArgs(
+					//	diff < 0 ? Keys.Left : Keys.Right));
 			}
 			value = outValue;
 		}

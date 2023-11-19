@@ -14,12 +14,12 @@ namespace Renderer
 
 		static Camera()
 		{
-			Far = 50.0f;
+			Far = 1000.0f;
 			Near = 1.0f;
-			Fov = MathF.PI / 2;
+			Fov = MathF.PI / 4;
 			Up = Vector3.UnitY;
-			Target = new Vector3(0.0f, 0.0f, 0.0f);
-			Eye = new Vector3(0.0f, 0.0f, 1.0f);
+			Target = new Vector3(0.0f, 0.0f, 3.0f);
+			Eye = new Vector3(0.0f, 0.0f, 2.0f);
 		}
 
 		public static Matrix4x4 CreateTranslation()
