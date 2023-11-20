@@ -18,7 +18,7 @@ namespace Visual
 		private List<Vector4> _objectFileVectices;
 
 		private Color _objectColor = Color.Red;
-		private Color _sceneColor = Color.FromArgb(0, 49, 83);
+		private Color _sceneColor = Color.FromArgb(33,33,33);//;//Color.FromArgb(0, 49, 83);
 
 		private float _movingFactor = 0.05f;
 		private float _rotationFactor = 0.10f;
@@ -31,14 +31,24 @@ namespace Visual
 		private Rectangle _bitmapRect => new Rectangle(0, 0, ViewPort.Width, ViewPort.Height);
 		#endregion
 
+		#region Z_Buffer
 		private float[] _zBuffer = null;
-		
+		#endregion
+
+
+		#region Stats
 		private int _objectRenderTime = 0;
+		private int _objectRenderTimeMin = int.MaxValue;
+		private int _objectRenderTimeMax = int.MinValue;
+		private int _objectRenderSamples = 0;
+		private bool _objectRenderWired = false;
+
 		private long _objectTriangles = 0;
 		private long _objectTrianglesRendered = 0;
 
-		private Font _textFont = new Font("Consolas", 7);
+		private Font _textFont = new Font("Consolas", 9);
 		private SolidBrush _textBrush = new SolidBrush(Color.White);
+		#endregion
 
 		public SceneForm(string path)
 		{
@@ -67,11 +77,10 @@ namespace Visual
 			this.ClearZBuffer();
 		}
 
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		private void ClearZBuffer()
 		{
 			var zBufferCapacity = ViewPort.Width * ViewPort.Height;
-			Array.Fill(this._zBuffer, Camera.Far, 0, zBufferCapacity);
+			Array.Fill(this._zBuffer, float.PositiveInfinity, 0, zBufferCapacity);
 		}
 
 		private Matrix4x4 CreateSrMatrix()
@@ -82,7 +91,6 @@ namespace Visual
 			return scaleMatrix * rotateXMatrix * rotateYMatrix;
 		}
 
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		private Matrix4x4 CreateVmMatrix()
 		{
 			var viewMatrix = Camera.CreateTranslation(); 
@@ -102,21 +110,6 @@ namespace Visual
 			return ViewPort.CreateTranslation();
 		}
 
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		private unsafe float GetZBufferValue(Point at)
-		{
-			var index = at.Y * ViewPort.Width + at.X;
-			return this._zBuffer[index];
-		}
-
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		private unsafe void SetZBufferValue(Point at, float value)
-		{
-			var index = at.Y * ViewPort.Width + at.X;
-			this._zBuffer[index] = value;
-		}
-
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		private unsafe bool ShouldBeCulled(Vector4 v1, Vector4 v2, Vector4 v3)
 		{
 			var e1 = new Vector3(v2.X - v1.X, v2.Y - v1.Y, v2.Z - v1.Z);
@@ -126,26 +119,14 @@ namespace Visual
 			return Vector3.Dot(n, v) > 0;
 		}
 
-		private float GetZInsideTriangle(Vector4 v1, Vector4 v2, Vector4 v3, Point p)
+		private Vector3 GetBarycentric(Point p, Vector4 v1, Vector4 v2, Vector4 v3)
 		{
-			var det = (v2.Z - v3.Z) * (v1.X - v3.X) + (v3.X - v2.X) * (v1.Y - v3.Y);
-			var l1 = ((v2.Z - v3.Z) * (p.X - v3.X) + (v3.X - v2.X) * (p.Y - v3.Y)) / det;
-			var l2 = ((v3.Z - v1.Z) * (p.X - v3.X) + (v1.X - v3.X) * (p.Y - v3.Y)) / det;
-			var l3 = 1.0f - l1 - l2;
-			return l1 * v1.Z + l2 * v2.Z + l3 * v3.Z;
-		}
-
-		private bool IsPointInTriangle(Point p, Vector4 v1, Vector4 v2, Vector4 v3)
-		{
-			// Вычисление барицентрических координат
-			float alpha = ((v2.Y - v3.Y) * (p.X - v3.X) + (v3.X - v2.X) * (p.Y - v3.Y)) /
-						  ((v2.Y - v3.Y) * (v1.X - v3.X) + (v3.X - v2.X) * (v1.Y - v3.Y));
-			float beta = ((v3.Y - v1.Y) * (p.X - v3.X) + (v1.X - v3.X) * (p.Y - v3.Y)) /
-						 ((v2.Y - v3.Y) * (v1.X - v3.X) + (v3.X - v2.X) * (v1.Y - v3.Y));
-			float gamma = 1.0f - alpha - beta;
-
-			// Проверка, находится ли точка внутри треугольника
-			return alpha >= 0 && beta >= 0 && gamma >= 0;
+			var barycentric = new Vector3();
+			var det = (v2.Y - v3.Y) * (v1.X - v3.X) + (v3.X - v2.X) * (v1.Y - v3.Y);
+			barycentric.X = ((v2.Y - v3.Y) * (p.X - v3.X) + (v3.X - v2.X) * (p.Y - v3.Y)) / det;
+			barycentric.Y = ((v3.Y - v1.Y) * (p.X - v3.X) + (v1.X - v3.X) * (p.Y - v3.Y)) / det;
+			barycentric.Z = 1.0f - barycentric.X - barycentric.Y;
+			return barycentric;
 		}
 
 		private unsafe bool Rasterize(Vector4 v1, Vector4 v2, Vector4 v3, float intensity)
@@ -167,44 +148,57 @@ namespace Visual
 
 			var rasterized = false;
 
-			for (var y = box.Y; y <= box.Bottom; y++)
+			for (var y = box.Y; y >= 0 && y <= box.Bottom; y++)
 			{
-				for (var x = box.X; x <= box.Right; x++)
+				for (var x = box.X; x >= 0 && x <= box.Right; x++)
 				{
 					// check if inside viewport
-					if (x < 0 || y < 0 || 
-						this._bitmapData.Width <= x || 
+					if (this._bitmapData.Width <= x || 
 						this._bitmapData.Height <= y)
 						continue;
-					// check if point inside triangle
 					var p = new Point(x, y);
-					if (!this.IsPointInTriangle(p, v1, v2, v3))
+					// get barycentric coordinates
+					var bc = this.GetBarycentric(p, v1, v2, v3);
+					// check if point inside triangle
+					if (bc.X < 0 || bc.Y < 0 || bc.Z < 0)
 						continue;
 					// z-buffer logic
-					var bZIndex = this.GetZBufferValue(p);
-					var pZIndex = this.GetZInsideTriangle(v1, v2, v3, p);
+					var index = p.Y * ViewPort.Width + p.X;
+					var bZIndex = this._zBuffer[index];
+					var pZIndex = bc.X * v1.Z + bc.Y * v2.Z + bc.Z * v3.Z;
 					if (pZIndex > bZIndex)
 						continue;
-					this.SetZBufferValue(p, pZIndex);
 					rasterized = true;
+					this._zBuffer[index] = pZIndex;
 					this.DrawPixel(p, intensity);
 				}
 			}
 			return rasterized;
+
 		}
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		private unsafe void DrawPixel(Point at, float intensity)
 		{
-			byte* pixel = (byte*)(
+			var pixel = (int*)(
 				this._bitmapData.Scan0 +
 				(at.Y * this._bitmapData.Stride +
 					at.X * this._bitmapBytesPerPixel)
 			);
-			pixel[0] = (byte)(this._objectColor.B * intensity);
-			pixel[1] = (byte)(this._objectColor.G * intensity);
-			pixel[2] = (byte)(this._objectColor.R * intensity);
-			pixel[3] = this._objectColor.A;
+			var value = (int)(this._objectColor.A) << 24 |
+						(int)(this._objectColor.R * intensity) << 16 |
+						(int)(this._objectColor.G * intensity) << 8 |
+						(int)(this._objectColor.B * intensity);
+			*pixel = value;
+			//var pixel = (byte*)(
+			//	this._bitmapData.Scan0 +
+			//	(at.Y * this._bitmapData.Stride +
+			//		at.X * this._bitmapBytesPerPixel)
+			//);
+			//pixel[0] = (byte)(this._objectColor.B * intensity);
+			//pixel[1] = (byte)(this._objectColor.G * intensity);
+			//pixel[2] = (byte)(this._objectColor.R * intensity);
+			//pixel[3] = this._objectColor.A;
 		}
 
 		private void DrawDDALine(Vector4 v1, Vector4 v2, float intensity)
@@ -235,60 +229,96 @@ namespace Visual
 
 		private float GetIntensity(Vector4 v1, Vector4 v2, Vector4 v3)
 		{
-			//return 1.0f;
 			var e1 = new Vector3(v2.X - v1.X, v2.Y - v1.Y, v2.Z - v1.Z);
 			var e2 = new Vector3(v3.X - v1.X, v3.Y - v1.Y, v3.Z - v1.Z);
-			var n = -Vector3.Cross(e1, e2);
+			var n = Vector3.Cross(e1, e2);
 			var f1 = World.Light.Compute(n, new Vector3(v1.X, v1.Y, v1.Z));
 			var f2 = World.Light.Compute(n, new Vector3(v2.X, v2.Y, v2.Z));
 			var f3 = World.Light.Compute(n, new Vector3(v3.X, v3.Y, v3.Z));
 			return (f1 + f2 + f3) / 3.0f;
 		}
 
-		[MethodImpl(MethodImplOptions.AggressiveOptimization)]
-		private unsafe void SortVerticesClockwise(ref Vector4 v1, ref Vector4 v2, ref Vector4 v3)
-		{
-			var center = (v1 + v2 + v3) / 3;
-			var vertices = stackalloc Vector4[] { v1, v2, v3 };
-			for (var i = 0; i < 3; i++)
-				for (var j = i + 1; j < 3; j++)
-					if (MathF.Atan2(vertices[i].Y - center.Y, vertices[i].X - center.X) >
-						MathF.Atan2(vertices[j].Y - center.Y, vertices[j].X - center.X))
-						(vertices[i], vertices[j]) = (vertices[j], vertices[i]);
-			v1 = vertices[0];
-			v2 = vertices[1];
-			v3 = vertices[2];
-			////// Вычисляем центр треугольника
-			//var center = (v1 + v2 + v3) / 3;
-			//// Создаем список вершин
-			//var vertices = new List<Vector4> { v1, v2, v3 };
-			//// Сортируем вершины по углу относительно центра
-			//vertices.Sort((a, b) =>
-			//{
-			//	float aAngle = (float)Math.Atan2(a.Y - center.Y, a.X - center.X);
-			//	float bAngle = (float)Math.Atan2(b.Y - center.Y, b.X - center.X);
+		//[MethodImpl(MethodImplOptions.AggressiveOptimization)]
+		//private unsafe void SortVerticesClockwise(ref Vector4 v1, ref Vector4 v2, ref Vector4 v3)
+		//{
+		//	var center = (v1 + v2 + v3) / 3;
+		//	var vertices = stackalloc Vector4[] { v1, v2, v3 };
+		//	for (var i = 0; i < 3; i++)
+		//		for (var j = i + 1; j < 3; j++)
+		//			if (MathF.Atan2(vertices[i].Y - center.Y, vertices[i].X - center.X) >
+		//				MathF.Atan2(vertices[j].Y - center.Y, vertices[j].X - center.X))
+		//				(vertices[i], vertices[j]) = (vertices[j], vertices[i]);
+		//	v1 = vertices[0];
+		//	v2 = vertices[1];
+		//	v3 = vertices[2];
+		//}
 
-			//	return aAngle.CompareTo(bAngle);
-			//});
-			//// Обновляем вершины
-			//v1 = vertices[0];
-			//v2 = vertices[1];
-			//v3 = vertices[2];
+		//[MethodImpl(MethodImplOptions.AggressiveOptimization)]
+		//private unsafe void SortVerticesCounterClockwise(ref Vector4 v1, ref Vector4 v2, ref Vector4 v3)
+		//{
+		//	var center = (v1 + v2 + v3) / 3;
+		//	var vertices = stackalloc Vector4[] { v1, v2, v3 };
+		//	for (var i = 0; i < 3; i++)
+		//		for (var j = i + 1; j < 3; j++)
+		//			if (MathF.Atan2(vertices[i].Y - center.Y, vertices[i].X - center.X) <
+		//				MathF.Atan2(vertices[j].Y - center.Y, vertices[j].X - center.X))
+		//				(vertices[i], vertices[j]) = (vertices[j], vertices[i]);
+		//	v1 = vertices[0];
+		//	v2 = vertices[1];
+		//	v3 = vertices[2]; 
+		//}
+
+		//[MethodImpl(MethodImplOptions.AggressiveOptimization)]
+		//private unsafe void SortVerticesCounterClockwise(Polygon p)
+		//{
+		//	var list = p.Arguments as List<ValueTuple<int, int, int>>;
+		//	for (var i = 0; i < list.Count; i++)
+		//		for (var j = i + 1; j < list.Count; j++)
+		//			if (this._objectFileVectices[list[j].Item1-1].Y >
+		//				this._objectFileVectices[list[i].Item1-1].Y)
+		//				(this._objectFileVectices[list[j].Item1 - 1], this._objectFileVectices[list[i].Item1 - 1]) =
+		//				(this._objectFileVectices[list[i].Item1 - 1], this._objectFileVectices[list[j].Item1 - 1]);
+		//}
+
+		private void DrawSceneRasterized()
+		{
+			for (var i = 0; i < this._objectFile.Polygons.Count; i++)
+			{
+				var p = this._objectFile.Polygons.ElementAt(i);
+				var angles = p.Arguments.Count;
+				var intensity = float.NegativeInfinity;
+				for (var a = 1; !p.Culled && a <= angles - 2; a++)
+				{
+					var v1 = this._objectFileVectices[p.Arguments.ElementAt(0).Item1 - 1];
+					var v2 = this._objectFileVectices[p.Arguments.ElementAt((a + 0) % angles).Item1 - 1];
+					var v3 = this._objectFileVectices[p.Arguments.ElementAt((a + 1) % angles).Item1 - 1];
+					if (intensity == float.NegativeInfinity)
+						intensity = this.GetIntensity(v1, v2, v3);
+					if (this.Rasterize(v1, v2, v3, intensity))
+						this._objectTrianglesRendered++;
+				}
+			}
 		}
 
-		[MethodImpl(MethodImplOptions.AggressiveOptimization)]
-		private unsafe void SortVerticesCounterClockwise(ref Vector4 v1, ref Vector4 v2, ref Vector4 v3)
+		private void DrawSceneWired()
 		{
-			var center = (v1 + v2 + v3) / 3;
-			var vertices = stackalloc Vector4[] { v1, v2, v3 };
-			for (var i = 0; i < 3; i++)
-				for (var j = i + 1; j < 3; j++)
-					if (MathF.Atan2(vertices[i].Y - center.Y, vertices[i].X - center.X) <
-						MathF.Atan2(vertices[j].Y - center.Y, vertices[j].X - center.X))
-						(vertices[i], vertices[j]) = (vertices[j], vertices[i]);
-			v1 = vertices[0];
-			v2 = vertices[1];
-			v3 = vertices[2]; 
+			for (var i = 0; i < this._objectFile.Polygons.Count; i++)
+			{
+				var p = this._objectFile.Polygons.ElementAt(i);
+				var angles = p.Arguments.Count;
+				for (var a = 1; !p.Culled && a <= angles - 2; a++)
+				{
+					var v1 = this._objectFileVectices[p.Arguments.ElementAt(0).Item1 - 1];
+					var v2 = this._objectFileVectices[p.Arguments.ElementAt((a + 0) % angles).Item1 - 1];
+					var v3 = this._objectFileVectices[p.Arguments.ElementAt((a + 1) % angles).Item1 - 1];
+					var intensity = this.GetIntensity(v1, v2, v3);
+					if (a == 1)
+						this.DrawDDALine(v1, v2, intensity);
+					this.DrawDDALine(v1, v3, intensity);
+					this.DrawDDALine(v2, v3, intensity);
+					this._objectTrianglesRendered++;
+				}
+			}
 		}
 
 		private Bitmap DrawScene()
@@ -299,55 +329,23 @@ namespace Visual
 			this._objectTrianglesRendered = 0;
 			var bitmap = new Bitmap(ViewPort.Width, ViewPort.Height);
 			this._bitmapData = bitmap.LockBits(this._bitmapRect, ImageLockMode.ReadWrite, bitmap.PixelFormat);
-			this._bitmapBytesPerPixel = Image.GetPixelFormatSize(this._bitmapData.PixelFormat) / 8;
 			unchecked
 			{
-				for (var i = 0; i < this._objectFile.Polygons.Count; i++)
+				this._bitmapBytesPerPixel = Image.GetPixelFormatSize(this._bitmapData.PixelFormat) / 8;
+				if (this._objectRenderWired)
+					this.DrawSceneWired();
+				else
+					this.DrawSceneRasterized();
+				this._objectRenderSamples++;
+				if (this._objectRenderSamples > this.Timer.Interval)
 				{
-					var p = this._objectFile.Polygons.ElementAt(i);
-					var angles = p.Arguments.Count;
-					for (var a = 1; !p.Culled && a <= angles - 2; a++)
-					{
-						var v1 = this._objectFileVectices[p.Arguments.ElementAt(0).Item1 - 1];
-						var v2 = this._objectFileVectices[p.Arguments.ElementAt((a + 0) % angles).Item1 - 1];
-						var v3 = this._objectFileVectices[p.Arguments.ElementAt((a + 1) % angles).Item1 - 1];
-						//this.SortVerticesClockwise(ref v1, ref v2, ref v3);
-						//var v12 = v2 - v1;
-						//var v13 = v3 - v1;
-						//var res = v12.X * v13.Y - v12.Y * v13.X;
-						//if (this.ShouldBeCulled(v1, v2, v3))
-						//	continue;
-						if (this.Rasterize(v1, v2, v3, this.GetIntensity(v1, v2, v3)))
-							this._objectTrianglesRendered++;
-					}
+					this._objectRenderSamples = 0;
+					this._objectRenderTimeMin = int.MaxValue;
+					this._objectRenderTimeMax = int.MinValue;
 				}
-			}
-			//for (var i = 0; i < this._objectFile.Polygons.Count; i++)
-			//{
-			//	var p = this._objectFile.Polygons.ElementAt(i);
-			//	var angles = p.Arguments.Count;
-			//	for (var a = 1; !p.Culled && a <= angles - 2; a++)
-			//	{
-			//		var v1 = this._objectFileVectices[p.Arguments.ElementAt(0).Item1 - 1];
-			//		var v2 = this._objectFileVectices[p.Arguments.ElementAt((a + 0) % angles).Item1 - 1];
-			//		var v3 = this._objectFileVectices[p.Arguments.ElementAt((a + 1) % angles).Item1 - 1];
-			//		//this.SortVerticesCounterClockwise(ref v1, ref v2, ref v3);
-			//		//var v12 = v2 - v1;
-			//		//var v13 = v3 - v1;
-			//		//var res = v12.X * v13.Y - v12.Y * v13.X;
-			//		//if (this.ShouldBeCulled(v1, v2, v3))
-			//		//	continue;
-			//		var intensity = this.GetIntensity(v1, v2, v3);
-			//		if (a == 1)
-			//			this.DrawDDALine(v1, v2, intensity);
-			//		this.DrawDDALine(v1, v3, intensity);
-			//		this.DrawDDALine(v2, v3, intensity);
-			//		this._objectTrianglesRendered++;
-			//	}
-			//}
-			unchecked
-			{
 				this._objectRenderTime = (int)(DateTime.Now - start).TotalMilliseconds;
+				this._objectRenderTimeMin = int.Min(this._objectRenderTimeMin, this._objectRenderTime);
+				this._objectRenderTimeMax = int.Max(this._objectRenderTimeMax, this._objectRenderTime);
 			}
 			bitmap.UnlockBits(this._bitmapData);
 			return bitmap;
@@ -373,7 +371,6 @@ namespace Visual
 					var v1 = this._objectFileVectices[p.Arguments.ElementAt(0).Item1 - 1];
 					var v2 = this._objectFileVectices[p.Arguments.ElementAt((a + 0) % angles).Item1 - 1];
 					var v3 = this._objectFileVectices[p.Arguments.ElementAt((a + 1) % angles).Item1 - 1];
-					//this.SortVerticesCounterClockwise(ref v1, ref v2, ref v3);
 					if (p.Culled = this.ShouldBeCulled(v1, v2, v3))
 						break;
 				}
@@ -405,12 +402,13 @@ namespace Visual
 			graphics.DrawImage(scene, Point.Empty);
 			this.DrawText(graphics,
 				$"x: {this._objectPosition.X}, " +
-				$"y: {this._objectPosition.Y}, " + 
+				$"y: {this._objectPosition.Y}, " +
 				$"z: {this._objectPosition.Z}",
 				$"scale: {this._scaleFactor}",
 				$"triangles: {this._objectTriangles}",
 				$"rendered: {this._objectTrianglesRendered}",
-				$"frame rendered: {this._objectRenderTime}ms"
+				$"wired: {this._objectRenderWired}",
+				$"frame rendered: {this._objectRenderTime}({this._objectRenderTimeMin}-{this._objectRenderTimeMax})ms"
 			);
 		}
 
@@ -444,6 +442,9 @@ namespace Visual
 		{
 			switch (e.KeyCode)
 			{
+				case Keys.R:
+					this._objectRenderWired = !this._objectRenderWired;
+					break;
 				case Keys.Left:
 					this._objectRotation.Y -= this._rotationFactor;
 					break;

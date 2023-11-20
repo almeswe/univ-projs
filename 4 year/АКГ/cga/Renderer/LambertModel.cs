@@ -10,9 +10,15 @@ namespace Renderer
 
 		public override float Compute(Vector3 normal, Vector3 position)
 		{
-			var direction = Vector3.Normalize(this.Position - position);
-			var theta = Vector3.Dot(normal, direction);
-			return theta < 0 ? 0.0f : this.Intensity * theta;
+			normal = Vector3.Normalize(normal);
+			position = Vector3.Normalize(this.Position - position);
+			var dot = -Vector3.Dot(normal, position);
+			if (dot < 0)
+				return 0.0f;
+			var intensity = dot * this.Intensity;
+			if (intensity > 1.0f)
+				return 1.0f;
+			return intensity;
 		}
 	}
 }

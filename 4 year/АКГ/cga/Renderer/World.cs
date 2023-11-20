@@ -15,7 +15,8 @@ namespace Renderer
 			XAxis = Vector3.UnitX;
 			YAxis = Vector3.UnitY;
 			ZAxis = Vector3.UnitZ;
-			Light = new LambertModel(Camera.Eye, 1.0f);
+			Light = new LambertModel(new Vector3(-5.0f, 0.0f, 3.0f), 100.0f);
+			//Light = new LambertModel(Camera.Eye, 100.0f);
 		}
 
 		public static Matrix4x4 CreateTranslation(Vector3 translation)
