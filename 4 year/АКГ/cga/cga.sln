@@ -15,7 +15,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Visual", "Visual\Visual.csp
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Renderer", "Renderer\Renderer.csproj", "{8F074C99-FC2E-47A0-9E7B-0152101761B7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Interaction.Com", "Interaction.Com\Interaction.Com.csproj", "{3B45BDB6-6E60-41C3-9629-4C976A4318DD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Interaction.Com", "Interaction.Com\Interaction.Com.csproj", "{3B45BDB6-6E60-41C3-9629-4C976A4318DD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Interaction.Com.MPU6050", "Interaction.Com.MPU6050\Interaction.Com.MPU6050.csproj", "{71CB2087-1E97-4131-8F4E-64458E8E986A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -51,6 +53,10 @@ Global
 		{3B45BDB6-6E60-41C3-9629-4C976A4318DD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3B45BDB6-6E60-41C3-9629-4C976A4318DD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3B45BDB6-6E60-41C3-9629-4C976A4318DD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{71CB2087-1E97-4131-8F4E-64458E8E986A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{71CB2087-1E97-4131-8F4E-64458E8E986A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{71CB2087-1E97-4131-8F4E-64458E8E986A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{71CB2087-1E97-4131-8F4E-64458E8E986A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

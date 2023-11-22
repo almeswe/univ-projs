@@ -14,7 +14,7 @@ namespace Visual
 		private IObjectParser _objectParser;
 
 		private Vector3 _objectPosition;
-		private Vector2 _objectRotation;
+		private Vector3 _objectRotation;
 		private List<Vector4> _objectFileVectices;
 
 		private Color _objectColor = Color.Red;
@@ -55,7 +55,7 @@ namespace Visual
 			this.InitializeComponent();
 			this._objectParser = new ObjectParser();
 			this._objectFile = this._objectParser.Parse(path);
-			this._objectRotation = new Vector2(0.0f, 0.0f);
+			this._objectRotation = new Vector3(0.0f, 0.0f, 0.0f);
 			this._objectPosition = Camera.Target;
 			this._objectFileVectices = new List<Vector4>(this._objectFile.Vertices.Count);
 			this._objectTriangles = this._objectFile.Polygons.Sum(p => p.Triangles);
@@ -88,7 +88,8 @@ namespace Visual
 			var scaleMatrix = World.CreateScale(this._scaleFactor);
 			var rotateXMatrix = World.CreateRotationX(this._objectRotation.X);
 			var rotateYMatrix = World.CreateRotationY(this._objectRotation.Y);
-			return scaleMatrix * rotateXMatrix * rotateYMatrix;
+			var rotateZMatrix = World.CreateRotationZ(this._objectRotation.Z);
+			return scaleMatrix * rotateXMatrix * rotateYMatrix * rotateZMatrix;
 		}
 
 		private Matrix4x4 CreateVmMatrix()

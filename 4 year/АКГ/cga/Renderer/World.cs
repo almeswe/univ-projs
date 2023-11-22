@@ -66,5 +66,19 @@ namespace Renderer
 				0.0f, 0.0f, 0.0f, 1.0f
 			);
 		}
+
+		public static Matrix4x4 CreateRotationZ(float radians)
+		{
+			return Matrix4x4.CreateRotationZ(radians);
+			float c = MathF.Cos(radians);
+			float s = MathF.Sin(radians);
+			return new Matrix4x4
+			(
+				c, 0.0f, -s, 0.0f,
+				0.0f, 1.0f, 0.0f, 0.0f,
+				s, 0.0f, c, 0.0f,
+				0.0f, 0.0f, 0.0f, 1.0f
+			);
+		}
 	}
 }
