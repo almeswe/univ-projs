@@ -56,7 +56,7 @@ namespace Visual
 			this._objectParser = new ObjectParser();
 			this._objectFile = this._objectParser.Parse(path);
 			this._objectRotation = new Vector3(0.0f, 0.0f, 0.0f);
-			this._objectPosition = Camera.Target;
+			this._objectPosition = new Vector3(0.0f, 0.0f, 40.0f); //Camera.Target;//
 			this._objectFileVectices = new List<Vector4>(this._objectFile.Vertices.Count);
 			this._objectTriangles = this._objectFile.Polygons.Sum(p => p.Triangles);
 			this.Size = new Size(500, 500);
@@ -287,15 +287,12 @@ namespace Visual
 			{
 				var p = this._objectFile.Polygons.ElementAt(i);
 				var angles = p.Arguments.Count;
-				var intensity = float.NegativeInfinity;
 				for (var a = 1; !p.Culled && a <= angles - 2; a++)
 				{
 					var v1 = this._objectFileVectices[p.Arguments.ElementAt(0).Item1 - 1];
 					var v2 = this._objectFileVectices[p.Arguments.ElementAt((a + 0) % angles).Item1 - 1];
 					var v3 = this._objectFileVectices[p.Arguments.ElementAt((a + 1) % angles).Item1 - 1];
-					if (intensity == float.NegativeInfinity)
-						intensity = this.GetIntensity(v1, v2, v3);
-					if (this.Rasterize(v1, v2, v3, intensity))
+					if (this.Rasterize(v1, v2, v3, p.Intensity))
 						this._objectTrianglesRendered++;
 				}
 			}
@@ -365,13 +362,16 @@ namespace Visual
 			}
 			for (var i = 0; i < this._objectFile.Polygons.Count; i++)
 			{
+				var intensitySet = false;
 				var p = this._objectFile.Polygons.ElementAt(i);
 				var angles = p.Arguments.Count;
-				for (var a = 1; a <= angles - 2; a++)
+				for (var a = 1; a <= angles - 2; a++, intensitySet = true)
 				{
 					var v1 = this._objectFileVectices[p.Arguments.ElementAt(0).Item1 - 1];
 					var v2 = this._objectFileVectices[p.Arguments.ElementAt((a + 0) % angles).Item1 - 1];
 					var v3 = this._objectFileVectices[p.Arguments.ElementAt((a + 1) % angles).Item1 - 1];
+					if (!intensitySet)
+						p.Intensity = this.GetIntensity(v1, v2, v3);
 					if (p.Culled = this.ShouldBeCulled(v1, v2, v3))
 						break;
 				}
@@ -465,10 +465,10 @@ namespace Visual
 					this._objectPosition.Y -= this._movingFactor;
 					break;
 				case Keys.A:
-					this._objectPosition.X -= this._movingFactor;
+					this._objectPosition.X += this._movingFactor;
 					break;
 				case Keys.D:
-					this._objectPosition.X += this._movingFactor;
+					this._objectPosition.X -= this._movingFactor;
 					break;
 			}
 		}

@@ -15,7 +15,7 @@ namespace Renderer
 			XAxis = Vector3.UnitX;
 			YAxis = Vector3.UnitY;
 			ZAxis = Vector3.UnitZ;
-			Light = new LambertModel(new Vector3(-5.0f, 0.0f, 3.0f), 100.0f);
+			Light = new LambertModel(new Vector3(-10.0f, 0.0f, 2.0f), 1.0f);
 			//Light = new LambertModel(Camera.Eye, 100.0f);
 		}
 
