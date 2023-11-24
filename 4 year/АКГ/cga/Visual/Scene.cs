@@ -20,7 +20,7 @@ namespace Visual
 		private Color _objectColor = Color.Red;
 		private Color _sceneColor = Color.FromArgb(33,33,33);//;//Color.FromArgb(0, 49, 83);
 
-		private float _movingFactor = 0.05f;
+		private float _movingFactor = 0.15f;
 		private float _rotationFactor = 0.10f;
 		private float _scaleFactor = 0.05f;
 		private float _scaleFactorStep => 0.005f + this._scaleFactor / 10;
@@ -34,7 +34,6 @@ namespace Visual
 		#region Z_Buffer
 		private float[] _zBuffer = null;
 		#endregion
-
 
 		#region Stats
 		private int _objectRenderTime = 0;
@@ -56,7 +55,7 @@ namespace Visual
 			this._objectParser = new ObjectParser();
 			this._objectFile = this._objectParser.Parse(path);
 			this._objectRotation = new Vector3(0.0f, 0.0f, 0.0f);
-			this._objectPosition = new Vector3(0.0f, 0.0f, 40.0f); //Camera.Target;//
+			this._objectPosition = Camera.Target;
 			this._objectFileVectices = new List<Vector4>(this._objectFile.Vertices.Count);
 			this._objectTriangles = this._objectFile.Polygons.Sum(p => p.Triangles);
 			this.Size = new Size(500, 500);
@@ -239,48 +238,6 @@ namespace Visual
 			return (f1 + f2 + f3) / 3.0f;
 		}
 
-		//[MethodImpl(MethodImplOptions.AggressiveOptimization)]
-		//private unsafe void SortVerticesClockwise(ref Vector4 v1, ref Vector4 v2, ref Vector4 v3)
-		//{
-		//	var center = (v1 + v2 + v3) / 3;
-		//	var vertices = stackalloc Vector4[] { v1, v2, v3 };
-		//	for (var i = 0; i < 3; i++)
-		//		for (var j = i + 1; j < 3; j++)
-		//			if (MathF.Atan2(vertices[i].Y - center.Y, vertices[i].X - center.X) >
-		//				MathF.Atan2(vertices[j].Y - center.Y, vertices[j].X - center.X))
-		//				(vertices[i], vertices[j]) = (vertices[j], vertices[i]);
-		//	v1 = vertices[0];
-		//	v2 = vertices[1];
-		//	v3 = vertices[2];
-		//}
-
-		//[MethodImpl(MethodImplOptions.AggressiveOptimization)]
-		//private unsafe void SortVerticesCounterClockwise(ref Vector4 v1, ref Vector4 v2, ref Vector4 v3)
-		//{
-		//	var center = (v1 + v2 + v3) / 3;
-		//	var vertices = stackalloc Vector4[] { v1, v2, v3 };
-		//	for (var i = 0; i < 3; i++)
-		//		for (var j = i + 1; j < 3; j++)
-		//			if (MathF.Atan2(vertices[i].Y - center.Y, vertices[i].X - center.X) <
-		//				MathF.Atan2(vertices[j].Y - center.Y, vertices[j].X - center.X))
-		//				(vertices[i], vertices[j]) = (vertices[j], vertices[i]);
-		//	v1 = vertices[0];
-		//	v2 = vertices[1];
-		//	v3 = vertices[2]; 
-		//}
-
-		//[MethodImpl(MethodImplOptions.AggressiveOptimization)]
-		//private unsafe void SortVerticesCounterClockwise(Polygon p)
-		//{
-		//	var list = p.Arguments as List<ValueTuple<int, int, int>>;
-		//	for (var i = 0; i < list.Count; i++)
-		//		for (var j = i + 1; j < list.Count; j++)
-		//			if (this._objectFileVectices[list[j].Item1-1].Y >
-		//				this._objectFileVectices[list[i].Item1-1].Y)
-		//				(this._objectFileVectices[list[j].Item1 - 1], this._objectFileVectices[list[i].Item1 - 1]) =
-		//				(this._objectFileVectices[list[i].Item1 - 1], this._objectFileVectices[list[j].Item1 - 1]);
-		//}
-
 		private void DrawSceneRasterized()
 		{
 			for (var i = 0; i < this._objectFile.Polygons.Count; i++)
@@ -309,11 +266,10 @@ namespace Visual
 					var v1 = this._objectFileVectices[p.Arguments.ElementAt(0).Item1 - 1];
 					var v2 = this._objectFileVectices[p.Arguments.ElementAt((a + 0) % angles).Item1 - 1];
 					var v3 = this._objectFileVectices[p.Arguments.ElementAt((a + 1) % angles).Item1 - 1];
-					var intensity = this.GetIntensity(v1, v2, v3);
 					if (a == 1)
-						this.DrawDDALine(v1, v2, intensity);
-					this.DrawDDALine(v1, v3, intensity);
-					this.DrawDDALine(v2, v3, intensity);
+						this.DrawDDALine(v1, v2, p.Intensity);
+					this.DrawDDALine(v1, v3, p.Intensity);
+					this.DrawDDALine(v2, v3, p.Intensity);
 					this._objectTrianglesRendered++;
 				}
 			}
