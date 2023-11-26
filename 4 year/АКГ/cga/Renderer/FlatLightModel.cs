@@ -1,6 +1,4 @@
-﻿using System.Numerics;
-
-namespace Renderer
+﻿namespace Renderer
 {
 	public abstract class FlatLightModel
 	{

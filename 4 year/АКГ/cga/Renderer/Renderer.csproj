@@ -5,4 +5,10 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Using Include="System.Drawing" />
+    <Using Include="System.Numerics" />
+    <Using Include="System.Runtime.CompilerServices" />
+  </ItemGroup>
+
 </Project>

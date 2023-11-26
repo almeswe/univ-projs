@@ -1,10 +1,6 @@
 using Renderer;
 using Parser.Core;
 using Parser.Interface;
-using System.Numerics;
-using System.Runtime.CompilerServices;
-using System.Drawing.Imaging;
-using System.Buffers;
 
 namespace Visual
 {
@@ -17,13 +13,25 @@ namespace Visual
 		private Vector3 _objectRotation;
 		private List<Vector4> _objectFileVectices;
 
-		private Color _objectColor = Color.Red;
-		private Color _sceneColor = Color.FromArgb(33,33,33);//;//Color.FromArgb(0, 49, 83);
+		private Color _objectColor = Color.Crimson;
+		private Color _sceneColor = Color.FromArgb(33, 33, 33);//;//Color.FromArgb(0, 49, 83);
 
 		private float _movingFactor = 0.15f;
 		private float _rotationFactor = 0.10f;
 		private float _scaleFactor = 0.05f;
 		private float _scaleFactorStep => 0.005f + this._scaleFactor / 10;
+
+		#region Temp_Data_Across_Rasterization
+		private Vector3 _polyNormal1;
+		private Vector3 _polyNormal2;
+		private Vector3 _polyNormal3;
+		private Vector3 _polyInterpNormal;
+		#endregion
+
+		#region Inverse_Matrices
+		private Matrix4x4 _inverseViewMatrix;
+		private Matrix4x4 _inverseProjectionMatrix;
+		#endregion
 
 		#region Bitmap
 		private int _bitmapBytesPerPixel = 0;
@@ -55,7 +63,7 @@ namespace Visual
 			this._objectParser = new ObjectParser();
 			this._objectFile = this._objectParser.Parse(path);
 			this._objectRotation = new Vector3(0.0f, 0.0f, 0.0f);
-			this._objectPosition = Camera.Target;
+			this._objectPosition = new Vector3(0.0f, 0.0f, 40.0f);//Camera.Target;
 			this._objectFileVectices = new List<Vector4>(this._objectFile.Vertices.Count);
 			this._objectTriangles = this._objectFile.Polygons.Sum(p => p.Triangles);
 			this.Size = new Size(500, 500);
@@ -93,7 +101,8 @@ namespace Visual
 
 		private Matrix4x4 CreateVmMatrix()
 		{
-			var viewMatrix = Camera.CreateTranslation(); 
+			var viewMatrix = Camera.CreateTranslation();
+			Matrix4x4.Invert(viewMatrix, out this._inverseViewMatrix);
 			var modelMatrix = World.CreateTranslation(this._objectPosition);
 			return modelMatrix * viewMatrix;
 		}
@@ -101,7 +110,9 @@ namespace Visual
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		private Matrix4x4 CreateProjectionMatrix()
 		{
-			return ViewPort.CreatePerspective();
+			var pm = ViewPort.CreatePerspective();
+			Matrix4x4.Invert(pm, out this._inverseProjectionMatrix);
+			return pm;
 		}
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -119,7 +130,7 @@ namespace Visual
 			return Vector3.Dot(n, v) > 0;
 		}
 
-		private Vector3 GetBarycentric(Point p, Vector4 v1, Vector4 v2, Vector4 v3)
+		private Vector3 GetBarycentric(Vector3 p, Vector4 v1, Vector4 v2, Vector4 v3)
 		{
 			var barycentric = new Vector3();
 			var det = (v2.Y - v3.Y) * (v1.X - v3.X) + (v3.X - v2.X) * (v1.Y - v3.Y);
@@ -129,7 +140,7 @@ namespace Visual
 			return barycentric;
 		}
 
-		private unsafe bool Rasterize(Vector4 v1, Vector4 v2, Vector4 v3, float intensity)
+		private unsafe bool Rasterize(Vector4 v1, Vector4 v2, Vector4 v3)
 		{
 			var sx1 = v1.X;
 			var sx2 = v2.X;
@@ -156,52 +167,63 @@ namespace Visual
 					if (this._bitmapData.Width <= x || 
 						this._bitmapData.Height <= y)
 						continue;
-					var p = new Point(x, y);
+					var p = new Vector3(x, y, 0.0f);
 					// get barycentric coordinates
 					var bc = this.GetBarycentric(p, v1, v2, v3);
 					// check if point inside triangle
 					if (bc.X < 0 || bc.Y < 0 || bc.Z < 0)
 						continue;
 					// z-buffer logic
-					var index = p.Y * ViewPort.Width + p.X;
+					var index = (int)p.Y * ViewPort.Width + (int)p.X;
 					var bZIndex = this._zBuffer[index];
-					var pZIndex = bc.X * v1.Z + bc.Y * v2.Z + bc.Z * v3.Z;
-					if (pZIndex > bZIndex)
+					p.Z = bc.X * v1.Z + bc.Y * v2.Z + bc.Z * v3.Z;
+					if (p.Z > bZIndex)
 						continue;
 					rasterized = true;
-					this._zBuffer[index] = pZIndex;
-					this.DrawPixel(p, intensity);
+					this._zBuffer[index] = p.Z;
+					this._polyInterpNormal = this._polyNormal1 * bc.X +
+											 this._polyNormal2 * bc.Y +
+											 this._polyNormal3 * bc.Z;
+					this._polyInterpNormal = Vector3.Normalize(this._polyInterpNormal);
+					this.DrawPixel(p);
 				}
 			}
 			return rasterized;
 
 		}
 
+		private Vector3 TranslateToWorld(Vector3 pixelPosition)
+		{
+			var xNDC = (pixelPosition.X / ViewPort.Width * 2) - 1;
+			var yNDC = 1 - (pixelPosition.Y / ViewPort.Height * 2);
+			var clipSpace = new Vector4(xNDC, yNDC, 0, 1);
+			var viewSpace = Vector4.Transform(clipSpace, this._inverseProjectionMatrix);
+			var worldSpace = Vector4.Transform(viewSpace, this._inverseViewMatrix);
+			return new Vector3(worldSpace.X, worldSpace.Y, worldSpace.Z) / worldSpace.W;
+		}
+
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		private unsafe void DrawPixel(Point at, float intensity)
+		private unsafe void DrawPixel(Vector3 at)
 		{
 			var pixel = (int*)(
 				this._bitmapData.Scan0 +
-				(at.Y * this._bitmapData.Stride +
-					at.X * this._bitmapBytesPerPixel)
+				((int)at.Y * this._bitmapData.Stride +
+					(int)at.X * this._bitmapBytesPerPixel)
 			);
-			var value = (int)(this._objectColor.A) << 24 |
-						(int)(this._objectColor.R * intensity) << 16 |
-						(int)(this._objectColor.G * intensity) << 8 |
-						(int)(this._objectColor.B * intensity);
+			var color = World.Light.Compute(
+				this._objectColor,
+				this._polyInterpNormal,
+				this.TranslateToWorld(at)
+				//at
+			);
+			var value = (int)color.A << 24 |
+						(int)color.R << 16 |
+						(int)color.G << 8  |
+						(int)color.B;
 			*pixel = value;
-			//var pixel = (byte*)(
-			//	this._bitmapData.Scan0 +
-			//	(at.Y * this._bitmapData.Stride +
-			//		at.X * this._bitmapBytesPerPixel)
-			//);
-			//pixel[0] = (byte)(this._objectColor.B * intensity);
-			//pixel[1] = (byte)(this._objectColor.G * intensity);
-			//pixel[2] = (byte)(this._objectColor.R * intensity);
-			//pixel[3] = this._objectColor.A;
 		}
-
-		private void DrawDDALine(Vector4 v1, Vector4 v2, float intensity)
+			
+		private void DrawDDALine(Vector4 v1, Vector4 v2)
 		{
 			var at = new PointF(v1.X, v1.Y);
 			var l = float.Max(Math.Abs(v1.X - v2.X), Math.Abs(v1.Y - v2.Y));
@@ -209,47 +231,33 @@ namespace Visual
 			{
 				at.X += (v2.X - v1.X) / l;
 				at.Y += (v2.Y - v1.Y) / l;
-				var p = new Point(
+				var p = new Vector3(
 					Convert.ToInt32(Math.Round(at.X)),
-					Convert.ToInt32(Math.Round(at.Y))
+					Convert.ToInt32(Math.Round(at.Y)),
+					0.0f
 				);
 				if (p.X < 0 || p.Y < 0 ||
 					this._bitmapData.Width <= p.X ||
 					this._bitmapData.Height <= p.Y)
 					continue;
-
-				//var bZIndex = this.GetZBufferValue(p);
-				//var pZIndex = this.GetZInsideTriangle(v1, v2, v3, p);
-				//if (pZIndex > bZIndex)
-				//	continue;
-				//this.SetZBufferValue(p, pZIndex);
-				this.DrawPixel(p, intensity);
+				this.DrawPixel(p);
 			}
-		}
-
-		private float GetIntensity(Vector4 v1, Vector4 v2, Vector4 v3)
-		{
-			var e1 = new Vector3(v2.X - v1.X, v2.Y - v1.Y, v2.Z - v1.Z);
-			var e2 = new Vector3(v3.X - v1.X, v3.Y - v1.Y, v3.Z - v1.Z);
-			var n = Vector3.Cross(e1, e2);
-			var f1 = World.Light.Compute(n, new Vector3(v1.X, v1.Y, v1.Z));
-			var f2 = World.Light.Compute(n, new Vector3(v2.X, v2.Y, v2.Z));
-			var f3 = World.Light.Compute(n, new Vector3(v3.X, v3.Y, v3.Z));
-			return (f1 + f2 + f3) / 3.0f;
 		}
 
 		private void DrawSceneRasterized()
 		{
 			for (var i = 0; i < this._objectFile.Polygons.Count; i++)
 			{
-				var p = this._objectFile.Polygons.ElementAt(i);
-				var angles = p.Arguments.Count;
-				for (var a = 1; !p.Culled && a <= angles - 2; a++)
+				var poly = this._objectFile.Polygons.ElementAt(i);
+				for (var a = 1; !poly.IsCulled && a <= poly.Arguments.Count - 2; a++)
 				{
-					var v1 = this._objectFileVectices[p.Arguments.ElementAt(0).Item1 - 1];
-					var v2 = this._objectFileVectices[p.Arguments.ElementAt((a + 0) % angles).Item1 - 1];
-					var v3 = this._objectFileVectices[p.Arguments.ElementAt((a + 1) % angles).Item1 - 1];
-					if (this.Rasterize(v1, v2, v3, p.Intensity))
+					this._polyNormal1 = poly.Normals[0 + 0];
+					this._polyNormal2 = poly.Normals[a + 0];
+					this._polyNormal3 = poly.Normals[a + 1];
+					var v1 = this._objectFileVectices[poly.Arguments.ElementAt(0).Item1 - 1];
+					var v2 = this._objectFileVectices[poly.Arguments.ElementAt(a + 0).Item1 - 1];
+					var v3 = this._objectFileVectices[poly.Arguments.ElementAt(a + 1).Item1 - 1];
+					if (this.Rasterize(v1, v2, v3))
 						this._objectTrianglesRendered++;
 				}
 			}
@@ -261,15 +269,15 @@ namespace Visual
 			{
 				var p = this._objectFile.Polygons.ElementAt(i);
 				var angles = p.Arguments.Count;
-				for (var a = 1; !p.Culled && a <= angles - 2; a++)
+				for (var a = 1; !p.IsCulled && a <= angles - 2; a++)
 				{
 					var v1 = this._objectFileVectices[p.Arguments.ElementAt(0).Item1 - 1];
-					var v2 = this._objectFileVectices[p.Arguments.ElementAt((a + 0) % angles).Item1 - 1];
-					var v3 = this._objectFileVectices[p.Arguments.ElementAt((a + 1) % angles).Item1 - 1];
+					var v2 = this._objectFileVectices[p.Arguments.ElementAt(a + 0).Item1 - 1];
+					var v3 = this._objectFileVectices[p.Arguments.ElementAt(a + 1).Item1 - 1];
 					if (a == 1)
-						this.DrawDDALine(v1, v2, p.Intensity);
-					this.DrawDDALine(v1, v3, p.Intensity);
-					this.DrawDDALine(v2, v3, p.Intensity);
+						this.DrawDDALine(v1, v2);
+					this.DrawDDALine(v1, v3);
+					this.DrawDDALine(v2, v3);
 					this._objectTrianglesRendered++;
 				}
 			}
@@ -309,28 +317,33 @@ namespace Visual
 		{
 			this._objectFileVectices.Clear();
 			var sr = this.CreateSrMatrix();
-			var vm = sr * this.CreateVmMatrix();
+			var vm = this.CreateVmMatrix();
+			var svm = sr * vm;
 			for (var i = 0; i < this._objectFile.Vertices.Count; i++)
 			{
 				var vector = this._objectFile.Vertices.ElementAt(i);
-				var transformed = Vector4.Transform(vector, vm);
+				var transformed = Vector4.Transform(vector, svm);
 				this._objectFileVectices.Add(transformed);
 			}
 			for (var i = 0; i < this._objectFile.Polygons.Count; i++)
 			{
-				var intensitySet = false;
-				var p = this._objectFile.Polygons.ElementAt(i);
-				var angles = p.Arguments.Count;
-				for (var a = 1; a <= angles - 2; a++, intensitySet = true)
+				var poly = this._objectFile.Polygons.ElementAt(i);
+				poly.ZeroNormals();
+				for (var a = 1; a <= poly.Arguments.Count - 2; a++)
 				{
-					var v1 = this._objectFileVectices[p.Arguments.ElementAt(0).Item1 - 1];
-					var v2 = this._objectFileVectices[p.Arguments.ElementAt((a + 0) % angles).Item1 - 1];
-					var v3 = this._objectFileVectices[p.Arguments.ElementAt((a + 1) % angles).Item1 - 1];
-					if (!intensitySet)
-						p.Intensity = this.GetIntensity(v1, v2, v3);
-					if (p.Culled = this.ShouldBeCulled(v1, v2, v3))
+					var v1 = this._objectFileVectices[poly.Arguments.ElementAt(0 + 0).Item1 - 1];
+					var v2 = this._objectFileVectices[poly.Arguments.ElementAt(a + 0).Item1 - 1];
+					var v3 = this._objectFileVectices[poly.Arguments.ElementAt(a + 1).Item1 - 1];
+					var e1 = new Vector3(v2.X - v1.X, v2.Y - v1.Y, v2.Z - v1.Z);
+					var e2 = new Vector3(v3.X - v1.X, v3.Y - v1.Y, v3.Z - v1.Z);
+					var n = Vector3.Cross(e1, e2);
+					poly.Normals[0 + 0] += n;
+					poly.Normals[a + 0] += n;
+					poly.Normals[a + 1] += n;
+					if (poly.IsCulled = this.ShouldBeCulled(v1, v2, v3))
 						break;
 				}
+				poly.NormalizeNormals();
 			}
 			var pm = this.CreateProjectionMatrix();
 			var vpm = this.CreateViewPortMatrix();

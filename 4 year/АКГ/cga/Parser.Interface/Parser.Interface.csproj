@@ -7,6 +7,7 @@
 
   <ItemGroup>
     <Using Include="System.Numerics" />
+    <Using Include="System.Runtime.CompilerServices" />
   </ItemGroup>
 
 </Project>
