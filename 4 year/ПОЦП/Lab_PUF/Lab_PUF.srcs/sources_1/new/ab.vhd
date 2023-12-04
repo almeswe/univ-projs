@@ -32,16 +32,16 @@ architecture Structural of ab is
         );
     end component;
 begin
-    --FFD_0: ffd port map (
-    --    D => B,
-    --    EN => EN,
-    --    CLK => A,
-    --    RST => RST,
-    --    Q => Q
-    --);
-    LD_0: ld port map (
+    FFD_0: ffd port map (
         D => B,
-        EN => A,
+        EN => EN,
+        CLK => A,
+        RST => RST,
         Q => Q
     );
+    --LD_0: ld port map (
+    --    D => B,
+    --    EN => A,
+    --    Q => Q
+    --);
 end Structural;
