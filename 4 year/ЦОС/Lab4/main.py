@@ -7,11 +7,12 @@ from tqdm import tqdm
 class ImageProcessing(object):
     def __init__(self, im1: Image, im2: Image = None) -> None:
         self.im1: Image = im1
-        self.im2: Image = im2 if im2 != None else im1 
+        self.im2: Image = im2 
         self.gsim1: Image = ImageOps.grayscale(im1)
-        self.gsim2: Image = ImageOps.grayscale(im2)
         self.im1_npa: np.ndarray = np.array(self.gsim1)
-        self.im2_npa: np.ndarray = np.array(self.gsim2)
+        if im2 != None: 
+            self.gsim2: Image = ImageOps.grayscale(im2)
+            self.im2_npa: np.ndarray = np.array(self.gsim2)
 
     def norm(self, npa: np.ndarray) -> np.ndarray:
         return (npa - np.mean(npa)) / np.std(npa)
@@ -46,6 +47,11 @@ class ImageProcessing(object):
         import matplotlib.pyplot as plt
         tw, th = self.im2.size
         y, x = np.unravel_index(np.argmax(corr), corr.shape)
+
+        plt.imshow(corr, cmap='gray')
+        plt.colorbar(label='corr')
+        plt.show()
+
         plt.figure(figsize=(10, 10))
         plt.imshow(self.im1, cmap='gray')
         rect = plt.Rectangle((x, y), tw, th, edgecolor='r', facecolor='none')
@@ -55,18 +61,25 @@ class ImageProcessing(object):
     def show_autocorr(self, autocorr: np.ndarray) -> None:
         import matplotlib.pyplot as plt
         plt.imshow(autocorr, cmap='hot')
-        #plt.imshow(self.im1, cmap='gray')
         plt.colorbar(label='autocorr')
         plt.show()
 
 if __name__ == '__main__':
     import sys
-    imp = ImageProcessing(
-        Image.open('./Lab4/source_small.jpg'),
-        Image.open('./Lab4/template_small.png'),
-    )
-    corr = imp.autocorr()
-    imp.show_autocorr(corr)
+    if len(sys.argv) == 2:
+        imp = ImageProcessing(
+            Image.open(sys.argv[1]),
+            None
+        )
+        corr = imp.autocorr()
+        imp.show_autocorr(corr)
+    if len(sys.argv) == 3:
+        imp = ImageProcessing(
+            Image.open(sys.argv[1]),
+            Image.open(sys.argv[2]),
+        )
+        corr = imp.corr()
+        imp.show_corr(corr)
     '''
     ImageProcessing(
         Image.open(sys.argv[1]),
