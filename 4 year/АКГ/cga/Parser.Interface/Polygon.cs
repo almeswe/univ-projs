@@ -5,6 +5,7 @@
 		public bool IsCulled { get; set; }
 		
 		public Vector3[] Normals { get; set; }
+		public Vector3[] Textures { get; set; }
 
 		public int Triangles { get; set; }
 
@@ -22,6 +23,7 @@
 				this.Arguments.Add(arg);
 			this.Triangles = this.Arguments.Count - 2;
 			this.Normals = new Vector3[this.Arguments.Count];
+			this.Textures = new Vector3[this.Arguments.Count];
 		}
 
 		public Polygon(Span<ValueTuple<int, int, int>> arguments) : base()
@@ -31,6 +33,7 @@
 				this.Arguments.Add(arg);
 			this.Triangles = this.Arguments.Count - 2;
 			this.Normals = new Vector3[this.Arguments.Count];
+			this.Textures = new Vector3[this.Arguments.Count];
 		}
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]

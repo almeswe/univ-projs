@@ -21,6 +21,13 @@ namespace Parser.Core
 						parser(line.AsSpan());
 				}
 			}
+			for (var i = 0; i < this._objectFile.Polygons.Count; i++)
+			{
+				var p = this._objectFile.Polygons.ElementAt(i);
+				for (var a = 0; a < p.Arguments.Count; a++)
+					p.Textures[a] = this._objectFile.Textures.ElementAt(
+						p.Arguments.ElementAt(a).Item2 - 1);
+			}
 			return this._objectFile;
 		}
 

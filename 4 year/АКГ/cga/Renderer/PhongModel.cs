@@ -24,8 +24,9 @@
 		}
 
 		[MethodImpl(MethodImplOptions.AggressiveOptimization)]
-		public Color Compute(Color pixelColor, Vector3 normal, Vector3 pixelPosition)
+		public Color Compute(Color pixelColor, Color pixelSpecularColor, Vector3 normal, Vector3 pixelPosition)
 		{
+			normal = Vector3.Normalize(normal);
 			var view = pixelPosition - Camera.Eye;
 			var light = Vector3.Normalize(this.Position - pixelPosition);
 			this._ambient = Color.FromArgb(
@@ -44,9 +45,9 @@
 			this._specularIntensity = this.ComputeSpecularIntensity(normal, light, view);
 			this._specular = Color.FromArgb(
 				pixelColor.A,
-				(byte)(255 * this._specularIntensity),
-				(byte)(255 * this._specularIntensity),
-				(byte)(255 * this._specularIntensity)
+				(byte)(pixelSpecularColor.R * this._specularIntensity),
+				(byte)(pixelSpecularColor.G * this._specularIntensity),
+				(byte)(pixelSpecularColor.B * this._specularIntensity)
 			);
 			var r = int.Min(this._ambient.R + this._diffuse.R + this._specular.R, 255);
 			var g = int.Min(this._ambient.G + this._diffuse.G + this._specular.G, 255);
@@ -85,5 +86,9 @@
 		{
 			return light - 2 * Vector3.Dot(light, normal) * normal;
 		}
+
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public void SetSpeclar(float ks)
+			=> this._specularSourceIntensity = ks;
 	}
 }

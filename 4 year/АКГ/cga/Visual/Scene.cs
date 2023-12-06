@@ -14,23 +14,44 @@ namespace Visual
 		private List<Vector4> _objectFileVectices;
 
 		private Color _objectColor = Color.Crimson;
-		private Color _sceneColor = Color.FromArgb(33, 33, 33);//;//Color.FromArgb(0, 49, 83);
+		private Color _sceneColor = Color.FromArgb(33, 33, 33);
 
 		private float _movingFactor = 0.15f;
 		private float _rotationFactor = 0.10f;
 		private float _scaleFactor = 0.05f;
 		private float _scaleFactorStep => 0.005f + this._scaleFactor / 10;
 
+		#region TextureMaps
+		private readonly TextureMap _normalMap;
+		private readonly TextureMap _diffuseMap;
+		private readonly TextureMap _specularMap;
+		#endregion
+
 		#region Temp_Data_Across_Rasterization
 		private Vector3 _polyNormal1;
 		private Vector3 _polyNormal2;
 		private Vector3 _polyNormal3;
+		private Vector3 _polyTexture1;
+		private Vector3 _polyTexture2;
+		private Vector3 _polyTexture3;
 		private Vector3 _polyInterpNormal;
+		private Vector3 _polyInterpTexture;
 		#endregion
 
 		#region Inverse_Matrices
-		private Matrix4x4 _inverseViewMatrix;
-		private Matrix4x4 _inverseProjectionMatrix;
+		private Matrix4x4 _modelMatrix = default(Matrix4x4);
+		private Matrix4x4 _scaleMatrix = default(Matrix4x4);
+		private Matrix4x4 _rotationMatrix = default(Matrix4x4);
+
+		private Matrix4x4 _inverseScaleMatrix = default(Matrix4x4);
+		private Matrix4x4 _inverseRotationMatrix = default(Matrix4x4);
+		private Matrix4x4 _inverseTransposeModelMatrix = default(Matrix4x4);
+		private Matrix4x4 _inverseModelMatrix = default(Matrix4x4);
+		private Matrix4x4 _inverseViewMatrix = default(Matrix4x4);
+		private Matrix4x4 _inverseProjectionMatrix = default(Matrix4x4);
+		private bool _inverseViewMatrixSet = false;
+		private bool _inverseProjectionMatrixSet = false;
+
 		#endregion
 
 		#region Bitmap
@@ -61,9 +82,9 @@ namespace Visual
 		{
 			this.InitializeComponent();
 			this._objectParser = new ObjectParser();
-			this._objectFile = this._objectParser.Parse(path);
+			this._objectFile = this._objectParser.Parse(Path.Combine(path, "model.obj"));
 			this._objectRotation = new Vector3(0.0f, 0.0f, 0.0f);
-			this._objectPosition = new Vector3(0.0f, 0.0f, 40.0f);//Camera.Target;
+			this._objectPosition = new Vector3(0.0f, 0.0f, 30.0f);
 			this._objectFileVectices = new List<Vector4>(this._objectFile.Vertices.Count);
 			this._objectTriangles = this._objectFile.Polygons.Sum(p => p.Triangles);
 			this.Size = new Size(500, 500);
@@ -73,8 +94,11 @@ namespace Visual
 			this.CreateZBuffer();
 			this.DoubleBuffered = true;
 			this.SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
+			this._normalMap = new TextureMap(Path.Combine(path, "textures/", "normal.png"));
+			this._diffuseMap = new TextureMap(Path.Combine(path, "textures/", "diffuse.png"));
+			this._specularMap = new TextureMap(Path.Combine(path, "textures/", "specular.png"));
 		}
-		
+
 		private void CreateZBuffer()
 		{
 			if (this._zBuffer != null)
@@ -92,26 +116,35 @@ namespace Visual
 
 		private Matrix4x4 CreateSrMatrix()
 		{
-			var scaleMatrix = World.CreateScale(this._scaleFactor);
+			this._scaleMatrix = World.CreateScale(this._scaleFactor);
 			var rotateXMatrix = World.CreateRotationX(this._objectRotation.X);
 			var rotateYMatrix = World.CreateRotationY(this._objectRotation.Y);
 			var rotateZMatrix = World.CreateRotationZ(this._objectRotation.Z);
-			return scaleMatrix * rotateXMatrix * rotateYMatrix * rotateZMatrix;
+			this._rotationMatrix = rotateXMatrix * rotateYMatrix * rotateZMatrix;
+			//Matrix4x4.Invert(this._rotationMatrix, out this._inverseRotationMatrix);
+			//Matrix4x4.Invert(this._scaleMatrix, out this._inverseScaleMatrix);
+			return this._scaleMatrix * this._rotationMatrix;
 		}
 
 		private Matrix4x4 CreateVmMatrix()
 		{
 			var viewMatrix = Camera.CreateTranslation();
-			Matrix4x4.Invert(viewMatrix, out this._inverseViewMatrix);
-			var modelMatrix = World.CreateTranslation(this._objectPosition);
-			return modelMatrix * viewMatrix;
+			if (!this._inverseViewMatrixSet)
+				if (Matrix4x4.Invert(viewMatrix, out this._inverseViewMatrix))
+					this._inverseViewMatrixSet = true;
+			this._modelMatrix = World.CreateTranslation(this._objectPosition);
+			//if (Matrix4x4.Invert(this._modelMatrix, out this._inverseModelMatrix))
+			//	this._inverseTransposeModelMatrix = Matrix4x4.Transpose(this._inverseModelMatrix);
+			return this._modelMatrix * viewMatrix;
 		}
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		private Matrix4x4 CreateProjectionMatrix()
 		{
 			var pm = ViewPort.CreatePerspective();
-			Matrix4x4.Invert(pm, out this._inverseProjectionMatrix);
+			if (!this._inverseProjectionMatrixSet)
+				if (Matrix4x4.Invert(pm, out this._inverseProjectionMatrix))
+					this._inverseProjectionMatrixSet = true;
 			return pm;
 		}
 
@@ -181,17 +214,20 @@ namespace Visual
 						continue;
 					rasterized = true;
 					this._zBuffer[index] = p.Z;
-					this._polyInterpNormal = this._polyNormal1 * bc.X +
-											 this._polyNormal2 * bc.Y +
-											 this._polyNormal3 * bc.Z;
-					this._polyInterpNormal = Vector3.Normalize(this._polyInterpNormal);
+					//this._polyInterpNormal = this._polyNormal1 * bc.X +
+					//						 this._polyNormal2 * bc.Y +
+					//						 this._polyNormal3 * bc.Z;
+					this._polyInterpTexture = this._polyTexture1 * bc.X +
+											  this._polyTexture2 * bc.Y +
+											  this._polyTexture3 * bc.Z;
+					//this._polyInterpNormal = Vector3.Normalize(this._polyInterpNormal);
 					this.DrawPixel(p);
 				}
 			}
 			return rasterized;
-
 		}
 
+		[MethodImpl(MethodImplOptions.AggressiveOptimization)]
 		private Vector3 TranslateToWorld(Vector3 pixelPosition)
 		{
 			var xNDC = (pixelPosition.X / ViewPort.Width * 2) - 1;
@@ -202,7 +238,16 @@ namespace Visual
 			return new Vector3(worldSpace.X, worldSpace.Y, worldSpace.Z) / worldSpace.W;
 		}
 
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		[MethodImpl(MethodImplOptions.AggressiveOptimization)]
+		private Vector3 TranslateMapNormalToWorld()
+		{
+			var normal = this._normalMap.GetPixelAsNormal(this._polyInterpTexture);
+			normal = Vector3.TransformNormal(normal, this._rotationMatrix);
+			normal = Vector3.TransformNormal(normal, this._scaleMatrix);
+			return -Vector3.TransformNormal(normal, this._modelMatrix);
+		}
+
+		[MethodImpl(MethodImplOptions.AggressiveOptimization)]
 		private unsafe void DrawPixel(Vector3 at)
 		{
 			var pixel = (int*)(
@@ -211,10 +256,10 @@ namespace Visual
 					(int)at.X * this._bitmapBytesPerPixel)
 			);
 			var color = World.Light.Compute(
-				this._objectColor,
-				this._polyInterpNormal,
+				this._diffuseMap.GetPixel(this._polyInterpTexture),
+				this._specularMap.GetPixel(this._polyInterpTexture),
+				this.TranslateMapNormalToWorld(),
 				this.TranslateToWorld(at)
-				//at
 			);
 			var value = (int)color.A << 24 |
 						(int)color.R << 16 |
@@ -254,6 +299,9 @@ namespace Visual
 					this._polyNormal1 = poly.Normals[0 + 0];
 					this._polyNormal2 = poly.Normals[a + 0];
 					this._polyNormal3 = poly.Normals[a + 1];
+					this._polyTexture1 = poly.Textures[0 + 0];
+					this._polyTexture2 = poly.Textures[a + 0];
+					this._polyTexture3 = poly.Textures[a + 1];
 					var v1 = this._objectFileVectices[poly.Arguments.ElementAt(0).Item1 - 1];
 					var v2 = this._objectFileVectices[poly.Arguments.ElementAt(a + 0).Item1 - 1];
 					var v3 = this._objectFileVectices[poly.Arguments.ElementAt(a + 1).Item1 - 1];
@@ -343,7 +391,7 @@ namespace Visual
 					if (poly.IsCulled = this.ShouldBeCulled(v1, v2, v3))
 						break;
 				}
-				poly.NormalizeNormals();
+ 				poly.NormalizeNormals();
 			}
 			var pm = this.CreateProjectionMatrix();
 			var vpm = this.CreateViewPortMatrix();
