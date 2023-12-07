@@ -2,17 +2,22 @@
 using System.Text;
 using System.IO.Ports;
 using System.Windows.Forms;
+using System.Reflection;
 
 namespace Interaction.Com
 {
 	public class Program
 	{
 		private static SceneForm _scene = null;
+		private static MethodInfo _onSceneKeyDown = null;
 
 		[STAThread]
 		public static void Main(string[] args)
 		{
 			_scene = new SceneForm(@"C:\Users\HP\Desktop\car.obj");
+			_onSceneKeyDown = typeof(SceneForm).GetMethod("OnSceneKeyDown", 
+				BindingFlags.NonPublic | 
+				BindingFlags.Instance);
 			if (ThreadPool.QueueUserWorkItem((o) => StartComCommunication()))
 				_scene.ShowDialog();
 		}
@@ -65,11 +70,16 @@ namespace Interaction.Com
 			{
 				var diff = value - outValue;
 				var events = int.Abs(diff / scale);
-				for (int i = 0; i < events; i++)
-					_scene.OnSceneKeyDown(null, new KeyEventArgs(
-						diff < 0 ? Keys.Left : Keys.Right));
+				for (int i = 0; i < events; i++);
+					SetSceneKeyDown(diff < 0 ? Keys.Left : Keys.Right);
 			}
 			value = outValue;
+		}
+
+		private static void SetSceneKeyDown(Keys key)
+		{
+			var eventArgs = new KeyEventArgs(key);
+			_onSceneKeyDown.Invoke(_scene, new object[] { null, eventArgs });
 		}
 	}
 }

@@ -1,6 +1,4 @@
-﻿using System.Numerics;
-
-namespace Renderer
+﻿namespace Renderer
 {
 	public static class World
 	{
@@ -8,11 +6,17 @@ namespace Renderer
 		public static Vector3 YAxis { get; private set; }
 		public static Vector3 ZAxis { get; private set; }
 
+		public static PhongModel Light { get; private set; }
+
 		static World()
 		{
 			XAxis = Vector3.UnitX;
 			YAxis = Vector3.UnitY;
 			ZAxis = Vector3.UnitZ;
+			//Light = new LambertModel(new Vector3(-10.0f, 0.0f, 2.0f), 1.0f);
+			//Light = new LambertModel(Camera.Eye, 100.0f);
+			//Light = new PhongModel(new Vector3(-10.0f, 0.0f, 3.0f), 1.0f, 1.0f, 0.1f);
+			Light = new PhongModel(Camera.Eye, 0.6f, 0.3f, 0.1f);
 		}
 
 		public static Matrix4x4 CreateTranslation(Vector3 translation)
@@ -61,6 +65,11 @@ namespace Renderer
 				s, 0.0f, c, 0.0f,
 				0.0f, 0.0f, 0.0f, 1.0f
 			);
+		}
+
+		public static Matrix4x4 CreateRotationZ(float radians)
+		{
+			return Matrix4x4.CreateRotationZ(radians);
 		}
 	}
 }

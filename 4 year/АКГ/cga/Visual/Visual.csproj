@@ -18,4 +18,11 @@
     <ProjectReference Include="..\Renderer\Renderer.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Using Include="System.Buffers" />
+    <Using Include="System.Drawing.Imaging" />
+    <Using Include="System.Numerics" />
+    <Using Include="System.Runtime.CompilerServices" />
+  </ItemGroup>
+
 </Project>
