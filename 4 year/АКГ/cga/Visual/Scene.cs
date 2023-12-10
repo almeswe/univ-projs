@@ -181,13 +181,13 @@ namespace Visual
 			var sy1 = v1.Y;
 			var sy2 = v2.Y;
 			var sy3 = v3.Y;
-			
+
 			var xmax = sx1 > sx2 ? (sx1 > sx3 ? sx1 : sx3) : (sx2 > sx3 ? sx2 : sx3);
 			var ymax = sy1 > sy2 ? (sy1 > sy3 ? sy1 : sy3) : (sy2 > sy3 ? sy2 : sy3);
 			var xmin = sx1 < sx2 ? (sx1 < sx3 ? sx1 : sx3) : (sx2 < sx3 ? sx2 : sx3);
 			var ymin = sy1 < sy2 ? (sy1 < sy3 ? sy1 : sy3) : (sy2 < sy3 ? sy2 : sy3);
 
-			var box = new Rectangle((int)xmin, (int)ymin, 
+			var box = new Rectangle((int)xmin, (int)ymin,
 				(int)(xmax - xmin) + 1, (int)(ymax - ymin) + 1);
 
 			var rasterized = false;
@@ -197,7 +197,7 @@ namespace Visual
 				for (var x = box.X; x >= 0 && x <= box.Right; x++)
 				{
 					// check if inside viewport
-					if (this._bitmapData.Width <= x || 
+					if (this._bitmapData.Width <= x ||
 						this._bitmapData.Height <= y)
 						continue;
 					var p = new Vector3(x, y, 0.0f);
@@ -214,13 +214,14 @@ namespace Visual
 						continue;
 					rasterized = true;
 					this._zBuffer[index] = p.Z;
-					//this._polyInterpNormal = this._polyNormal1 * bc.X +
-					//						 this._polyNormal2 * bc.Y +
-					//						 this._polyNormal3 * bc.Z;
-					this._polyInterpTexture = this._polyTexture1 * bc.X +
-											  this._polyTexture2 * bc.Y +
-											  this._polyTexture3 * bc.Z;
-					//this._polyInterpNormal = Vector3.Normalize(this._polyInterpNormal);
+					this._polyInterpTexture = (this._polyTexture1 * bc.X / v1.W +
+											   this._polyTexture2 * bc.Y / v2.W +
+											   this._polyTexture3 * bc.Z / v3.W) /
+											  (bc.X / v1.W + bc.Y / v2.W + bc.Z / v3.W);
+					this._polyInterpNormal = (this._polyNormal1 * bc.X / v1.W +
+											  this._polyNormal2 * bc.Y / v2.W +
+											  this._polyNormal3 * bc.Z / v3.W) /
+											  (bc.X / v1.W + bc.Y / v2.W + bc.Z / v3.W);
 					this.DrawPixel(p);
 				}
 			}
@@ -241,10 +242,11 @@ namespace Visual
 		[MethodImpl(MethodImplOptions.AggressiveOptimization)]
 		private Vector3 TranslateMapNormalToWorld()
 		{
+			if (this._normalMap.Missing)
+				return this._polyInterpNormal;
 			var normal = this._normalMap.GetPixelAsNormal(this._polyInterpTexture);
-			normal = Vector3.TransformNormal(normal, this._rotationMatrix);
-			normal = Vector3.TransformNormal(normal, this._scaleMatrix);
-			return -Vector3.TransformNormal(normal, this._modelMatrix);
+			var msrm = this._rotationMatrix * this._scaleMatrix * this._modelMatrix;
+			return -Vector3.TransformNormal(normal, msrm);
 		}
 
 		[MethodImpl(MethodImplOptions.AggressiveOptimization)]
@@ -255,9 +257,15 @@ namespace Visual
 				((int)at.Y * this._bitmapData.Stride +
 					(int)at.X * this._bitmapBytesPerPixel)
 			);
+			var specularColor = Color.White;
+			var diffuseColor = this._objectColor;
+			if (!this._diffuseMap.Missing)
+				diffuseColor = this._diffuseMap.GetPixel(this._polyInterpTexture);
+			if (!this._specularMap.Missing)
+				specularColor = this._specularMap.GetPixel(this._polyInterpTexture);
 			var color = World.Light.Compute(
-				this._diffuseMap.GetPixel(this._polyInterpTexture),
-				this._specularMap.GetPixel(this._polyInterpTexture),
+				diffuseColor,
+				specularColor,
 				this.TranslateMapNormalToWorld(),
 				this.TranslateToWorld(at)
 			);
@@ -353,7 +361,7 @@ namespace Visual
 					this._objectRenderTimeMin = int.MaxValue;
 					this._objectRenderTimeMax = int.MinValue;
 				}
-				this._objectRenderTime = (int)(DateTime.Now - start).TotalMilliseconds;
+				this._objectRenderTime = int.Max((int)(DateTime.Now - start).TotalMilliseconds, 1);
 				this._objectRenderTimeMin = int.Min(this._objectRenderTimeMin, this._objectRenderTime);
 				this._objectRenderTimeMax = int.Max(this._objectRenderTimeMax, this._objectRenderTime);
 			}
@@ -399,8 +407,10 @@ namespace Visual
 			{
 				var vector = this._objectFileVectices[i];
 				var transformed = Vector4.Transform(vector, pm);
-				transformed /= transformed.W;
+				var transformedW = transformed.W;
+				transformed /= transformedW;
 				transformed = Vector4.Transform(transformed, vpm);
+				transformed.W = transformedW;
 				this._objectFileVectices[i] = transformed;
 			}
 		}
@@ -414,19 +424,20 @@ namespace Visual
 
 		private void OnScenePaint(object sender, PaintEventArgs e)
 		{
-			var graphics = e.Graphics;
-			var scene = this.DrawScene();
-			graphics.Clear(this._sceneColor);
-			graphics.DrawImage(scene, Point.Empty);
-			this.DrawText(graphics,
-				$"x: {this._objectPosition.X}, " +
-				$"y: {this._objectPosition.Y}, " +
-				$"z: {this._objectPosition.Z}",
-				$"scale: {this._scaleFactor}",
-				$"triangles: {this._objectTriangles}",
-				$"rendered: {this._objectTrianglesRendered}",
-				$"wired: {this._objectRenderWired}",
-				$"frame rendered: {this._objectRenderTime}({this._objectRenderTimeMin}-{this._objectRenderTimeMax})ms"
+				var graphics = e.Graphics;
+				var scene = this.DrawScene();
+				graphics.Clear(this._sceneColor);
+				graphics.DrawImage(scene, Point.Empty);
+				this.DrawText(graphics,
+					$"x: {this._objectPosition.X}, " +
+					$"y: {this._objectPosition.Y}, " +
+					$"z: {this._objectPosition.Z}",
+					$"scale: {this._scaleFactor}",
+					$"triangles: {this._objectTriangles}",
+					$"rendered: {this._objectTrianglesRendered}",
+					$"wired: {this._objectRenderWired}",
+				$"frame rendered: {this._objectRenderTime}({this._objectRenderTimeMin}-{this._objectRenderTimeMax})ms",
+				$"fps: {1000 / this._objectRenderTime}"
 			);
 		}
 
